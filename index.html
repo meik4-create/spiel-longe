@@ -180,8 +180,9 @@ input::placeholder{color:var(--muted);opacity:.8}
 .msg{margin:5px 0;padding:6px 11px;border-radius:14px;background:var(--field);border:2px solid var(--line);max-width:84%;overflow-wrap:anywhere;width:fit-content}.msg.me{background:var(--pop);color:#1a1b3a;margin-left:auto;border-color:transparent}.msg small{display:block;opacity:.7;font-size:.7rem}
 .chi{display:flex;gap:6px;margin-top:6px}.chi input{flex:1;min-width:0;text-transform:none;letter-spacing:0;text-align:left}.chi .btn{width:auto;margin:0;padding:10px 14px}
 </style>
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" id="fav" href="data:,">
+<link rel="apple-touch-icon" id="ati" href="data:,">
+<link rel="manifest" id="mf">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Spiele-Lounge">
@@ -203,6 +204,8 @@ input::placeholder{color:var(--muted);opacity:.8}
 <p class="sub" id="note" style="margin:6px 0 0"></p>
 </div>
 <div class="stats" id="stats"></div>
+<button class="btn alt" id="inst" style="display:none">📲 Zum Homescreen hinzufügen</button>
+<div class="card" id="instHelp" style="display:none;text-align:left"></div>
 </section>
 <section id="lobby">
 <div class="card"><div class="code" id="codeLine"></div><div id="who"></div>
@@ -730,6 +733,37 @@ try{var rq=new URLSearchParams(location.search).get("r");if(rq&&/^[a-z0-9]{4}$/.
 $("snd").onclick=function(){snd=!snd;this.textContent=snd?"🔊":"🔇"};
 try{if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)navigator.serviceWorker.register("sw.js").catch(function(){})}catch(e){}
 render();
+
+/* ===== Zum Homescreen hinzufügen: Icon + Manifest werden im Browser erzeugt ===== */
+(function(){
+var dp=null,standalone=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
+function icon(sz){var c=document.createElement("canvas");c.width=c.height=sz;var x=c.getContext("2d"),u=sz/512;
+var g=x.createLinearGradient(0,0,sz,sz);g.addColorStop(0,"#6a4cff");g.addColorStop(1,"#3a25c4");x.fillStyle=g;x.fillRect(0,0,sz,sz);
+function rr(a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()}
+function tile(cx,cy,w,col,rot){x.save();x.translate(cx*u,cy*u);x.rotate(rot*Math.PI/180);x.fillStyle=col;x.strokeStyle="#1a1b3a";x.lineWidth=10*u;rr(-w/2*u,-w/2*u,w*u,w*u,w*.2*u);x.fill();x.stroke();x.restore()}
+tile(140,150,110,"#e5383b",-12);tile(380,140,100,"#f6b800",10);tile(370,380,110,"#2a9d4a",-8);tile(145,370,100,"#2b8cdc",12);
+x.save();x.translate(256*u,256*u);x.rotate(-8*Math.PI/180);x.shadowColor="rgba(0,0,0,.35)";x.shadowOffsetY=14*u;x.shadowBlur=0;
+x.fillStyle="#fff";x.strokeStyle="#1a1b3a";x.lineWidth=14*u;rr(-110*u,-110*u,220*u,220*u,48*u);x.fill();x.shadowColor="transparent";x.stroke();
+x.fillStyle="#1a1b3a";[[-1,-1],[1,-1],[0,0],[-1,1],[1,1]].forEach(function(q){x.beginPath();x.arc(q[0]*58*u,q[1]*58*u,22*u,0,7);x.fill()});x.restore();
+return c.toDataURL("image/png")}
+try{
+var i192=icon(192),i512=icon(512),i180=icon(180);
+$("ati").href=i180;$("fav").href=i192;
+var base=location.href.split("#")[0].split("?")[0];
+var man={name:"Spiele-Lounge",short_name:"Spiele",description:"15 Spiele für den Spieleabend",start_url:base,scope:base.replace(/[^\/]*$/,""),display:"standalone",orientation:"portrait",background_color:"#dfe7ff",theme_color:"#dfe7ff",lang:"de",icons:[{src:i192,sizes:"192x192",type:"image/png",purpose:"any"},{src:i512,sizes:"512x512",type:"image/png",purpose:"any"},{src:i512,sizes:"512x512",type:"image/png",purpose:"maskable"}]};
+$("mf").href=URL.createObjectURL(new Blob([JSON.stringify(man)],{type:"application/manifest+json"}));
+}catch(e){}
+window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();dp=e});
+window.addEventListener("appinstalled",function(){dp=null;$("inst").style.display="none";$("instHelp").style.display="none";toast("✅ Zum Homescreen hinzugefügt")});
+if(standalone)return;
+$("inst").style.display="block";
+function help(){var ua=navigator.userAgent,ios=/iPad|iPhone|iPod/.test(ua)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1),and=/Android/.test(ua),h;
+if(ios)h='<b>So geht\'s auf dem iPhone/iPad:</b><ol style="margin:8px 0 0;padding-left:20px"><li>Tippe unten (oder oben) auf <b>Teilen</b> <span style="font-size:1.1em">⬆️</span></li><li>Wähle <b>„Zum Home-Bildschirm“</b></li><li>Tippe auf <b>„Hinzufügen“</b></li></ol><p class="sub" style="margin:8px 0 0">Tipp: Am besten in Safari öffnen.</p>';
+else if(and)h='<b>So geht\'s auf Android:</b><ol style="margin:8px 0 0;padding-left:20px"><li>Tippe oben rechts auf das Menü <b>⋮</b></li><li>Wähle <b>„App installieren“</b> oder <b>„Zum Startbildschirm hinzufügen“</b></li><li>Bestätige mit <b>„Hinzufügen“</b></li></ol>';
+else h='<b>So geht\'s am Computer:</b><ol style="margin:8px 0 0;padding-left:20px"><li>Chrome/Edge: Klicke in der Adressleiste auf das <b>Installieren-Symbol</b> ⊕ (oder Menü → „App installieren“)</li><li>Zum Handy-Homescreen: Öffne diese Seite auf dem Handy und tippe hier nochmal.</li></ol>';
+var b=$("instHelp");b.innerHTML=h;b.style.display="block";b.scrollIntoView({behavior:"smooth",block:"center"})}
+$("inst").onclick=function(){if(dp){var d=dp;dp=null;d.prompt();d.userChoice.then(function(r){if(r&&r.outcome!=="accepted")toast("Kein Problem, du kannst es jederzeit später machen.")})}else{var b=$("instHelp");if(b.style.display==="block"){b.style.display="none"}else help()}}
+})();
 </script>
 </body>
 </html>
