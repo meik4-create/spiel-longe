@@ -164,6 +164,13 @@ input::placeholder{color:var(--muted);opacity:.8}
 @keyframes fall{to{transform:translate(var(--dx,0),105vh) rotate(var(--rt,720deg))}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Spiele-Lounge">
+<script src="https://cdn.jsdelivr.net/npm/mqtt@4.3.7/dist/mqtt.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
 </head>
 <body>
 <main>
@@ -569,16 +576,77 @@ if(d.sc&&typeof d.sc==="object"){var n={};Object.keys(d.sc).forEach(function(k){
 if(G[d.g]&&Array.isArray(d.order)&&Array.isArray(d.moves)&&d.moves.length<=300&&!(gid===d.g&&d.moves.length<=moves.length)){var s=replay(d.g,d.order,+d.seed||1,d.moves);if(s){gid=d.g;order=d.order;seed=+d.seed||1;moves=d.moves;S=s;if(gid==="ship")fleet=mkFleet()}}
 render()}
 function lost(){if(mode==="net"){net=null;mode="menu";gid=null;$("note").textContent="Verbindung verloren – bitte neu beitreten.";render()}}
-function joinRoom(name){return claude.use("room").then(function(r){if(!r)throw{code:"conn"};return r.join(name)})}
+function joinRoom(name){if(typeof claude!=="undefined"&&claude&&claude.use)return claude.use("room").then(function(r){return r?r.join(name):mqttRoom(name)});return mqttRoom(name)}
+/* ===== Online-Raum ohne claude.ai: MQTT über öffentliche WebSocket-Server (alle Nachrichten laufen über den Server) ===== */
+var BROKERS=["wss://broker.emqx.io:8084/mqtt","wss://broker.hivemq.com:8884/mqtt","wss://test.mosquitto.org:8081"];
+try{var cb=new URLSearchParams(location.search).get("broker");if(cb&&/^wss:\/\/[\w.\-:\/]+$/.test(cb))BROKERS.unshift(cb)}catch(e){}
+function loadScript(u){return new Promise(function(ok,no){var t=document.createElement("script");t.src=u;t.onload=ok;t.onerror=no;document.head.appendChild(t)})}
+function needMqtt(){if(typeof mqtt!=="undefined")return Promise.resolve();
+return loadScript("https://unpkg.com/mqtt@4.3.7/dist/mqtt.min.js").catch(function(){return loadScript("https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.7/mqtt.min.js")}).then(function(){if(typeof mqtt==="undefined")throw 0}).catch(function(){throw{code:"conn",why:"Verbindungsbibliothek konnte nicht geladen werden"}})}
+function mqttRoom(name){return needMqtt().then(function(){return new Promise(function(resolve,reject){
+var room=String(name).replace(/[^a-z0-9]/gi,"").toLowerCase().slice(0,12)||"x",topic="spiele-lounge/v1/"+room,
+myId=Math.random().toString(36).slice(2,10),seq=0,seen={},seenQ=[],handlers={},peerCbs=[],closeCbs=[],stCbs=[],peers={},myPres=null,cl=null,gone=false,settled=false,bi=0,hbT=null,lastHi=0;
+function clean(p){if(!p||typeof p!=="object")return null;return{t:+p.t||0,name:String(p.name||"").slice(0,16),av:String(p.av||"").slice(0,8)}}
+function fire(t,d,from){(handlers[t]||[]).slice().forEach(function(f){try{f({data:d,peer:from,isMe:from===myId})}catch(e){}})}
+function firePeers(){peerCbs.slice().forEach(function(f){try{f()}catch(e){}})}
+function pub(o,q){if(gone||!cl)return;try{cl.publish(topic,JSON.stringify(o),{qos:q})}catch(e){}}
+function hi(){if(!myPres)return;lastHi=Date.now();pub({k:"p",f:myId,p:myPres},0)}
+function state(x){stCbs.slice().forEach(function(f){try{f(x)}catch(e){}})}
+var api={
+emit:function(t,d){var i=myId+":"+(++seq);pub({k:"e",t:t,d:d,f:myId,i:i},t==="draw"||t==="react"?0:1)},
+on:function(t,f){(handlers[t]=handlers[t]||[]).push(f);return function(){handlers[t]=(handlers[t]||[]).filter(function(x){return x!==f})}},
+presence:function(p){myPres=Object.assign({},myPres||{},p);peers[myId]={presence:clean(myPres),seen:Date.now()};firePeers();hi()},
+onPeers:function(f){peerCbs.push(f);return function(){peerCbs=peerCbs.filter(function(x){return x!==f})}},
+peers:function(){return Object.keys(peers).map(function(k){return{peer:k,presence:peers[k].presence,sameTab:k===myId}})},
+onClose:function(f){closeCbs.push(f)},onState:function(f){stCbs.push(f)},
+leave:function(){if(gone)return;pub({k:"bye",f:myId},0);gone=true;clearInterval(hbT);var c=cl;setTimeout(function(){try{c.end(true)}catch(e){}},250)}};
+function onMsg(tp,pl){var m;try{m=JSON.parse(pl.toString())}catch(e){return}
+if(!m||typeof m!=="object"||typeof m.f!=="string"||m.f.length>20)return;
+if(m.k==="p"){var p=clean(m.p);if(!p)return;var nw=!peers[m.f];peers[m.f]={presence:p,seen:Date.now()};if(nw){firePeers();if(m.f!==myId&&Date.now()-lastHi>600)hi()}else if(JSON.stringify(peers[m.f].presence)!==JSON.stringify(p))firePeers()}
+else if(m.k==="bye"){if(m.f!==myId&&peers[m.f]){delete peers[m.f];firePeers()}}
+else if(m.k==="e"&&typeof m.t==="string"){if(typeof m.i==="string"){if(seen[m.i])return;seen[m.i]=1;seenQ.push(m.i);if(seenQ.length>300)delete seen[seenQ.shift()]}if(peers[m.f])peers[m.f].seen=Date.now();fire(m.t,m.d,m.f)}}
+function next(why){if(bi>=BROKERS.length){reject({code:"conn",why:why||"kein Server erreichbar"});return}
+var url=BROKERS[bi++],dead=false,tm,c;
+try{var n=$("note");if(n)n.textContent="Verbinde mit Server "+bi+" von "+BROKERS.length+" …"}catch(e){}
+function fallback(w){if(dead||settled)return;dead=true;clearTimeout(tm);try{c.end(true)}catch(e){}next(w)}
+try{c=mqtt.connect(url,{clientId:"sl_"+myId,clean:true,keepalive:30,connectTimeout:6000,reconnectPeriod:0,will:{topic:topic,payload:JSON.stringify({k:"bye",f:myId}),qos:0,retain:false}})}catch(e){next("Verbindungsfehler");return}
+tm=setTimeout(function(){fallback("Zeitüberschreitung")},8000);
+c.on("message",onMsg);
+c.on("connect",function(){
+if(dead)return;
+c.subscribe(topic,{qos:1},function(err){
+if(dead)return;if(err){fallback("Abo fehlgeschlagen");return}
+clearTimeout(tm);
+if(!settled){settled=true;cl=c;c.options.reconnectPeriod=2000;
+hbT=setInterval(function(){hi();var now=Date.now(),ch=false;Object.keys(peers).forEach(function(k){if(k!==myId&&now-peers[k].seen>45000){delete peers[k];ch=true}});if(ch)firePeers()},4000);
+resolve(api)}
+else{hi();state("online")}})});
+c.on("error",function(){fallback("Server nicht erreichbar")});
+c.on("close",function(){if(!settled)fallback("Verbindung geschlossen");else if(!gone)state("offline")});
+c.on("offline",function(){if(settled&&!gone)state("offline")})}
+next()})})}
+function setCS(x){var e=$("cs");if(e)e.textContent=x==="online"?"🟢 Verbunden":"🟠 Verbindung wird neu aufgebaut …"}
+function peerToast(){if(!known)return;var cur={};players().forEach(function(p){cur[p.peer]=p.presence.name||"Jemand"});
+Object.keys(cur).forEach(function(k){if(!known[k]&&k!==me()){known[k]=1;toast("👋 "+cur[k]+" ist beigetreten")}});
+Object.keys(known).forEach(function(k){if(!cur[k]){delete known[k];toast("🚪 "+(nameOf[k]||"Jemand")+" hat den Raum verlassen")}})}
+function showQR(){var b=$("qrBox");if(b.innerHTML){b.innerHTML="";return}
+if(typeof qrcode==="undefined"){toast("QR-Code braucht Internet – nutze „Teilen“");return}
+var u=location.origin+location.pathname+"?r="+roomCode.toLowerCase();
+try{var q=qrcode(0,"M");q.addData(u);q.make();var n=q.getModuleCount(),m=2,sz=n+m*2,p="";for(var r=0;r<n;r++)for(var c=0;c<n;c++)if(q.isDark(r,c))p+="M"+(c+m)+" "+(r+m)+"h1v1h-1z";
+b.innerHTML='<svg viewBox="0 0 '+sz+" "+sz+'" style="width:min(240px,70vw);background:#fff;border:3px solid var(--ink);border-radius:12px;margin-top:10px" shape-rendering="crispEdges" role="img" aria-label="QR-Code zum Raum"><path d="'+p+'" fill="#000"/></svg><div class="sub" style="margin:6px 0 0">Mit der Handy-Kamera scannen</div>'}catch(e){toast("QR-Code nicht verfügbar")}}
+document.addEventListener("visibilitychange",function(){if(!document.hidden&&net)net.emit("sync",{})});
 function myName(){var v=$("nm").value.trim();if(!v){$("note").textContent="Bitte gib zuerst deinen Namen ein.";return null}try{localStorage.setItem("sl-name",v);localStorage.setItem("sl-av",$("av").value)}catch(e){}return v}
 async function connect(code){var name=myName();if(!name)return;
-$("note").textContent="Verbinde … (beim ersten Mal kann das bis zu einer Minute dauern)";
-try{net=await joinRoom("sl-"+code.toLowerCase())}catch(e){net=null;$("note").textContent=e&&e.code==="full"?"Der Raum ist voll.":"Online-Spiel ist gerade nicht erreichbar. Öffne die Seite über den geteilten Link oder spiele gegen den Computer.";return}
-mode="net";gid=null;scores={};nameOf={};avOf={};net.presence({t:Date.now(),name:name,av:$("av").value});
+$("note").textContent="Verbinde … (das dauert ein paar Sekunden)";
+try{net=await joinRoom("sl-"+code.toLowerCase())}catch(e){net=null;$("note").textContent=e&&e.code==="full"?"Der Raum ist voll.":"Verbindung fehlgeschlagen ("+(e&&e.why||"unbekannt")+"). Wechsle zwischen WLAN und Mobilfunk und versuche es noch einmal.";return}
+mode="net";gid=null;scores={};nameOf={};avOf={};var known=null;setTimeout(function(){known={};players().forEach(function(p){known[p.peer]=1})},3000);
+if(net.onClose)net.onClose(function(){lost()});
+if(net.onState)net.onState(function(x){setCS(x);toast(x==="online"?"Wieder verbunden ✅":"Verbindung unterbrochen …");if(x==="online")net.emit("sync",{})});
+net.presence({t:Date.now(),name:name,av:$("av").value});
 offs=[net.on("move",onMove),net.on("start",onStart),net.on("state",onState),
 net.on("sync",function(m){if(!m.isMe&&(gid||sum(scores)>0))net.emit("state",{g:gid,order:order,seed:seed,moves:moves,sc:scores})}),
-net.on("stop",function(m){if(order.indexOf(m.peer)>=0||!gid){gid=null;render()}}),net.on("react",onReact),net.on("draw",onDraw),net.onPeers(render)];
-roomCode=code.toUpperCase();$("codeLine").innerHTML="Raum-Code: <span class='chip'>"+roomCode+"</span><br><button class='mini' id='cp'>📋 Code kopieren</button><button class='mini' id='sh'>📤 Teilen</button>";$("cp").onclick=copyCode;$("sh").onclick=shareRoom;$("dfw").style.display="none";$("loc").style.display="none";
+net.on("stop",function(m){if(order.indexOf(m.peer)>=0||!gid){gid=null;render()}}),net.on("react",onReact),net.on("draw",onDraw),net.onPeers(render),net.onPeers(peerToast)];
+roomCode=code.toUpperCase();$("codeLine").innerHTML="Raum-Code: <span class='chip'>"+roomCode+"</span><br><button class='mini' id='cp'>📋 Code kopieren</button><button class='mini' id='sh'>📤 Teilen</button><button class='mini' id='qr'>📷 QR-Code</button><span id='cs' class='sub' style='display:block;margin:4px 0 0'></span><div id='qrBox'></div>";$("cp").onclick=copyCode;$("sh").onclick=shareRoom;$("qr").onclick=showQR;setCS("online");$("dfw").style.display="none";$("loc").style.display="none";
 render();net.emit("sync",{})}
 function startGame(g,sd){var d=G[g];
 if(net){var l=players().slice(0,d.max).map(function(p){return p.peer});if(l.length<d.min){$("who").textContent="Für "+d.n+" brauchst du mindestens "+d.min+" Mitspieler im Raum.";return}net.emit("start",{g:g,order:l,seed:sd})}
@@ -609,8 +677,9 @@ $("again").onclick=function(){startGame(gid,rnd())};
 $("back").onclick=function(){if(net)net.emit("stop",{});else{gid=null;render()}};
 $("board").onclick=function(e){var el=e.target.closest("[data-m]");if(!el||!gid)return;var m=JSON.parse(el.getAttribute("data-m"));if(m&&m.tilt){tilt=!tilt;lastH="";render();return}if(m&&m.col){pcol=m.col;pw=m.w||4;lastH="";render();return}if(m&&m.clr){strokes=[];pbuf=[];if(net)net.emit("draw",{r:S.rd,clr:1});paintInit();return}if(m&&m.sel!==undefined){dsel=m.sel;lastH="";render();return}if(m&&m.to!==undefined){m={f:dsel,t:m.to};dsel=null}if(S.w!==null)return;if(m&&m.roll)m=gid==="kn"?{r:[1,2,3,4,5].map(function(){return 1+Math.floor(Math.random()*6)})}:gid==="mono"?{r:[1+Math.floor(Math.random()*6),1+Math.floor(Math.random()*6),Math.floor(Math.random()*10)]}:{r:1+Math.floor(Math.random()*6)};
 if(net){if(G[gid].any){if(myIdx()>=0)sendAny(m);return}if(myIdx()!==S.t)return;net.emit("move",{n:moves.length,m:m})}else{if(botOn&&S.t!==0)return;apply(m,S.t)}};
-try{var rq=new URLSearchParams(location.search).get("r");if(rq&&/^[a-z0-9]{4}$/.test(rq))$("code").value=rq}catch(e){}
+try{var rq=new URLSearchParams(location.search).get("r");if(rq&&/^[a-z0-9]{4}$/.test(rq)){$("code").value=rq;$("note").textContent="Einladung zu Raum "+rq.toUpperCase()+": Name prüfen und auf „Beitreten“ tippen."}}catch(e){}
 $("snd").onclick=function(){snd=!snd;this.textContent=snd?"🔊":"🔇"};
+try{if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)navigator.serviceWorker.register("sw.js").catch(function(){})}catch(e){}
 render();
 </script>
 </body>
