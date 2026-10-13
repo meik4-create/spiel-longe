@@ -12,6 +12,7 @@
 ## Spielmodi
 
 - **Online mit Raum-Code:** Einer erstellt einen Raum, die anderen geben den 4-stelligen Code ein, scannen den QR-Code oder öffnen den Teilen-Link. Es gibt keinen Gastgeber: Jeder darf jederzeit gehen, der Raum bleibt bestehen.
+- **Chat:** Im Online-Modus gibt es unten rechts einen Chat-Knopf 💬 (mit Zähler für ungelesene Nachrichten). Der Verlauf liegt nur auf den Geräten und gilt, solange du im Raum bist.
 - **Zusammen an einem Handy**
 - **Gegen den Computer** mit drei Schwierigkeitsstufen (läuft auch ohne Internet, wenn die App installiert ist)
 
