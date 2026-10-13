@@ -190,6 +190,14 @@ input::placeholder{color:var(--muted);opacity:.8}
 .cf{z-index:101}
 #tb{margin:0 0 10px;display:none}#tb .tbh{font-weight:800}#tb .tbs{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:6px}#tb .tbs span{background:var(--bg1);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-weight:700}#tb.fin{background:linear-gradient(135deg,#ffcf3355,#ff9f1c33);border:2px solid var(--pop);border-radius:14px;padding:12px}#tb .cup{font-size:3rem;line-height:1}
 .tro{text-align:left}.tro h3{margin:0 0 8px;font-size:1rem}.tro .tr{display:flex;justify-content:space-between;gap:8px;padding:5px 2px;border-top:1px solid var(--line)}.tro small{color:var(--muted)}
+.g9{grid-template-columns:repeat(9,1fr);gap:2px;padding:6px;background:#d29a45!important}
+.g9 .c{background:#ebc47c;border-radius:4px;box-shadow:none}.g9 .c .ds{width:84%;height:84%}.g9 .c.lm{box-shadow:inset 0 0 0 3px #fff}
+.bjr{display:flex;flex-direction:column;align-items:center;padding:8px;margin:8px 0;border:3px solid var(--line);border-radius:16px;background:var(--field)}
+.bjr.on{border-color:var(--ink);box-shadow:0 0 0 3px var(--pop)}.bjr.bu{opacity:.6}
+.bjn{font-weight:800;margin-bottom:4px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center}
+.bjt{background:var(--ink);color:#fff;border-radius:999px;padding:1px 11px;font-weight:800}
+.pcd{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;width:40px;height:56px;margin:2px;background:#fff;color:#1a1b3a;border:2px solid #1a1b3a;border-radius:7px;font-weight:800;line-height:1.05}
+.pcd small{font-size:.95rem}.pcd.rd{color:#e5383b}.pcd.nw{animation:pop .3s}
 /* ===== Admin-Panel ===== */
 #admLogin{position:fixed;inset:0;z-index:120;display:none;align-items:center;justify-content:center;background:rgba(10,12,30,.62);padding:18px}
 #admLogin.on{display:flex}
@@ -236,7 +244,7 @@ body.adm-open main{padding-bottom:calc(40vh + 110px)}
 <main>
 <div class="tools"><button class="mini" id="thm" aria-label="Hell oder dunkel">🌙</button><button class="mini" id="snd" aria-label="Ton an oder aus">🔊</button></div>
 <h1 class="logo" aria-label="Spiele-Lounge"><span class="w"><i id="egg" role="button" tabindex="0" aria-label="Überraschung" style="--c:var(--p0);--i:0;--r:-4deg;cursor:pointer">S</i><i style="--c:var(--p3);--i:1;--r:3deg">P</i><i style="--c:var(--p1);--i:2;--r:-2deg;--tc:#1a1b3a">I</i><i style="--c:var(--p2);--i:3;--r:4deg">E</i><i style="--c:var(--p4);--i:4;--r:-3deg">L</i><i style="--c:var(--p5);--i:5;--r:2deg">E</i></span><span class="w"><i style="--c:var(--p1);--i:6;--r:-2deg;--tc:#1a1b3a">L</i><i style="--c:var(--p2);--i:7;--r:4deg">O</i><i id="adm-u" style="--c:var(--p4);--i:8;--r:-3deg">U</i><i style="--c:var(--p5);--i:9;--r:2deg">N</i><i style="--c:var(--p0);--i:10;--r:-4deg">G</i><i style="--c:var(--p3);--i:11;--r:3deg">E</i></span></h1>
-<p class="sub">18 Spiele für den Spieleabend. Jeder am eigenen Handy.</p>
+<p class="sub">20 Spiele für den Spieleabend. Jeder am eigenen Handy.</p>
 <section id="menu">
 <div class="card">
 <div style="display:flex;gap:8px"><select id="av" style="width:78px;font-size:1.4rem;padding:8px"></select><input id="nm" maxlength="16" placeholder="Dein Name" autocomplete="nickname"></div>
@@ -333,7 +341,46 @@ function ub(s,i){var n=[0,0,0,0];s.h[s.t].forEach(function(cd){if(DK[cd][0]<4)n[
 function wchk(s){var wa=0,oa=0,i,ws=null;for(i=0;i<s.P;i++)if(s.al[i]){if(s.role[i]===1)wa++;else oa++}
 if(!wa){ws=[];s.role.forEach(function(r,j){if(r!==1)ws.push(j)});s.msg="🏡 Das Dorf gewinnt!"}else if(wa>=oa){ws=[];s.role.forEach(function(r,j){if(r===1)ws.push(j)});s.msg="🐺 Die Werwölfe gewinnen!"}
 if(ws){s.ws=ws;s.w=ws[0]}return s}
+function bjv(c){var r=c%13;return r<9?r+2:r<12?10:11}
+function bjt(h){var t=0,a=0;h.forEach(function(c){var v=bjv(c);t+=v;if(v===11)a++});while(t>21&&a>0){t-=10;a--}return t}
+function bjr(c){return["2","3","4","5","6","7","8","9","10","B","D","K","A"][c%13]}
+function bjnext(s,f){var k,j,b=-1,ws=[],i,v;
+for(k=1;k<=s.P;k++){j=(f+k+s.P)%s.P;if(s.st[j]===0){s.t=j;return s}}
+for(i=0;i<s.P;i++){v=s.st[i]===2?-1:bjt(s.h[i]);if(v>b){b=v;ws=[i]}else if(v===b&&v>=0)ws.push(i)}
+if(b<0){s.w=-1;s.msg="💥 Alle überkauft – Unentschieden"}else{s.w=ws[0];if(ws.length>1){s.ws=ws;s.msg="🤝 Gleichstand – die Besten gewinnen gemeinsam!"}}
+return s}
 var G={
+five:{n:"Fünf gewinnt",e:"⚫",min:2,max:2,
+bot:function(s,d){var me=s.t,op=1-me,b=s.b,best=-1,bs=-1e9,i,k,v,r,c;
+function run(i,p,dr,dc){var r=Math.floor(i/9),c=i%9,n=0,o=0,sg,y,x;for(sg=1;sg>=-1;sg-=2){y=r+dr*sg;x=c+dc*sg;while(y>=0&&y<9&&x>=0&&x<9&&b[y*9+x]===p){n++;y+=dr*sg;x+=dc*sg}if(y>=0&&y<9&&x>=0&&x<9&&b[y*9+x]===null)o++}return[n,o]}
+function sc(n,o){if(n>=4)return 100000;if(n===3)return o===2?5000:o===1?600:0;if(n===2)return o===2?300:o===1?40:0;if(n===1)return o===2?20:o===1?3:0;return 0}
+var D=[[0,1],[1,0],[1,1],[1,-1]];
+for(i=0;i<81;i++){if(b[i]!==null)continue;r=Math.floor(i/9);c=i%9;v=10-Math.abs(r-4)-Math.abs(c-4);
+for(k=0;k<4;k++){var a=run(i,me,D[k][0],D[k][1]),q=run(i,op,D[k][0],D[k][1]);v+=sc(a[0],a[1])+sc(q[0],q[1])*(d===0?.5:.9)}
+v+=Math.random()*(d===0?3000:d===1?60:5);if(v>bs){bs=v;best=i}}
+return best},
+init:function(){return{P:2,b:Array(81).fill(null),t:0,w:null}},
+step:function(s,m){if(s.w!==null||!Number.isInteger(m)||m<0||m>=81||s.b[m]!==null)return null;s.b[m]=s.t;
+var r=Math.floor(m/9),c=m%9,wl=null;
+[[0,1],[1,0],[1,1],[1,-1]].forEach(function(d){if(wl)return;var cs=[m];[1,-1].forEach(function(sg){var y=r+d[0]*sg,x=c+d[1]*sg;while(y>=0&&y<9&&x>=0&&x<9&&s.b[y*9+x]===s.t){cs.push(y*9+x);y+=d[0]*sg;x+=d[1]*sg}});if(cs.length>=5)wl=cs});
+if(wl){s.w=s.t;s.wl=wl}else if(full(s.b))s.w=-1;s.lm=m;nx(s);return s},
+view:function(s){return'<p class="score">Wer zuerst fünf Steine in einer Reihe hat, gewinnt.</p><div class="g g9">'+s.b.map(function(x,i){return'<div class="c'+(s.wl&&s.wl.indexOf(i)>=0?" win":"")+(s.lm===i?" lm":"")+'" data-m="'+i+'">'+(x===null?"":'<i class="ds p'+x+'"></i>')+'</div>'}).join("")+'</div>'}},
+bj:{n:"Einundzwanzig",e:"♠️",min:2,max:6,
+bot:function(s,d){var t=s.t,v=bjt(s.h[t]),mx=-1,act=0;
+s.h.forEach(function(h,i){if(i===t)return;if(s.st[i]!==2)mx=Math.max(mx,bjt(h));if(s.st[i]===0)act++});
+if(d===2){if(act===0)return v>=mx?{s:1}:{h:1};return(v<=16||(v<mx&&v<=18))?{h:1}:{s:1}}
+if(d===0&&Math.random()<.2)return Math.random()<.5?{h:1}:{s:1};
+return v<=(d===0?14:16)?{h:1}:{s:1}},
+init:function(P,seed){var a=[],h=[],i,s;for(i=0;i<52;i++)a.push(i);shf(a,seed||1);for(i=0;i<P;i++)h.push([a[i],a[P+i]]);
+s={P:P,dk:a,i:2*P,h:h,st:Array(P).fill(0),t:0,w:null};for(i=0;i<P;i++)if(bjt(h[i])===21)s.st[i]=1;return bjnext(s,-1)},
+step:function(s,m){if(s.w!==null||!m||s.st[s.t]!==0)return null;var t=s.t,v;
+if(m.h){if(s.i>=52)return null;s.h[t].push(s.dk[s.i]);s.i++;v=bjt(s.h[t]);if(v>21)s.st[t]=2;else if(v===21)s.st[t]=1;s.lc=[t,"h"];return bjnext(s,t)}
+if(m.s){s.st[t]=1;s.lc=[t,"s"];return bjnext(s,t)}return null},
+view:function(s,me){var o='<p class="score">Komm näher an 21 als die anderen, ohne zu überkaufen. Wer dran ist, zieht eine Karte oder hält.</p>';
+s.h.forEach(function(h,i){var v=bjt(h),st=s.st[i];
+o+='<div class="bjr'+(s.w===null&&s.t===i?" on":"")+(st===2?" bu":"")+'"><div class="bjn">'+tag(i)+'<span class="bjt">'+v+'</span>'+(st===2?'<span class="chip2">💥 überkauft</span>':st===1?'<span class="chip2">✋ hält</span>':"")+'</div><div>'+h.map(function(c,k){var su=Math.floor(c/13);return'<span class="pcd'+(su===1||su===2?" rd":"")+(s.lc&&s.lc[0]===i&&s.lc[1]==="h"&&k===h.length-1?" nw":"")+'">'+bjr(c)+'<small>'+["♠","♥","♦","♣"][su]+'</small></span>'}).join("")+'</div></div>'});
+if(s.w===null&&me===s.t)o+='<div class="row"><button class="btn" data-m=\'{"h":1}\'>🃏 Karte ziehen</button><button class="btn alt" data-m=\'{"s":1}\'>✋ Halten</button></div>';
+return o}},
 ttt:{n:"Tic Tac Toe",e:"❌",min:2,max:2,
 rb:function(s){var e=[];s.b.forEach(function(x,i){if(x===null)e.push(i)});return e[Math.floor(Math.random()*e.length)]},
 bot:function(s){var L=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]],e=[];s.b.forEach(function(x,i){if(x===null)e.push(i)});
@@ -605,9 +652,10 @@ a+='</div><div class="lbl">Deine Flotte</div><div class="g g8">';
 for(i=0;i<64;i++){f=en.filter(function(x){return x[0]===i})[0];a+='<div class="c'+(fleet[i]?" sp":"")+'">'+(f?(f[1]?"💥":"•"):"")+'</div>'}
 return a+'</div><p class="score">Treffer: '+my.filter(function(x){return x[1]}).length+' / 14</p>'}}
 };
-var TC={ttt:["#ff6b6b","#ee5a8f"],c4:["#4facfe","#3b5bdb"],nim:["#f6a85b","#e17055"],pig:["#a8e063","#2a9d4a"],mem:["#a18cd1","#7a5cff"],ludo:["#ff9a9e","#e5383b"],mono:["#43e97b","#1a936f"],rv:["#4b6cb7","#182848"],dame:["#c79081","#8b5a2b"],kn:["#f7971e","#d4580a"],uno:["#ff5f6d","#ffa04d"],wolf:["#4a4a6a","#1b1b2f"],hang:["#9d50bb","#4e2a84"],paint:["#f953c6","#b91d73"],ship:["#2193b0","#0b486b"]};
+var TC={five:["#f2c46d","#c27a1e"],bj:["#3fb37f","#12643c"],ttt:["#ff6b6b","#ee5a8f"],c4:["#4facfe","#3b5bdb"],nim:["#f6a85b","#e17055"],pig:["#a8e063","#2a9d4a"],mem:["#a18cd1","#7a5cff"],ludo:["#ff9a9e","#e5383b"],mono:["#43e97b","#1a936f"],rv:["#4b6cb7","#182848"],dame:["#c79081","#8b5a2b"],kn:["#f7971e","#d4580a"],uno:["#ff5f6d","#ffa04d"],wolf:["#4a4a6a","#1b1b2f"],hang:["#9d50bb","#4e2a84"],paint:["#f953c6","#b91d73"],ship:["#2193b0","#0b486b"]};
 var AV=["🦊","🐼","🐸","🦁","🐙","🦄","🐯","🐵"],RX=["😂","👏","😮","😡","🔥","❤️"],avOf={};
-var RULES={rps:"Beide wählen heimlich Schere ✂️, Stein 🪨 oder Papier 📄. Stein schlägt Schere, Schere schlägt Papier, Papier schlägt Stein. Bei gleicher Wahl wird die Runde wiederholt. Wer zuerst 3 Runden gewinnt, siegt. Am gleichen Handy: erst Spieler 1 wählen lassen, dann das Handy weitergeben.",
+var RULES={five:"Abwechselnd setzt ihr einen Stein auf ein freies Feld. Wer zuerst fünf eigene Steine in einer Reihe hat, waagerecht, senkrecht oder schräg, gewinnt. Tipp: Blockiere offene Dreierreihen des Gegners rechtzeitig!",
+bj:"Jeder bekommt 2 offene Karten. Wer dran ist, zieht eine Karte oder hält. Zahlenkarten zählen ihren Wert, Bube, Dame und König zählen 10, das Ass 11 oder 1. Wer über 21 kommt, ist überkauft und raus. Wer am Ende am nächsten an 21 liegt, gewinnt. Bei Gleichstand gewinnen alle Besten.",rps:"Beide wählen heimlich Schere ✂️, Stein 🪨 oder Papier 📄. Stein schlägt Schere, Schere schlägt Papier, Papier schlägt Stein. Bei gleicher Wahl wird die Runde wiederholt. Wer zuerst 3 Runden gewinnt, siegt. Am gleichen Handy: erst Spieler 1 wählen lassen, dann das Handy weitergeben.",
 hl:"Oben liegt eine Karte (2 bis Ass). Rate, ob die nächste höher oder tiefer ist. Richtig: Punkt und du bist nochmal dran. Falsch oder gleiche Zahl: der Nächste ist dran. Wer zuerst 10 Punkte hat, gewinnt.",
 dbx:"Abwechselnd eine Linie zwischen zwei Punkten setzen. Wer die vierte Seite eines Kästchens schließt, bekommt das Kästchen und darf nochmal. Wer am Ende die meisten Kästchen hat, gewinnt. Tipp: Setze nicht die dritte Seite, sonst schnappt es dir der Gegner weg!",
 uno:"Lege eine Karte, die in Farbe oder Zahl/Symbol zur obersten passt (Joker ★ und +4 gehen immer, dann Farbe wählen). ⊘ überspringt, ⇄ dreht die Richtung, +2 / +4 lässt den Nächsten ziehen. Hast du nichts, tippe „Karte ziehen“. Wer zuerst keine Karten mehr hat, gewinnt.",
@@ -829,6 +877,8 @@ $("chb").onclick=function(){var p=$("chp"),o=p.style.display==="flex";p.style.di
 $("chx").onclick=function(){$("chp").style.display="none"};$("chs").onclick=chSend;$("cht").onkeydown=function(e){if(e.key==="Enter")chSend()};
 chRender();
 var TH={
+five:SV('<rect x="14" y="4" width="72" height="56" rx="6" fill="#e0b060" stroke="#1a1b3a" stroke-width="2.5"/><g stroke="#8a5a1a" stroke-width="1.2"><path d="M26 10v44M38 10v44M50 10v44M62 10v44M74 10v44M20 16h60M20 28h60M20 40h60M20 52h60"/></g><g stroke="#fff" stroke-width="1.5"><circle cx="26" cy="16" r="5" fill="#e5383b"/><circle cx="38" cy="28" r="5" fill="#e5383b"/><circle cx="50" cy="40" r="5" fill="#e5383b"/><circle cx="62" cy="52" r="5" fill="#e5383b"/><circle cx="50" cy="28" r="5" fill="#f6b800"/><circle cx="62" cy="40" r="5" fill="#f6b800"/><circle cx="38" cy="40" r="5" fill="#f6b800"/></g>'),
+bj:SV('<g transform="rotate(-12 34 34)"><rect x="16" y="10" width="36" height="48" rx="5" fill="#fff" stroke="#1a1b3a" stroke-width="2.5"/><text x="34" y="43" font-size="24" font-weight="800" text-anchor="middle" fill="#1a1b3a">A</text><text x="25" y="23" font-size="11" text-anchor="middle" fill="#1a1b3a">♠</text></g><g transform="rotate(12 66 34)"><rect x="48" y="8" width="36" height="48" rx="5" fill="#fff" stroke="#1a1b3a" stroke-width="2.5"/><text x="66" y="41" font-size="24" font-weight="800" text-anchor="middle" fill="#e5383b">K</text><text x="57" y="21" font-size="11" text-anchor="middle" fill="#e5383b">♥</text></g>'),
 rps:SV('<g font-size="26" text-anchor="middle"><text x="20" y="44">✂️</text><text x="50" y="44">🪨</text><text x="80" y="44">📄</text></g>'),
 hl:SV('<rect x="10" y="10" width="34" height="46" rx="5" fill="#fff" stroke="#1a1b3a" stroke-width="2.5"/><text x="27" y="41" font-size="24" font-weight="800" text-anchor="middle" fill="#1a1b3a">7</text><text x="50" y="26" font-size="14" text-anchor="middle" fill="#fff">⬆</text><text x="50" y="50" font-size="14" text-anchor="middle" fill="#fff">⬇</text><rect x="56" y="10" width="34" height="46" rx="5" fill="#ffffff44" stroke="#fff" stroke-width="2.5"/><text x="73" y="41" font-size="24" font-weight="800" text-anchor="middle" fill="#fff">?</text>'),
 dbx:SV('<rect x="25" y="12" width="25" height="20" fill="#e5383b" opacity=".75"/><g stroke="#fff" stroke-width="4" stroke-linecap="round"><path d="M25 12H50M25 12V32M50 12V32M25 32H50M50 32H75M75 32V52"/></g><g fill="#1a1b3a" stroke="#fff" stroke-width="1.5"><circle cx="25" cy="12" r="4"/><circle cx="50" cy="12" r="4"/><circle cx="75" cy="12" r="4"/><circle cx="25" cy="32" r="4"/><circle cx="50" cy="32" r="4"/><circle cx="75" cy="32" r="4"/><circle cx="25" cy="52" r="4"/><circle cx="50" cy="52" r="4"/><circle cx="75" cy="52" r="4"/></g>'),
@@ -848,7 +898,7 @@ hang:SV('<g stroke="#fff" stroke-width="3.5" stroke-linecap="round" fill="none">
 paint:SV('<rect x="10" y="8" width="64" height="48" rx="6" fill="#fff" stroke="#1a1b3a" stroke-width="2.5"/><path d="M18 42q10-24 20-4t26-20" stroke="#e5383b" stroke-width="4.5" fill="none" stroke-linecap="round"/><path d="M72 12l16 16-26 26-9 3 3-9z" fill="#f6b800" stroke="#1a1b3a" stroke-width="2.5" stroke-linejoin="round"/>'),
 ship:SV('<path d="M0 52q12-8 25 0t25 0t25 0t25 0V64H0z" fill="#ffffff66"/><path d="M20 38h58l-9 14H29z" fill="#fff" stroke="#1a1b3a" stroke-width="2.5" stroke-linejoin="round"/><path d="M50 36V10l18 22z" fill="#fff" stroke="#1a1b3a" stroke-width="2.5" stroke-linejoin="round"/>')
 };
-var GRP=[["Zu zweit",["ttt","c4","rv","dame","ship","rps","dbx"]],["Würfeln und Brettspiele",["pig","kn","ludo","mono","nim"]],["Karten und Denken",["mem","uno","hang","hl"]],["Für die ganze Runde",["paint","wolf"]]],TS={ttt:"#e8457c",c4:"#3b5bdb",nim:"#d9622b",pig:"#23924a",mem:"#7352f0",ludo:"#d92f3a",mono:"#14806a",rv:"#26335f",dame:"#8b5a2b",kn:"#c9500c",uno:"#e0334b",wolf:"#3a3a5c",hang:"#8541b0",paint:"#c4208a",ship:"#1a7a9a",rps:"#e0792b",hl:"#2a7f9e",dbx:"#b0307a"};
+var GRP=[["Zu zweit",["ttt","five","c4","rv","dame","ship","rps","dbx"]],["Würfeln und Brettspiele",["pig","kn","ludo","mono","nim"]],["Karten und Denken",["mem","bj","uno","hang","hl"]],["Für die ganze Runde",["paint","wolf"]]],TS={five:"#c27a1e",bj:"#1b7a4a",ttt:"#e8457c",c4:"#3b5bdb",nim:"#d9622b",pig:"#23924a",mem:"#7352f0",ludo:"#d92f3a",mono:"#14806a",rv:"#26335f",dame:"#8b5a2b",kn:"#c9500c",uno:"#e0334b",wolf:"#3a3a5c",hang:"#8541b0",paint:"#c4208a",ship:"#1a7a9a",rps:"#e0792b",hl:"#2a7f9e",dbx:"#b0307a"};
 GRP.forEach(function(g){var h=document.createElement("div");h.className="gg";h.textContent=g[0];$("games").appendChild(h);var w=document.createElement("div");w.className="tiles";g[1].forEach(function(k){var d=G[k],b=document.createElement("button");b.className="tile";b.style.setProperty("--c",TS[k]||"#3b5bdb");b.innerHTML='<div class="th">'+(TH[k]||"<b>"+d.e+"</b>")+"</div>"+d.n+"<small>"+(d.min===d.max?d.min:d.min+"–"+d.max)+" Spieler</small>";b.onclick=function(){startGame(k,rnd())};w.appendChild(b)});$("games").appendChild(w)});
 $("rndG").onclick=function(){var n=net?players().length:botOn?2:+$("lp").value,ks=Object.keys(G).filter(function(k){var d=G[k];if(n<d.min||n>d.max)return false;if(botOn&&!d.bot)return false;if(!net&&!botOn&&d.online)return false;return true});if(!ks.length){toast("Für "+n+" Spieler passt gerade kein Spiel.");return}startGame(pick(ks),rnd())};
 function keepAwake(){try{if(navigator.wakeLock&&!wl)navigator.wakeLock.request("screen").then(function(l){wl=l;l.addEventListener("release",function(){wl=null})},function(){})}catch(e){}}
@@ -896,7 +946,7 @@ try{
 var i192=icon(192),i512=icon(512),i180=icon(180);
 $("ati").href=i180;$("fav").href=i192;
 var base=location.href.split("#")[0].split("?")[0];
-var man={name:"Spiele-Lounge",short_name:"Spiele",description:"18 Spiele für den Spieleabend",start_url:base,scope:base.replace(/[^\/]*$/,""),display:"standalone",orientation:"portrait",background_color:"#dfe7ff",theme_color:"#dfe7ff",lang:"de",icons:[{src:i192,sizes:"192x192",type:"image/png",purpose:"any"},{src:i512,sizes:"512x512",type:"image/png",purpose:"any"},{src:i512,sizes:"512x512",type:"image/png",purpose:"maskable"}]};
+var man={name:"Spiele-Lounge",short_name:"Spiele",description:"20 Spiele für den Spieleabend",start_url:base,scope:base.replace(/[^\/]*$/,""),display:"standalone",orientation:"portrait",background_color:"#dfe7ff",theme_color:"#dfe7ff",lang:"de",icons:[{src:i192,sizes:"192x192",type:"image/png",purpose:"any"},{src:i512,sizes:"512x512",type:"image/png",purpose:"any"},{src:i512,sizes:"512x512",type:"image/png",purpose:"maskable"}]};
 $("mf").href=URL.createObjectURL(new Blob([JSON.stringify(man)],{type:"application/manifest+json"}));
 }catch(e){}
 window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();dp=e});
@@ -918,7 +968,7 @@ var CODE="spiele2026",
 adm={on:false,open:false,mk:true,dv:[null,null,null,null,null],bp:null,hk:"",hv:null,html:"",tm:0},
 orig={render:null,pick:null,board:null,rnd:Math.random},
 E=["✂️","🪨","📄"],FARB=["Rot","Gelb","Grün","Blau"],
-HG={ttt:1,c4:1,nim:1,rv:1,dame:1,dbx:1,ludo:1,uno:1,kn:1,pig:1},
+HG={five:1,ttt:1,c4:1,nim:1,rv:1,dame:1,dbx:1,ludo:1,uno:1,kn:1,pig:1},
 DICE={pig:1,ludo:1,mono:2,kn:5};
 
 function HR(x){return x<=10?x:["B","D","K","A"][x-11]}
@@ -933,6 +983,7 @@ function mark(cls,els){var cur=document.querySelectorAll("."+cls),i;for(i=0;i<cu
 /* ---------- Zug-Tipps (nutzt die Computer-Logik auf "Schwer") ---------- */
 function describe(g,m){
 switch(g){
+case"five":return{txt:"Setze auf Reihe "+(Math.floor(m/9)+1)+", Spalte "+(m%9+1),ms:function(){return[m]}};
 case"ttt":return{txt:"Setze auf Reihe "+(Math.floor(m/3)+1)+", Spalte "+(m%3+1),ms:function(){return[m]}};
 case"c4":return{txt:"Wirf in Spalte "+(m+1)+" ein",ms:function(){return[m]}};
 case"nim":return{txt:"Reihe "+(m[0]+1)+": "+m[1]+" Hölzchen nehmen",ms:function(){return[m]}};
@@ -1007,6 +1058,10 @@ return'<div class="adm-s"><b>👀 Alle Rollen</b>'+x+'</div>'}
 function paintSec(){var s=S,wd=WL[s.wo[Math.min(s.rd,s.P*2-1)]],me=myIdx();
 return'<div class="adm-s"><b>👀 Gesuchtes Wort</b><div class="adm-t" style="font-size:1.3rem;letter-spacing:.1em">'+esc(wd)+'</div>'+(s.w===null&&me>=0&&me!==s.dr?'<button class="mini" data-a="pg">✅ Sofort richtig raten</button>':'')+'</div>'}
 
+function bjSec(o){var s=S,h=s.h[s.t],n=s.dk[s.i],x="",i,ok;if(s.w!==null||n===undefined)return"";
+ok=bjt(h.concat([n]))<=21;o.ms.push(ok?{h:1}:{s:1});
+for(i=s.i;i<Math.min(s.i+4,52);i++)x+='<span class="adm-c" style="background:'+(Math.floor(s.dk[i]/13)===1||Math.floor(s.dk[i]/13)===2?"#e5383b":"#222")+'">'+bjr(s.dk[i])+'</span>';
+return'<div class="adm-s"><b>👀 Nächste Karten im Stapel</b><div>'+x+'</div><div class="adm-t">'+tag(s.t)+': Mit der nächsten Karte '+(ok?"bleibst du bei "+bjt(h.concat([n]))+" – ziehen lohnt sich!":"würdest du überkaufen – lieber halten!")+'</div></div>'}
 function cheat(g,o){var h="";
 if(DICE[g])h+=diceSec(g);
 if(HG[g])h+=hintSec(g,o);
@@ -1014,6 +1069,7 @@ if(g==="rps")h+=rpsSec(o);
 else if(g==="ship")h+=shipSec(o);
 else if(g==="mem")h+=memSec(o);
 else if(g==="uno")h+=unoSec();
+else if(g==="bj")h+=bjSec(o);
 else if(g==="hang")h+=hangSec(o);
 else if(g==="hl")h+=hlSec(o);
 else if(g==="wolf")h+=wolfSec();
