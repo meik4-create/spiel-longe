@@ -190,6 +190,38 @@ input::placeholder{color:var(--muted);opacity:.8}
 .cf{z-index:101}
 #tb{margin:0 0 10px;display:none}#tb .tbh{font-weight:800}#tb .tbs{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:6px}#tb .tbs span{background:var(--bg1);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-weight:700}#tb.fin{background:linear-gradient(135deg,#ffcf3355,#ff9f1c33);border:2px solid var(--pop);border-radius:14px;padding:12px}#tb .cup{font-size:3rem;line-height:1}
 .tro{text-align:left}.tro h3{margin:0 0 8px;font-size:1rem}.tro .tr{display:flex;justify-content:space-between;gap:8px;padding:5px 2px;border-top:1px solid var(--line)}.tro small{color:var(--muted)}
+/* ===== Admin-Panel ===== */
+#admLogin{position:fixed;inset:0;z-index:120;display:none;align-items:center;justify-content:center;background:rgba(10,12,30,.62);padding:18px}
+#admLogin.on{display:flex}
+.adm-box{background:var(--card);color:var(--text);border:3px solid var(--ink);border-radius:22px;box-shadow:0 6px 0 var(--ink);padding:18px;width:100%;max-width:340px;text-align:center}
+.adm-box h3{margin:0 0 12px}
+.adm-box input{text-align:center;letter-spacing:.12em}
+.adm-box .row{margin-top:8px}
+#admErr{min-height:1.4em;color:var(--p0);font-weight:800;margin:8px 0 0}
+.adm-box.shake{animation:admsh .4s}
+@keyframes admsh{20%,60%{transform:translateX(-9px)}40%,80%{transform:translateX(9px)}}
+#admFab{position:fixed;left:12px;bottom:calc(34px + env(safe-area-inset-bottom,0px));width:48px;height:48px;border-radius:50%;border:3px solid var(--ink);background:#ff2d95;color:#fff;font-size:1.3rem;box-shadow:0 4px 0 var(--ink);z-index:40;display:none;cursor:pointer;padding:0}
+#admP{position:fixed;left:10px;right:10px;bottom:calc(92px + env(safe-area-inset-bottom,0px));max-width:480px;max-height:40vh;margin:0 auto;overflow:auto;background:var(--card);color:var(--text);border:3px solid #ff2d95;border-radius:20px;box-shadow:0 5px 0 var(--ink);z-index:40;display:none;padding:12px;text-align:left}
+#admP.on{display:block}
+#admP .mini{margin:4px 3px 0;min-height:34px;padding:4px 10px;font-size:.8rem}
+.adm-h{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:6px}
+.adm-h b{font-size:1.05rem}
+.adm-s{border-top:2px dashed var(--line);padding:8px 0 4px}
+.adm-s>b{display:block;margin-bottom:4px}
+.adm-t{margin:4px 0;font-weight:700}
+.adm-grid{display:grid;gap:3px;justify-content:start;margin:4px 0}
+.adm-grid span{display:grid;place-items:center;width:30px;height:30px;background:var(--field);border:1px solid var(--line);border-radius:6px;font-size:1rem}
+.adm-grid .dn{opacity:.35}
+.adm-grid .sh{background:#ff2d9533;border-color:#ff2d95}
+.adm-dice{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.adm-dice select{width:auto;padding:6px 8px;border-width:2px;border-radius:10px;font-size:.9rem}
+.adm-c{display:inline-block;min-width:26px;padding:2px 6px;border-radius:6px;color:#fff;font-weight:800;text-align:center;margin:1px;border:1px solid #0004;text-shadow:0 1px 1px #0006}
+#admRm{display:block;background:#e5383b;color:#fff;border:3px solid var(--ink);border-radius:14px;box-shadow:0 4px 0 var(--ink);padding:10px;font:inherit;font-weight:800;width:100%;margin:12px 0 4px;cursor:pointer}
+.adm-hl{outline:4px solid #ff2d95!important;outline-offset:-3px;filter:drop-shadow(0 0 6px #ff2d95) drop-shadow(0 0 6px #ff2d95)}
+line.adm-hl{stroke:#ff2d95!important;opacity:1!important;outline:none!important}
+.adm-sp{background:#ff2d9540!important;box-shadow:inset 0 0 0 3px #ff2d95!important}
+.adm-sp:empty::after{content:"🚢";font-size:.9em}
+body.adm-open main{padding-bottom:calc(40vh + 110px)}
 </style>
 <link rel="icon" id="fav" href="data:,">
 <link rel="apple-touch-icon" id="ati" href="data:,">
@@ -203,7 +235,7 @@ input::placeholder{color:var(--muted);opacity:.8}
 <body>
 <main>
 <div class="tools"><button class="mini" id="thm" aria-label="Hell oder dunkel">🌙</button><button class="mini" id="snd" aria-label="Ton an oder aus">🔊</button></div>
-<h1 class="logo" aria-label="Spiele-Lounge"><span class="w"><i id="egg" role="button" tabindex="0" aria-label="Überraschung" style="--c:var(--p0);--i:0;--r:-4deg;cursor:pointer">S</i><i style="--c:var(--p3);--i:1;--r:3deg">P</i><i style="--c:var(--p1);--i:2;--r:-2deg;--tc:#1a1b3a">I</i><i style="--c:var(--p2);--i:3;--r:4deg">E</i><i style="--c:var(--p4);--i:4;--r:-3deg">L</i><i style="--c:var(--p5);--i:5;--r:2deg">E</i></span><span class="w"><i style="--c:var(--p1);--i:6;--r:-2deg;--tc:#1a1b3a">L</i><i style="--c:var(--p2);--i:7;--r:4deg">O</i><i style="--c:var(--p4);--i:8;--r:-3deg">U</i><i style="--c:var(--p5);--i:9;--r:2deg">N</i><i style="--c:var(--p0);--i:10;--r:-4deg">G</i><i style="--c:var(--p3);--i:11;--r:3deg">E</i></span></h1>
+<h1 class="logo" aria-label="Spiele-Lounge"><span class="w"><i id="egg" role="button" tabindex="0" aria-label="Überraschung" style="--c:var(--p0);--i:0;--r:-4deg;cursor:pointer">S</i><i style="--c:var(--p3);--i:1;--r:3deg">P</i><i style="--c:var(--p1);--i:2;--r:-2deg;--tc:#1a1b3a">I</i><i style="--c:var(--p2);--i:3;--r:4deg">E</i><i style="--c:var(--p4);--i:4;--r:-3deg">L</i><i style="--c:var(--p5);--i:5;--r:2deg">E</i></span><span class="w"><i style="--c:var(--p1);--i:6;--r:-2deg;--tc:#1a1b3a">L</i><i style="--c:var(--p2);--i:7;--r:4deg">O</i><i id="adm-u" style="--c:var(--p4);--i:8;--r:-3deg">U</i><i style="--c:var(--p5);--i:9;--r:2deg">N</i><i style="--c:var(--p0);--i:10;--r:-4deg">G</i><i style="--c:var(--p3);--i:11;--r:3deg">E</i></span></h1>
 <p class="sub">18 Spiele für den Spieleabend. Jeder am eigenen Handy.</p>
 <section id="menu">
 <div class="card">
@@ -237,6 +269,9 @@ input::placeholder{color:var(--muted);opacity:.8}
 <button id="chb" class="chb" aria-label="Chat">💬<span id="chn"></span></button><div id="chp" class="chp"><div class="chh">💬 Chat<button class="mini" id="chx" aria-label="Schließen">✕</button></div><div id="chl"></div><div class="chi"><input id="cht" maxlength="200" placeholder="Nachricht …" autocomplete="off"><button class="btn" id="chs">Senden</button></div></div>
 <div id="fx" aria-live="polite"></div>
 <div id="e67" role="dialog" aria-label="Easter Egg"><b>67</b><small>Tippen zum Schließen</small></div>
+<div id="admLogin" role="dialog" aria-label="Zugang"><div class="adm-box" id="admBox"><h3>🔒 Geheimer Code</h3><input id="admCode" type="password" placeholder="Code eingeben" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"><div id="admErr"></div><div class="row"><button class="btn alt" id="admNo">Abbrechen</button><button class="btn" id="admOk">Öffnen</button></div></div></div>
+<button id="admFab" aria-label="Admin-Panel">🛠</button>
+<div id="admP" role="region" aria-label="Admin-Panel"></div>
 <div class="ver" id="ver"></div>
 <script>
 var $=function(i){return document.getElementById(i)};
@@ -874,6 +909,180 @@ else if(and)h='<b>So geht\'s auf Android:</b><ol style="margin:8px 0 0;padding-l
 else h='<b>So geht\'s am Computer:</b><ol style="margin:8px 0 0;padding-left:20px"><li>Chrome/Edge: Klicke in der Adressleiste auf das <b>Installieren-Symbol</b> ⊕ (oder Menü → „App installieren“)</li><li>Zum Handy-Homescreen: Öffne diese Seite auf dem Handy und tippe hier nochmal.</li></ol>';
 var b=$("instHelp");b.innerHTML=h;b.style.display="block";b.scrollIntoView({behavior:"smooth",block:"center"})}
 $("inst").onclick=function(){if(dp){var d=dp;dp=null;d.prompt();d.userChoice.then(function(r){if(r&&r.outcome!=="accepted")toast("Kein Problem, du kannst es jederzeit später machen.")})}else{var b=$("instHelp");if(b.style.display==="block"){b.style.display="none"}else help()}}
+})();
+</script>
+<script>
+/* ===== Admin-Panel: im Titel auf das U von LOUNGE tippen ===== */
+(function(){
+var CODE="spiele2026",
+adm={on:false,open:false,mk:true,dv:[null,null,null,null,null],bp:null,hk:"",hv:null,html:"",tm:0},
+orig={render:null,pick:null,board:null,rnd:Math.random},
+E=["✂️","🪨","📄"],FARB=["Rot","Gelb","Grün","Blau"],
+HG={ttt:1,c4:1,nim:1,rv:1,dame:1,dbx:1,ludo:1,uno:1,kn:1,pig:1},
+DICE={pig:1,ludo:1,mono:2,kn:5};
+
+function HR(x){return x<=10?x:["B","D","K","A"][x-11]}
+function sq(i){return"ABCDEFGH".charAt(i&7)+((i>>3)+1)}
+function canAct(){if(!S||S.w!==null)return false;if(G[gid].any)return myIdx()>=0;if(net)return myIdx()===S.t;if(botOn)return S.t===0;return true}
+
+/* ---------- Markierungen auf dem Spielbrett ---------- */
+function nodes(){var r=[],l=$("board").querySelectorAll("[data-m]"),i,v;for(i=0;i<l.length;i++){try{v=JSON.stringify(JSON.parse(l[i].getAttribute("data-m")))}catch(e){continue}r.push([l[i],v])}return r}
+function find(ms){var N=nodes(),out=[];ms.forEach(function(m){var k=JSON.stringify(m);N.forEach(function(p){if(p[1]===k&&out.indexOf(p[0])<0)out.push(p[0])})});return out}
+function mark(cls,els){var cur=document.querySelectorAll("."+cls),i;for(i=0;i<cur.length;i++)if(els.indexOf(cur[i])<0)cur[i].classList.remove(cls);for(i=0;i<els.length;i++)if(!els[i].classList.contains(cls))els[i].classList.add(cls)}
+
+/* ---------- Zug-Tipps (nutzt die Computer-Logik auf "Schwer") ---------- */
+function describe(g,m){
+switch(g){
+case"ttt":return{txt:"Setze auf Reihe "+(Math.floor(m/3)+1)+", Spalte "+(m%3+1),ms:function(){return[m]}};
+case"c4":return{txt:"Wirf in Spalte "+(m+1)+" ein",ms:function(){return[m]}};
+case"nim":return{txt:"Reihe "+(m[0]+1)+": "+m[1]+" Hölzchen nehmen",ms:function(){return[m]}};
+case"rv":return{txt:"Setze auf "+sq(m),ms:function(){return[m]}};
+case"dame":return{txt:"Ziehe von "+sq(m.f)+" nach "+sq(m.t),ms:function(){return(S.ch!==null||dsel===m.f)?[{to:m.t}]:[{sel:m.f}]}};
+case"dbx":return{txt:"Zeichne die leuchtende Linie",ms:function(){return[m]}};
+case"ludo":if(m.r!==undefined)return{txt:"Würfeln",ms:function(){return[{roll:1}]}};return{txt:"Figur "+(m.p+1)+" ziehen",ms:function(){return[{p:m.p}]}};
+case"uno":if(m.d)return{txt:"Karte ziehen",ms:function(){return[{d:1}]}};
+var cd=DK[S.h[S.t][m.p]];if(cd[0]!==4)delete m.c;
+return{txt:"Spiele Karte "+(m.p+1)+" von links"+(cd[0]===4?" und wünsch dir "+FARB[m.c]:""),ms:function(){return[m]}};
+case"kn":if(m.r)return{txt:"Würfeln",ms:function(){return[{roll:1}]}};
+if(m.k!==undefined)return{txt:"Würfel "+(m.k+1)+" halten bzw. loslassen",ms:function(){return[{k:m.k}]}};
+return{txt:"Eintragen bei „"+KC[m.c]+"“ ("+ks(S.d,m.c)+" Punkte)",ms:function(){return[{c:m.c}]}};
+case"pig":if(m.h)return{txt:"Punkte behalten",ms:function(){return[{h:1}]}};return{txt:"Weiterwürfeln",ms:function(){return[{roll:1}]}};
+}return null}
+function getHint(g){
+if(!HG[g]||!canAct())return null;
+var key=g+":"+moves.length+":"+S.t+":"+(botOn?$("df").value:"");
+if(adm.hk===key)return adm.hv;
+var s=cl(S),m=null,r=null;
+try{
+if((g==="ttt"||g==="c4")&&s.t===0){s.b=s.b.map(function(x){return x===null?null:1-x});s.t=1}
+m=G[g].bot(s,2);
+if(m!==null&&m!==undefined)r=describe(g,m)
+}catch(e){r=null}
+adm.hk=key;adm.hv=r;return r}
+function hintSec(g,o){var hh=getHint(g);if(!hh)return"";o.ms=o.ms.concat(hh.ms());return'<div class="adm-s"><b>💡 Bester Zug</b><div class="adm-t">'+hh.txt+'</div></div>'}
+
+/* ---------- Würfel bestimmen ---------- */
+function diceSec(g){var n=DICE[g],o="",i,k,x;
+for(i=0;i<n;i++){o+='<label>'+(n>1?(i+1)+". ":"")+'<select data-d="'+i+'"><option value="">🎲 Zufall</option>';for(k=1;k<=6;k++)o+='<option value="'+k+'"'+(adm.dv[i]===k?" selected":"")+'>'+k+'</option>';o+='</select></label>'}
+x='<div class="adm-s"><b>🎲 Würfel bestimmen</b><div class="adm-dice">'+o+'</div>';
+if(g==="kn")x+='<div><button class="mini" data-a="pre" data-v="6,6,6,6,6">Kniffel</button><button class="mini" data-a="pre" data-v="1,2,3,4,5">Gr. Straße</button><button class="mini" data-a="pre" data-v="3,3,3,5,5">Full House</button><button class="mini" data-a="pre" data-v="4,4,4,4,2">Viererpasch</button></div>';
+return x+'<button class="mini" data-a="dz">Alle zufällig</button><p class="sub" style="margin:4px 0 0;font-size:.8rem">Gilt bei jedem Wurf, bis du wieder auf „Zufall“ stellst.'+(g==="kn"?" Gehaltene Würfel bleiben, wie sie sind.":"")+'</p></div>'}
+
+/* ---------- Spiel-spezifische Einblicke ---------- */
+function rpsSec(o){var s=S,me=myIdx(),x=null,who="Gegner";
+if(botOn){who="Computer";if(s.w===null&&s.t===0&&s.p===null&&(!adm.bp||adm.bp.k!==moves.length+1))adm.bp={k:moves.length+1,v:G.rps.bot(cl(s),+$("df").value)};x=(adm.bp&&s.w===null)?adm.bp.v:null}
+else if(s.p!==null&&s.w===null&&(!net||me===1))x=s.p;
+if(x===null)return'<div class="adm-s"><b>👀 Wahl des Gegners</b><p class="sub" style="margin:0">'+(net&&me===0?"Du wählst als Erste(r) – vom Gegner ist noch nichts zu sehen. Als zweiter Spieler siehst du seine Wahl sofort.":"Noch hat niemand gewählt.")+'</p></div>';
+var c=(x+1)%3;o.ms.push(c);
+return'<div class="adm-s"><b>👀 '+who+' hat gewählt</b><div style="font-size:2.2rem;line-height:1.2">'+E[x]+'</div><div class="adm-t">Spiel '+E[c]+' – das gewinnt!</div></div>'}
+function shipSec(o){
+if(!botOn)return'<div class="adm-s"><b>👀 Gegnerische Flotte</b><p class="sub" style="margin:0">Online kennt nur dein Gegner seine Flotte. Sichtbar ist sie nur im Spiel gegen den Computer.</p></div>';
+var sh={},i,c,x="",left=0,nxt=-1;S.sh[0].forEach(function(a){sh[a[0]]=a[1]});
+for(i=0;i<64;i++){var f=botFleet[i],st=sh[i];if(f&&!st){left++;if(nxt<0)nxt=i}c=f?(st?"💥":"🚢"):(st===undefined?"":"•");x+='<span class="'+(f&&!st?"sh":"")+'">'+c+'</span>'}
+if(nxt>=0&&canAct()&&!S.pend)o.ms.push({s:nxt});
+o.sp=[];for(i=0;i<64;i++)if(botFleet[i])o.sp.push(i);
+return'<div class="adm-s"><b>👀 Flotte des Computers</b><div class="adm-grid" style="grid-template-columns:repeat(8,30px)">'+x+'</div><p class="adm-t">Noch '+left+' Schiffsfelder'+(nxt>=0?" · nächster Treffer: Reihe "+((nxt>>3)+1)+", Spalte "+((nxt&7)+1):"")+'</p></div>'}
+function memSec(o){var s=S,m=[],i,j,k,f=-1,x="";
+if(s.o.length===1){for(j=0;j<16;j++)if(j!==s.o[0]&&!s.d[j]&&s.a[j]===s.a[s.o[0]]){m=[j];break}}
+else{for(i=0;i<16;i++)if(!s.d[i]&&s.o.indexOf(i)<0){f=i;break}
+if(f>=0)for(k=f+1;k<16;k++)if(!s.d[k]&&s.a[k]===s.a[f]){m=[f,k];break}}
+if(canAct())o.ms=o.ms.concat(m);
+for(i=0;i<16;i++)x+='<span class="'+(s.d[i]?"dn":"")+'">'+s.a[i]+'</span>';
+return'<div class="adm-s"><b>👀 Alle Karten</b><div class="adm-grid" style="grid-template-columns:repeat(4,30px)">'+x+'</div>'+(m.length&&canAct()?'<p class="adm-t">Das passende Paar leuchtet pink.</p>':'')+'</div>'}
+function chip(cd){var c=DK[cd];return'<span class="adm-c" style="background:'+UC[c[0]]+'">'+UV[c[1]]+'</span>'}
+function unoSec(){var s=S,me=myIdx(),x="",i;
+for(i=0;i<s.P;i++){if(i===me)continue;x+='<div>'+tag(i)+': '+s.h[i].map(chip).join("")+'</div>'}
+return'<div class="adm-s"><b>👀 Karten der anderen</b>'+x+'<div class="adm-t">Nächste Zieh-Karte: '+(s.dk.length?chip(s.dk[0]):"–")+'</div></div>'}
+function hangSec(o){var s=S,n=s.wd.split("").filter(function(c){return s.gs.indexOf(c)<0})[0],on=n&&s.w===null;
+if(on)o.ms.push({l:n});
+return'<div class="adm-s"><b>👀 Gesuchtes Wort</b><div class="adm-t" style="font-size:1.5rem;letter-spacing:.15em">'+esc(s.wd)+'</div>'+(on?'<div class="adm-t">Nächster richtiger Buchstabe: '+n+'</div>':'')+'</div>'}
+function hlSec(o){var s=S,a=s.dk[s.i],b=s.dk[s.i+1],x,i,n="";if(b===undefined||s.w!==null)return"";
+x=b>a?"⬆️ Höher":b<a?"⬇️ Tiefer":"Gleich – zählt als falsch";
+if(b>a)o.ms.push({hl:"h"});else if(b<a)o.ms.push({hl:"l"});
+for(i=s.i+2;i<Math.min(s.i+7,52);i++)n+='<span class="adm-c" style="background:#2a7f9e">'+HR(s.dk[i])+'</span>';
+return'<div class="adm-s"><b>👀 Nächste Karte</b><div class="adm-t">'+HR(b)+' → '+x+'</div>'+(n?'<div>Danach: '+n+'</div>':'')+'</div>'}
+function wolfSec(){var s=S,R=["🏡 Dorfbewohner","🐺 Werwolf","🔮 Seher(in)"],x="",j;
+for(j=0;j<s.P;j++)x+='<div>'+tag(j)+' – '+R[s.role[j]]+(s.al[j]?"":" ☠️")+'</div>';
+return'<div class="adm-s"><b>👀 Alle Rollen</b>'+x+'</div>'}
+function paintSec(){var s=S,wd=WL[s.wo[Math.min(s.rd,s.P*2-1)]],me=myIdx();
+return'<div class="adm-s"><b>👀 Gesuchtes Wort</b><div class="adm-t" style="font-size:1.3rem;letter-spacing:.1em">'+esc(wd)+'</div>'+(s.w===null&&me>=0&&me!==s.dr?'<button class="mini" data-a="pg">✅ Sofort richtig raten</button>':'')+'</div>'}
+
+function cheat(g,o){var h="";
+if(DICE[g])h+=diceSec(g);
+if(HG[g])h+=hintSec(g,o);
+if(g==="rps")h+=rpsSec(o);
+else if(g==="ship")h+=shipSec(o);
+else if(g==="mem")h+=memSec(o);
+else if(g==="uno")h+=unoSec();
+else if(g==="hang")h+=hangSec(o);
+else if(g==="hl")h+=hlSec(o);
+else if(g==="wolf")h+=wolfSec();
+else if(g==="paint")h+=paintSec();
+return h}
+
+function build(o){
+var h='<div class="adm-h"><b>🛠 Admin-Panel</b><span><button class="mini" data-a="mk">✨ Markierungen: '+(adm.mk?"an":"aus")+'</button><button class="mini" data-a="close" aria-label="Zuklappen">✕</button></span></div>';
+if(!gid||!S||mode==="menu")h+='<p class="sub" style="margin:6px 0">Starte ein Spiel, dann erscheinen hier die Cheats dafür.</p>';
+else h+='<div class="adm-t">'+G[gid].e+' '+G[gid].n+'</div>'+(cheat(gid,o)||'<p class="sub" style="margin:6px 0">Hier gibt es gerade nichts zu sehen.</p>');
+return h+'<button id="admRm" data-a="rm">🗑 Panel entfernen</button>'}
+
+function refresh(){
+if(!adm.on)return;
+var o={ms:[],sp:null},h=build(o),sp=[],gr;
+if(h!==adm.html){adm.html=h;$("admP").innerHTML=h}
+mark("adm-hl",adm.mk&&o.ms.length?find(o.ms):[]);
+if(adm.mk&&o.sp){gr=$("board").querySelector(".g8");if(gr)o.sp.forEach(function(i){if(gr.children[i])sp.push(gr.children[i])})}
+mark("adm-sp",sp)}
+
+/* ---------- ein- und ausschalten ---------- */
+function togglePanel(f){adm.open=typeof f==="boolean"?f:!adm.open;$("admP").classList.toggle("on",adm.open);document.body.classList.toggle("adm-open",adm.open)}
+function activate(){
+if(adm.on)return;adm.on=true;
+orig.pick=pickBot;
+pickBot=function(g){if(adm.on&&g==="rps"&&adm.bp&&adm.bp.k===moves.length){var v=adm.bp.v;adm.bp=null;return v}return orig.pick(g)};
+orig.board=$("board").onclick;
+$("board").onclick=function(e){
+var el=e.target.closest&&e.target.closest("[data-m]"),q=null,i=0;
+if(adm.on&&el&&gid&&DICE[gid]&&/"roll"/.test(el.getAttribute("data-m")||"")){var d=adm.dv.slice(0,DICE[gid]);if(d.some(function(v){return v}))q=d}
+if(q)Math.random=function(){if(i<q.length){var v=q[i++];if(v)return(v-1+.5)/6}return orig.rnd()};
+try{return orig.board.call(this,e)}finally{Math.random=orig.rnd}};
+orig.render=render;
+render=function(){var r=orig.render.apply(this,arguments);try{refresh()}catch(x){}return r};
+$("admFab").style.display="block";
+adm.tm=setInterval(function(){try{refresh()}catch(x){}},400);
+togglePanel(true);refresh();toast("🛠 Admin-Panel aktiviert")}
+function deactivate(){
+if(!adm.on)return;adm.on=false;clearInterval(adm.tm);
+pickBot=orig.pick;$("board").onclick=orig.board;render=orig.render;Math.random=orig.rnd;
+mark("adm-hl",[]);mark("adm-sp",[]);
+$("admP").classList.remove("on");document.body.classList.remove("adm-open");$("admP").innerHTML="";$("admFab").style.display="none";
+adm.open=false;adm.html="";adm.bp=null;adm.hk="";adm.hv=null;adm.dv=[null,null,null,null,null];
+toast("Admin-Panel entfernt")}
+
+/* ---------- Code-Fenster ---------- */
+function openLogin(){if(adm.on){togglePanel(true);refresh();return}
+$("admLogin").classList.add("on");$("admErr").textContent="";var c=$("admCode");c.value="";setTimeout(function(){c.focus()},60)}
+function closeLogin(){$("admLogin").classList.remove("on");$("admCode").value=""}
+function tryLogin(){
+if($("admCode").value.trim().toLowerCase()===CODE){closeLogin();activate()}
+else{$("admErr").textContent="Falscher Code";var b=$("admBox");b.classList.remove("shake");void b.offsetWidth;b.classList.add("shake");$("admCode").select()}}
+
+var u=$("adm-u");if(u)u.onclick=openLogin;
+$("admOk").onclick=tryLogin;$("admNo").onclick=closeLogin;
+$("admCode").onkeydown=function(e){if(e.key==="Enter")tryLogin();else if(e.key==="Escape")closeLogin()};
+$("admLogin").onclick=function(e){if(e.target===this)closeLogin()};
+$("admFab").onclick=function(){togglePanel()};
+$("admP").addEventListener("click",function(e){
+var b=e.target.closest("[data-a]");if(!b)return;var a=b.getAttribute("data-a");
+if(a==="rm")deactivate();
+else if(a==="close")togglePanel(false);
+else if(a==="mk"){adm.mk=!adm.mk;refresh()}
+else if(a==="dz"){adm.dv=[null,null,null,null,null];refresh()}
+else if(a==="pre"){adm.dv=b.getAttribute("data-v").split(",").map(Number);refresh()}
+else if(a==="pg"){if(gid==="paint"&&S&&S.w===null&&myIdx()>=0&&myIdx()!==S.dr)sendAny({g:WL[S.wo[Math.min(S.rd,S.P*2-1)]]})}});
+$("admP").addEventListener("change",function(e){
+var t=e.target,d=t.getAttribute&&t.getAttribute("data-d");
+if(d!==null&&d!==undefined){adm.dv[+d]=t.value?+t.value:null;refresh()}});
 })();
 </script>
 </body>
