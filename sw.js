@@ -1,16 +1,9 @@
-/* Service Worker: Netzwerk zuerst (du bekommst immer die neueste Version), Zwischenspeicher als Notfall ohne Internet. */
-const V = "sl-v3";
-self.addEventListener("install", e => {
-  e.waitUntil(caches.open(V).then(c => c.addAll(["./", "./index.html"])).catch(() => {}).then(() => self.skipWaiting()));
-});
-self.addEventListener("activate", e => {
-  e.waitUntil(caches.keys().then(k => Promise.all(k.filter(x => x !== V).map(x => caches.delete(x)))).then(() => self.clients.claim()));
-});
-self.addEventListener("fetch", e => {
-  const r = e.request;
-  if (r.method !== "GET" || new URL(r.url).origin !== location.origin) return;
-  e.respondWith(
-    fetch(r).then(res => { if (res.ok) { const c = res.clone(); caches.open(V).then(ch => ch.put(r, c)); } return res; })
-      .catch(() => caches.match(r).then(m => m || caches.match("./index.html")))
-  );
-});
+/* Service Worker der Spiele-Lounge: Push-Benachrichtigungen auch bei geschlossener App. */
+self.addEventListener("install",function(){self.skipWaiting()});
+self.addEventListener("activate",function(e){e.waitUntil(self.clients.claim())});
+self.addEventListener("push",function(e){var d={};try{d=e.data.json()}catch(x){}
+e.waitUntil(self.clients.matchAll({type:"window",includeUncontrolled:true}).then(function(l){
+var vis=l.some(function(c){return c.visibilityState==="visible"});
+return self.registration.showNotification(d.title||"Spiele-Lounge",{body:d.body||"",tag:d.tag||"sl",renotify:true,silent:vis,data:{url:d.url||"./"}})}))});
+self.addEventListener("notificationclick",function(e){e.notification.close();
+e.waitUntil(self.clients.matchAll({type:"window",includeUncontrolled:true}).then(function(l){if(l.length)return l[0].focus();return self.clients.openWindow((e.notification.data&&e.notification.data.url)||"./")}))});

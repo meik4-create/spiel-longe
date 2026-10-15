@@ -230,6 +230,27 @@ line.adm-hl{stroke:#ff2d95!important;opacity:1!important;outline:none!important}
 .adm-sp{background:#ff2d9540!important;box-shadow:inset 0 0 0 3px #ff2d95!important}
 .adm-sp:empty::after{content:"🚢";font-size:.9em}
 body.adm-open main{padding-bottom:calc(40vh + 110px)}
+/* ===== Freunde ===== */
+#frb{position:relative}
+#frb span,.fr button span{position:absolute;top:-6px;right:-6px;background:var(--p0);color:#fff;border:2px solid var(--ink);border-radius:999px;font:800 .7rem "Nunito",system-ui,sans-serif;padding:0 6px;display:none;line-height:1.4}
+.frp{position:fixed;inset:0;z-index:35;background:rgba(10,12,30,.55);display:none;align-items:flex-end;justify-content:center;padding:10px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px));padding-top:calc(10px + env(safe-area-inset-top,0px))}
+.frp.on{display:flex}
+.frs{width:100%;max-width:480px;max-height:100%;height:min(88vh,640px);display:flex;flex-direction:column;background:var(--card);color:var(--text);border:3px solid var(--ink);border-radius:20px;box-shadow:0 5px 0 var(--ink);overflow:hidden;text-align:left}
+.frv{display:flex;flex-direction:column;min-height:0;flex:1}
+.frh{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-bottom:2px dashed var(--line)}
+.frh b{font-size:1.05rem}.frh .mini{margin:0;min-height:36px}
+.frb2{overflow:auto;padding:10px 12px;flex:1;min-height:0}
+.frme{background:var(--field);border:2px solid var(--line);border-radius:14px;padding:10px;margin-bottom:10px}
+.frme .chip{margin:0 6px 0 0;letter-spacing:.12em}
+.fradd{display:flex;gap:8px;margin:8px 0}.fradd input{text-transform:uppercase;letter-spacing:.12em}.fradd .btn{width:auto;margin:0;padding:10px 16px}
+.fr{display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--line)}
+.fr .fi{flex:1;min-width:0}.fr .fi b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.fr small{color:var(--muted)}
+.fr .mini{margin:0;position:relative;min-height:38px;padding:6px 11px}
+.frt{font-weight:800;margin:12px 0 2px;font-size:.85rem;color:var(--muted)}
+.frdm{overflow:auto;padding:10px 12px;flex:1;min-height:0}
+.fri{display:flex;gap:8px;padding:10px 12px;border-top:2px dashed var(--line)}.fri .btn{width:auto;margin:0;padding:10px 16px}
+#frinv{position:fixed;left:10px;right:10px;top:calc(62px + env(safe-area-inset-top,0px));max-width:480px;margin:0 auto;z-index:36;display:none;background:var(--card);color:var(--text);border:3px solid var(--ink);border-radius:18px;box-shadow:0 5px 0 var(--ink);padding:12px;text-align:center;animation:fade .3s}
+#frinv.on{display:block}#frinv .row{margin-top:10px}
 </style>
 <link rel="icon" id="fav" href="data:,">
 <link rel="apple-touch-icon" id="ati" href="data:,">
@@ -242,7 +263,7 @@ body.adm-open main{padding-bottom:calc(40vh + 110px)}
 </head>
 <body>
 <main>
-<div class="tools"><button class="mini" id="thm" aria-label="Hell oder dunkel">🌙</button><button class="mini" id="snd" aria-label="Ton an oder aus">🔊</button></div>
+<div class="tools"><button class="mini" id="thm" aria-label="Hell oder dunkel">🌙</button><button class="mini" id="frb" aria-label="Freunde">👥<span id="frn"></span></button><button class="mini" id="snd" aria-label="Ton an oder aus">🔊</button></div>
 <h1 class="logo" aria-label="Spiele-Lounge"><span class="w"><i id="egg" role="button" tabindex="0" aria-label="Überraschung" style="--c:var(--p0);--i:0;--r:-4deg;cursor:pointer">S</i><i style="--c:var(--p3);--i:1;--r:3deg">P</i><i style="--c:var(--p1);--i:2;--r:-2deg;--tc:#1a1b3a">I</i><i style="--c:var(--p2);--i:3;--r:4deg">E</i><i style="--c:var(--p4);--i:4;--r:-3deg">L</i><i style="--c:var(--p5);--i:5;--r:2deg">E</i></span><span class="w"><i style="--c:var(--p1);--i:6;--r:-2deg;--tc:#1a1b3a">L</i><i style="--c:var(--p2);--i:7;--r:4deg">O</i><i id="adm-u" style="--c:var(--p4);--i:8;--r:-3deg">U</i><i style="--c:var(--p5);--i:9;--r:2deg">N</i><i style="--c:var(--p0);--i:10;--r:-4deg">G</i><i style="--c:var(--p3);--i:11;--r:3deg">E</i></span></h1>
 <p class="sub">20 Spiele für den Spieleabend. Jeder am eigenen Handy.</p>
 <section id="menu">
@@ -254,18 +275,17 @@ body.adm-open main{padding-bottom:calc(40vh + 110px)}
 <button class="btn alt" id="bot">🤖 Gegen den Computer</button>
 <p class="sub" id="note" style="margin:6px 0 0"></p>
 </div>
+<div class="card" id="frc" style="text-align:left"></div>
 <div class="stats" id="stats"></div>
-<div class="card tro" id="trc" style="display:none"></div>
 <button class="btn alt" id="inst" style="display:none">📲 Zum Homescreen hinzufügen</button>
 <div class="card" id="instHelp" style="display:none;text-align:left"></div>
 </section>
 <section id="lobby">
 <div class="card"><div class="code" id="codeLine"></div><div id="who"></div>
 <div id="loc" style="display:none;margin-top:8px">Spieleranzahl: <select id="lp" style="width:auto"><option>2</option><option>3</option><option>4</option></select></div><div id="dfw" style="display:none;margin-top:8px">Schwierigkeit: <select id="df" style="width:auto"><option value="0">Leicht</option><option value="1" selected>Mittel</option><option value="2">Schwer</option></select></div></div>
-<button class="btn" id="rndG">🎲 Überrasch uns</button>
+<button class="btn" id="frl2">👥 Freunde einladen</button><button class="btn" id="rndG">🎲 Überrasch uns</button>
 <div class="card" id="tnc"><b>🏆 Turnier</b><div class="sub" style="margin:4px 0 10px">Zufällige Spiele. Wer die meisten Runden gewinnt, holt den Pokal.</div><div style="display:flex;gap:8px;align-items:center"><select id="tnr" style="width:auto"><option value="3">3 Runden</option><option value="5" selected>5 Runden</option><option value="7">7 Runden</option><option value="9">9 Runden</option><option value="11">11 Runden</option></select><button class="btn" id="tnb" style="margin:0">Turnier starten</button></div></div>
 <div id="games"></div>
-<div class="card tro" id="trl" style="display:none"></div>
 <button class="btn alt" id="leave">Raum verlassen</button>
 </section>
 <section id="game">
@@ -280,6 +300,17 @@ body.adm-open main{padding-bottom:calc(40vh + 110px)}
 <div id="admLogin" role="dialog" aria-label="Zugang"><div class="adm-box" id="admBox"><h3>🔒 Geheimer Code</h3><input id="admCode" type="password" placeholder="Code eingeben" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"><div id="admErr"></div><div class="row"><button class="btn alt" id="admNo">Abbrechen</button><button class="btn" id="admOk">Öffnen</button></div></div></div>
 <button id="admFab" aria-label="Admin-Panel">🛠</button>
 <div id="admP" role="region" aria-label="Admin-Panel"></div>
+<div id="acp" class="frp" role="dialog" aria-label="Konto"><div class="frs" style="height:auto"><div class="frh"><b>👤 Konto</b><button class="mini" id="acx" aria-label="Schließen">✕</button></div><div class="frb2" id="acb"></div></div></div>
+<div id="frinv" role="alertdialog" aria-live="assertive"></div>
+<div id="frp" class="frp" role="dialog" aria-label="Freunde"><div class="frs">
+<div class="frv" id="frlv"><div class="frh"><b>👥 Freunde <span id="frst" class="sub" style="font-size:.8rem;margin:0"></span></b><button class="mini" id="frx" aria-label="Schließen">✕</button></div>
+<div class="frb2"><div class="frme"><div class="lbl" style="margin:0 0 6px">Dein Freundescode</div><span class="chip" id="frme"></span><button class="mini" id="frcp">📋</button><button class="mini" id="frsh">📤 Link teilen</button><button class="mini" data-a="acc" id="fracc">👤 Konto</button>
+<div class="fradd"><input id="fradd" maxlength="9" placeholder="Code des Freundes" autocomplete="off" autocapitalize="characters"><button class="btn" id="fradb">Hinzufügen</button></div>
+<button class="mini" id="frnt" style="margin:0"></button><div class="sub" id="frnh" style="font-size:.78rem;margin:6px 0 0"></div></div>
+<div id="frlb"></div></div></div>
+<div class="frv" id="frdv" style="display:none"><div class="frh"><button class="mini" id="frbk" aria-label="Zurück">←</button><b id="frdh" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></b><button class="mini" id="frx2" aria-label="Schließen">✕</button></div>
+<div class="frdm" id="frdm"></div><div class="fri"><input id="frdi" maxlength="200" placeholder="Nachricht …" autocomplete="off"><button class="btn" id="frds">Senden</button></div></div>
+</div></div>
 <div class="ver" id="ver"></div>
 <script>
 var $=function(i){return document.getElementById(i)};
@@ -680,7 +711,7 @@ function confetti(){if(window.matchMedia&&matchMedia("(prefers-reduced-motion:re
 function sticker(big,txt,sub){var f=$("fx"),d=document.createElement("div");d.className="sticker";d.innerHTML='<span class="bg">'+big+"</span>"+txt+(sub?"<small>"+esc(sub)+"</small>":"");f.innerHTML="";f.appendChild(d);setTimeout(function(){if(d.parentNode)d.remove()},2800)}
 function stat(){var s={};try{s=JSON.parse(localStorage.getItem("sl-stats"))||{}}catch(e){}return{w:+s.w||0,p:+s.p||0,s:+s.s||0}}
 function drawStats(){var s=stat(),el=$("stats");if(!el)return;el.innerHTML=s.p?'<span class="chip2">🏆 '+s.w+(s.w===1?" Sieg":" Siege")+'</span><span class="chip2">🎮 '+s.p+" Spiele</span>"+(s.s>1?'<span class="chip2">🔥 '+s.s+" in Folge</span>":""):""}
-function addStat(won){var s=stat();s.p++;if(won){s.w++;s.s++}else s.s=0;try{localStorage.setItem("sl-stats",JSON.stringify(s))}catch(e){}drawStats()}
+function addStat(won){var s=stat();s.p++;if(won){s.w++;s.s++}else s.s=0;try{localStorage.setItem("sl-stats",JSON.stringify(s))}catch(e){}try{window.slStat&&window.slStat(won)}catch(e){}drawStats()}
 function endFx(win){var ws=S.ws||[S.w],mi=myIdx(),mine=win&&ws.indexOf(mi)>=0,names=win?ws.map(nm).join(" & "):"";
 if(!win){sticker("🤝","Unentschieden",pick(["Das war knapp.","Alle gleich gut. Nochmal?","Ein fairer Kampf."]));tune([440,440],150,.2);return}
 if(botOn){if(mine){sticker("🏆","Du gewinnst!",pick(["Der Computer ist beeindruckt.","Das war souverän.","Und der Computer so: 🤯"]));confetti();tune([523,659,784,1047],110,.24)}else{sticker("🤖","Der Computer gewinnt",pick(["Nächstes Mal klappt es.","Revanche?","Knapp daneben ist auch vorbei."]));tune([392,330,262],170,.28)}}
@@ -745,18 +776,7 @@ function tnClean(t){if(!t||typeof t!=="object"||typeof t.tid!=="string"||t.tid.l
 var o={tid:t.tid,n:n,n0:n0,i:i,w:{},nm:{},cr:t.cr?1:0,last:String(t.last||"").slice(0,8)};
 Object.keys(t.w||{}).slice(0,12).forEach(function(k){var v=t.w[k];if(Number.isInteger(v)&&v>=0&&v<100){o.w[k]=v;o.nm[k]=String((t.nm||{})[k]||"").slice(0,24)}});
 if(t.done){o.done=1;o.win=String(t.win||"")}return o}
-function trList(){var a=[];try{a=JSON.parse(localStorage.getItem("sl-trophies"))||[]}catch(e){}return Array.isArray(a)?a:[]}
-function tnSave(){if(!T||!T.done)return;var a=trList();if(a.some(function(x){return x.id===T.tid}))return;
-var sc=Object.keys(T.w).map(function(k){return T.w[k]}).sort(function(x,y){return y-x});
-a.unshift({id:T.tid,n:T.nm[T.win]||"?",d:Date.now(),r:T.n0,s:sc.join(":")});a=a.slice(0,200);
-try{localStorage.setItem("sl-trophies",JSON.stringify(a))}catch(e){}drawTrophies()}
-function trReset(){if(confirm("Alle Pokale wirklich löschen?")){try{localStorage.removeItem("sl-trophies")}catch(e){}drawTrophies()}}
-function drawTrophies(){var a=trList(),c={},h="";a.forEach(function(x){c[x.n]=(c[x.n]||0)+1});
-var ks=Object.keys(c).sort(function(x,y){return c[y]-c[x]});
-if(a.length)h='<h3>🏆 Pokalschrank</h3>'+ks.slice(0,8).map(function(n){return'<div class="tr"><span>'+esc(n)+'</span><b>🏆 ×'+c[n]+'</b></div>'}).join("")
-+'<div class="lbl">Letzte Turniere</div>'+a.slice(0,5).map(function(x){return'<div class="tr"><span>'+esc(x.n)+'</span><small>Best of '+(+x.r||0)+' · '+esc(x.s)+' · '+new Date(x.d).toLocaleDateString("de-AT",{day:"numeric",month:"numeric"})+'</small></div>'}).join("")
-+'<button class="mini" onclick="trReset()">Zurücksetzen</button>';
-["trc","trl"].forEach(function(id){var e=$(id);if(e){e.style.display=a.length?"block":"none";e.innerHTML=h}})}
+function trList(){return[]}function tnSave(){}function trReset(){}function drawTrophies(){}
 function tnBar(){var e=$("tb");if(!e)return;if(!T){e.style.display="none";return}e.style.display="block";e.className=T.done?"fin":"";
 var ks=Object.keys(T.w).sort(function(a,b){return T.w[b]-T.w[a]}),nn=function(k){return esc(T.nm[k]||lab(k))};
 var chips='<div class="tbs">'+ks.map(function(k){return'<span>'+nn(k)+' · '+T.w[k]+'</span>'}).join("")+'</div>';
@@ -907,7 +927,7 @@ function curTheme(){var a=document.documentElement.getAttribute("data-theme");re
 function setTheme(t){document.documentElement.setAttribute("data-theme",t);try{localStorage.setItem("sl-theme",t)}catch(e){}$("thm").textContent=t==="dark"?"☀️":"🌙";var m=document.querySelector("meta[name=theme-color]");if(m)m.content=t==="dark"?"#0e1124":"#dfe7ff"}
 $("thm").onclick=function(){setTheme(curTheme()==="dark"?"light":"dark")};
 try{var sth=localStorage.getItem("sl-theme");if(sth==="dark"||sth==="light")setTheme(sth);else $("thm").textContent=curTheme()==="dark"?"☀️":"🌙"}catch(e){}
-drawStats();drawTrophies();
+drawStats();
 AV.forEach(function(a){var o=document.createElement("option");o.textContent=a;$("av").appendChild(o)});
 RX.forEach(function(e){var b=document.createElement("button");b.className="mini";b.textContent=e;b.onclick=function(){if(net)net.emit("react",{e:e})};$("rx").appendChild(b)});
 try{$("nm").value=localStorage.getItem("sl-name")||"";var sa=localStorage.getItem("sl-av");if(sa)$("av").value=sa}catch(e){}
@@ -924,7 +944,7 @@ $("board").onclick=function(e){var el=e.target.closest("[data-m]");if(!el||!gid)
 if(net){if(G[gid].any){if(myIdx()>=0)sendAny(m);return}if(myIdx()!==S.t)return;net.emit("move",{n:moves.length,m:m})}else{if(botOn&&S.t!==0)return;apply(m,S.t)}};
 try{var rq=new URLSearchParams(location.search).get("r");if(rq&&/^[a-z0-9]{4}$/.test(rq)){$("code").value=rq;$("note").textContent="Einladung zu Raum "+rq.toUpperCase()+": Name prüfen und auf „Beitreten“ tippen."}}catch(e){}
 $("snd").onclick=function(){snd=!snd;this.textContent=snd?"🔊":"🔇"};
-var VERSION="3";$("ver").textContent="Version "+VERSION;
+var VERSION="6";$("ver").textContent="Version "+VERSION;
 (function(){var e=$("e67"),g=$("egg");function open(){e.className="on";confetti();tune([392,523,659,784,1047],90,.2)}function close(){e.className=""}
 g.onclick=open;g.onkeydown=function(k){if(k.key==="Enter"||k.key===" "){k.preventDefault();open()}};e.onclick=close;document.addEventListener("keydown",function(k){if(k.key==="Escape")close()})})();
 try{if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)navigator.serviceWorker.register("sw.js").catch(function(){})}catch(e){}
@@ -959,6 +979,196 @@ else if(and)h='<b>So geht\'s auf Android:</b><ol style="margin:8px 0 0;padding-l
 else h='<b>So geht\'s am Computer:</b><ol style="margin:8px 0 0;padding-left:20px"><li>Chrome/Edge: Klicke in der Adressleiste auf das <b>Installieren-Symbol</b> ⊕ (oder Menü → „App installieren“)</li><li>Zum Handy-Homescreen: Öffne diese Seite auf dem Handy und tippe hier nochmal.</li></ol>';
 var b=$("instHelp");b.innerHTML=h;b.style.display="block";b.scrollIntoView({behavior:"smooth",block:"center"})}
 $("inst").onclick=function(){if(dp){var d=dp;dp=null;d.prompt();d.userChoice.then(function(r){if(r&&r.outcome!=="accepted")toast("Kein Problem, du kannst es jederzeit später machen.")})}else{var b=$("instHelp");if(b.style.display==="block"){b.style.display="none"}else help()}}
+})();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+/* ===== Freunde (Supabase): Konto, Freundesliste, Online-Status, Einladungen, Direktnachrichten ===== */
+(function(){
+var SB_URL="https://ffibcujekwgrlmdzizbq.supabase.co",SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZmaWJjdWpla3dncmxtZHppemJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwNjA5MDksImV4cCI6MjEwNzYzNjkwOX0.flNCknO4PCDqDA6oJa4GRkNxnJ0H2vKgAbvMjLoE45w";
+var AL="abcdefghjkmnpqrstuvwxyz23456789",CODE_RE=/^[a-z0-9]{8}$/;
+var isGuest=true,accMail="",pushOn=false,db=null,me=null,prof=null,friends=[],reqs=[],invs=[],pres={},seenOn={},unread={},msgs={},chan=null,online=false,view="list",lastSend=0,lastSig="",ready=false;
+function rid(n){var s="";for(var i=0;i<n;i++)s+=AL[Math.floor(Math.random()*AL.length)];return s}
+function lg(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+function clean(s,n){return String(s==null?"":s).replace(/[\u0000-\u001f<>]/g,"").slice(0,n)}
+function fmt(c){return c.slice(0,4).toUpperCase()+"-"+c.slice(4).toUpperCase()}
+function parseCode(v){v=String(v).toLowerCase().replace(/[^a-z0-9]/g,"");return CODE_RE.test(v)?v:null}
+function myNm(){return clean($("nm").value.trim()||lg("sl-name","")||"Spieler",16)}
+function myAv(){return clean($("av").value||lg("sl-av","")||"",8)}
+function curRoom(){try{return net&&roomCode?String(roomCode).toLowerCase():""}catch(e){return""}}
+function fOf(id){for(var i=0;i<friends.length;i++)if(friends[i].id===id)return friends[i];return null}
+function nameOfF(f){var p=pres[f.id];return clean((p&&p.name)||f.name||"Freund",16)}
+function avOfF(f){var p=pres[f.id];return clean((p&&p.av)||f.av||"",8)}
+function totalBadge(){var n=reqs.length+invs.length;Object.keys(unread).forEach(function(k){n+=unread[k]||0});return n}
+function badge(){var n=totalBadge(),e=$("frn");e.textContent=n;e.style.display=n?"block":"none";document.title=(n?"("+n+") ":"")+"Spiele-Lounge"}
+function panelOpen(){return $("frp").classList.contains("on")}
+function status(t){$("frst").textContent=t}
+/* ----- Start: anonym anmelden, Profil holen/anlegen ----- */
+async function init(){
+if(typeof supabase==="undefined"){status("🟠 offline");return}
+try{db=supabase.createClient(SB_URL,SB_KEY);
+var s=(await db.auth.getSession()).data.session;
+if(!s){var r=await db.auth.signInAnonymously();if(r.error)throw r.error;s=r.data.session}
+me=s.user.id;isGuest=!!s.user.is_anonymous;accMail=s.user.email||"";
+var p=(await db.from("profiles").select("*").eq("id",me).maybeSingle()).data;
+for(var t=0;!p&&t<5;t++){var ins=await db.from("profiles").insert({id:me,code:rid(8),name:myNm(),av:myAv()}).select().single();if(!ins.error)p=ins.data}
+if(!p)throw new Error("Profil konnte nicht angelegt werden");
+prof=p;await loadAll();realtime();ready=true;draw();syncStats();if("Notification" in window&&Notification.permission==="granted")subPush().then(ntState)
+}catch(e){status("🟠 Fehler");$("frnh").textContent="Server: "+(e&&e.message||e)+" – ist „Anonymous sign-ins“ aktiviert und das SQL ausgeführt?"}}
+async function loadAll(){
+var fs=(await db.from("friendships").select("*")).data||[],ids=[];
+fs.forEach(function(f){ids.push(f.a===me?f.b:f.a)});
+var ps={};if(ids.length)((await db.from("profiles").select("id,name,av").in("id",ids)).data||[]).forEach(function(p){ps[p.id]=p});
+friends=[];reqs=[];
+fs.forEach(function(f){var id=f.a===me?f.b:f.a,p=ps[id]||{name:"Freund",av:""};
+if(f.status==="ok")friends.push({fid:f.id,id:id,name:p.name,av:p.av,st:"ok"});
+else if(f.a===me)friends.push({fid:f.id,id:id,name:p.name,av:p.av,st:"out"});
+else reqs.push({fid:f.id,id:id,name:p.name,av:p.av})});
+var um=(await db.from("messages").select("id,from_id,kind,room,created_at").eq("to_id",me).eq("read",false)).data||[];
+unread={};var old=invs.map(function(v){return v.mid}),since=Date.now()-30*60000;
+um.forEach(function(m){if(m.kind==="dm")unread[m.from_id]=(unread[m.from_id]||0)+1;
+else if(m.kind==="inv"&&new Date(m.created_at).getTime()>since&&old.indexOf(m.id)<0&&fOf(m.from_id))invs.push({mid:m.id,id:m.from_id,room:m.room})});
+draw();showInv(true)}
+/* ----- Echtzeit: Online-Status, neue Nachrichten, Freundschaften ----- */
+function realtime(){
+chan=db.channel("lobby",{config:{presence:{key:me}}});
+chan.on("presence",{event:"sync"},function(){var st=chan.presenceState(),np={};
+Object.keys(st).forEach(function(k){var l=st[k];if(l&&l.length)np[k]=l[l.length-1]});
+Object.keys(np).forEach(function(k){var f=fOf(k);if(f&&f.st==="ok"&&!pres[k]&&seenOn[k])toast("🟢 "+nameOfF(f)+" ist online");seenOn[k]=1});
+pres=np;draw()})
+.on("postgres_changes",{event:"INSERT",schema:"public",table:"messages",filter:"to_id=eq."+me},function(p){onMsg(p.new)})
+.on("postgres_changes",{event:"*",schema:"public",table:"friendships"},function(p){var n=p.new||{};
+if(p.eventType==="INSERT"&&n.b===me){var f=null;toast("👋 Neue Freundschaftsanfrage");notify("Freundschaftsanfrage","Jemand möchte dein Freund sein","req")}
+else if(p.eventType==="UPDATE"&&n.status==="ok"&&n.a===me)toast("✅ Freundschaftsanfrage angenommen");
+loadAll()})
+.subscribe(function(s){online=s==="SUBSCRIBED";status(online?"🟢":"🟠 verbindet …");if(online){lastSig="";track();loadAll()}})}
+function track(){if(!chan||!online)return;var o={name:myNm(),av:myAv(),room:curRoom()},sig=JSON.stringify(o);if(sig===lastSig)return;lastSig=sig;chan.track(o);
+if(prof&&(prof.name!==o.name||prof.av!==o.av)){prof.name=o.name;prof.av=o.av;db.from("profiles").update({name:o.name,av:o.av}).eq("id",me).then(function(){})}}
+/* ----- Nachrichten ----- */
+function onMsg(m){var f=fOf(m.from_id);if(!f||f.st!=="ok")return;
+if(m.kind==="inv"){if(!/^[a-z0-9]{4}$/.test(m.room||""))return;invs.push({mid:m.id,id:m.from_id,room:m.room});showInv();notify("Einladung von "+nameOfF(f),"Komm in Raum "+m.room.toUpperCase(),"inv"+m.from_id);return}
+var t=clean(m.body,200);if(!t)return;
+if(panelOpen()&&view===f.id&&!document.hidden){(msgs[f.id]=msgs[f.id]||[]).push({me:0,t:t});drawDm();db.from("messages").update({read:true}).eq("id",m.id).then(function(){})}
+else{unread[f.id]=(unread[f.id]||0)+1;toast("💬 "+nameOfF(f)+": "+t.slice(0,40));notify(nameOfF(f),t,"dm"+f.id)}
+draw()}
+function notify(title,body,tag){try{beep(660,.06)}catch(e){}
+if(pushOn||!document.hidden||!("Notification" in window)||Notification.permission!=="granted")return;
+var o={body:body,tag:tag};
+try{var n=new Notification(title,o);n.onclick=function(){try{window.focus();n.close()}catch(e){}}}
+catch(e){try{navigator.serviceWorker.getRegistration().then(function(r){if(r)r.showNotification(title,o)})}catch(e2){}}}
+function ntState(){var b=$("frnt"),h=$("frnh");
+if(!("Notification" in window)){b.style.display="none";h.textContent="Benachrichtigungen werden von diesem Browser nicht unterstützt. Auf dem iPhone: erst „Zum Homescreen hinzufügen“ und dort öffnen.";return}
+b.style.display="";
+if(Notification.permission==="granted"){b.textContent=pushOn?"🔔 Push an (auch bei geschlossener App)":"🔔 Push aktivieren";h.textContent=pushOn?"":"Tippe zum Einrichten. Dafür muss sw.js neben der index.html liegen und die Edge Function „push“ laufen."}
+else if(Notification.permission==="denied"){b.textContent="🔕 Benachrichtigungen blockiert";h.textContent="Erlaube sie in den Browser- bzw. Systemeinstellungen für diese Seite."}
+else{b.textContent="🔔 Benachrichtigungen aktivieren";h.textContent=""}}
+function b64(s){s=s.replace(/-/g,"+").replace(/_/g,"/");s+="=".repeat((4-s.length%4)%4);var r=atob(s),a=new Uint8Array(r.length);for(var i=0;i<r.length;i++)a[i]=r.charCodeAt(i);return a}
+async function subPush(){try{if(!db||!me||!("serviceWorker" in navigator)||!("PushManager" in window)||Notification.permission!=="granted")return false;
+var reg=await navigator.serviceWorker.getRegistration();if(!reg)return false;await navigator.serviceWorker.ready;
+var k=await db.functions.invoke("push",{body:{action:"key"}});if(k.error||!k.data||!k.data.key)return false;
+var sub=await reg.pushManager.getSubscription();if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64(k.data.key)});
+var j=sub.toJSON(),r=await db.rpc("register_push",{p_endpoint:j.endpoint,p_p256dh:j.keys.p256dh,p_auth:j.keys.auth});pushOn=!r.error;return pushOn}catch(e){return false}}
+$("frnt").onclick=async function(){if(!("Notification" in window))return;if(Notification.permission==="default")await Notification.requestPermission();var ok=await subPush();ntState();if(Notification.permission==="granted")toast(ok?"🔔 Push ist aktiv":"Push konnte nicht eingerichtet werden")};
+/* ----- Einladungen ----- */
+function readMsg(id){if(db&&id)db.from("messages").update({read:true}).eq("id",id).then(function(){})}
+function showInv(quiet){var b=$("frinv"),v=invs[0];badge();if(!v){b.className="";return}var f=fOf(v.id);
+b.innerHTML="<b>🎲 "+esc(f?avOfF(f)+" "+nameOfF(f):"Ein Freund")+" lädt dich ein</b><div class='sub' style='margin:4px 0 0'>Raum <span class='chip'>"+esc(v.room.toUpperCase())+"</span></div><div class='row'><button class='btn alt' id='ivn'>Später</button><button class='btn' id='ivy'>Beitreten</button></div>";
+b.className="on";$("ivn").onclick=function(){readMsg(v.mid);invs.shift();showInv()};$("ivy").onclick=function(){var r=v.room;readMsg(v.mid);invs.shift();showInv();joinRoom2(r)}}
+function joinRoom2(r){if(net&&curRoom()===r){closeP();return}
+if(net){if(!confirm("Aktuellen Raum verlassen und Raum "+r.toUpperCase()+" beitreten?"))return;leave()}
+closeP();$("code").value=r.toUpperCase();connect(r)}
+async function invite(id){var f=fOf(id);if(!f)return;
+if(!net){if(!$("nm").value.trim()){toast("Gib zuerst deinen Namen ein");closeP();$("nm").focus();return}
+var c=rid(4);closeP();await connect(c);if(!net)return}
+var r=await db.from("messages").insert({from_id:me,to_id:id,kind:"inv",room:curRoom()});
+toast(r.error?"Einladung fehlgeschlagen":"📨 Einladung an "+nameOfF(f)+" gesendet")}
+/* ----- Freunde verwalten ----- */
+async function addFriend(raw){if(!db||!me){toast("Noch nicht mit dem Server verbunden");return}
+var c=parseCode(raw);if(!c){toast("Der Code ist nicht gültig (8 Zeichen)");return}
+var r=await db.rpc("request_friend",{p_code:c});if(r.error){toast("Fehler: "+r.error.message);return}
+var m={sent:"Anfrage gesendet",ok:"✅ Ihr seid jetzt Freunde",notfound:"Diesen Code gibt es nicht",self:"Das ist dein eigener Code 😉",exists:"Schon in deiner Liste"};
+toast(m[r.data]||"Fertig");if(r.data==="sent"||r.data==="ok")$("fradd").value="";loadAll()}
+async function acceptReq(id){var r=reqs.filter(function(x){return x.id===id})[0];if(!r)return;await db.from("friendships").update({status:"ok"}).eq("id",r.fid);loadAll()}
+async function dropF(fid){await db.from("friendships").delete().eq("id",fid);loadAll()}
+/* ----- Statistik auf dem Server ----- */
+async function syncStats(){try{var r=await db.from("stats").select("*").eq("user_id",me).maybeSingle();
+if(r.data){localStorage.setItem("sl-stats",JSON.stringify({w:r.data.won,p:r.data.played,s:r.data.streak}))}
+else{var l=lg("sl-stats",{});await db.rpc("init_stats",{p_played:+l.p||0,p_won:+l.w||0,p_streak:+l.s||0})}drawStats()}catch(e){}}
+window.slStat=function(won){if(db&&me)db.rpc("add_stat",{p_won:!!won}).then(function(){})};
+/* ----- Konto (optional) ----- */
+function accLabel(){var m=accMail||"";return m.indexOf("@lounge-user.app")>0?m.split("@")[0]:m||"Gast"}
+function ident(v){v=String(v).trim().toLowerCase();if(v.indexOf("@")>0)return v;var u=v.replace(/[^a-z0-9._-]/g,"");return u.length>=3?u+"@lounge-user.app":null}
+function acMsg(t){var e=$("acm");if(e)e.textContent=t}
+function drawAc(){var h;
+if(isGuest)h="<div class='sub' style='margin:0 0 8px;text-align:left'>Du spielst als <b>Gast</b>. Mit einem Konto bleiben Freunde, Chats und Statistiken erhalten – auch auf einem neuen Handy.</div><input id='acu' placeholder='Benutzername oder E-Mail' autocomplete='username' autocapitalize='off' style='margin:4px 0'><input id='acw' type='password' placeholder='Passwort (mind. 6 Zeichen)' autocomplete='current-password' style='margin:4px 0'><button class='btn' data-b='make'>Konto aus diesem Gast erstellen</button><button class='btn alt' data-b='in'>Ich habe schon ein Konto: Anmelden</button><div class='sub' id='acm' style='font-size:.8rem'></div>";
+else h="<div style='margin:0 0 10px'>Angemeldet als <b>"+esc(accLabel())+"</b></div><button class='btn alt' data-b='out'>Abmelden</button>";
+$("acb").innerHTML=h}
+function openAc(){drawAc();$("acp").classList.add("on")}
+$("acx").onclick=function(){$("acp").classList.remove("on")};
+$("acp").onclick=function(e){if(e.target===$("acp"))$("acp").classList.remove("on")};
+$("acb").onclick=async function(e){var b=e.target.closest("[data-b]");if(!b||!db)return;var a=b.getAttribute("data-b");
+if(a==="out"){if(!confirm("Abmelden? Danach spielst du wieder als neuer Gast."))return;try{localStorage.removeItem("sl-stats")}catch(x){}await db.auth.signOut();location.reload();return}
+var id=ident($("acu").value),pw=$("acw").value;
+if(!id){acMsg("Benutzername: mindestens 3 Zeichen (a–z, 0–9).");return}if(pw.length<6){acMsg("Das Passwort braucht mindestens 6 Zeichen.");return}
+if(a==="in"){if(!confirm("Anmelden? Dein aktueller Gast-Fortschritt wird nicht übernommen."))return;try{localStorage.removeItem("sl-stats")}catch(x){}var r=await db.auth.signInWithPassword({email:id,password:pw});if(r.error){acMsg("Anmeldung fehlgeschlagen: "+r.error.message);return}location.reload();return}
+var u=await db.auth.updateUser({email:id,password:pw});if(u.error){acMsg(u.error.message);return}
+var s2=(await db.auth.getSession()).data.session;if(s2){isGuest=!!s2.user.is_anonymous;accMail=s2.user.email||id}
+if(id.indexOf("@lounge-user.app")<0&&isGuest){acMsg("Bestätigungsmail gesendet – klicke den Link darin, dann ist dein Konto fertig.");return}
+toast("✅ Konto erstellt");drawAc();drawCard()};
+/* ----- Zeichnen ----- */
+function btnsFor(f,on,rm){var h="";if(on&&rm&&rm!==curRoom())h+="<button class='mini' data-a='join' data-i='"+f.id+"'>▶ Beitreten</button>";else if(on&&!(rm&&rm===curRoom()))h+="<button class='mini' data-a='inv' data-i='"+f.id+"'>➕ Einladen</button>";return h}
+function drawCard(){var c=$("frc");if(!c)return;var ok=friends.filter(function(f){return f.st==="ok"}),on=ok.filter(function(f){return pres[f.id]}),b=totalBadge();
+var h="<div style='display:flex;justify-content:space-between;align-items:center;gap:8px'><b style='font-size:1.15rem'>👥 Freunde</b><button class='mini' data-a='acc' style='margin:0'>👤 "+esc(isGuest?"Gast":accLabel())+" ›</button></div>";
+h+="<div class='sub' style='margin:2px 0 4px;text-align:left'>"+(!ready?"Verbinde …":ok.length?on.length+" von "+ok.length+" online":"Füge Freunde hinzu und spielt zusammen.")+"</div>";
+on.slice(0,3).forEach(function(f){var rm=/^[a-z0-9]{4}$/.test(pres[f.id].room||"")?pres[f.id].room:"";
+h+="<div class='fr'><span class='dot' style='color:#2a9d4a'></span><div class='fi'><b>"+esc(avOfF(f)+" "+nameOfF(f))+"</b><small>"+(rm?"im Raum "+rm.toUpperCase():"Online")+"</small></div><button class='mini' data-a='dm' data-i='"+f.id+"'>💬"+(unread[f.id]?"<span style='display:block'>"+unread[f.id]+"</span>":"")+"</button>"+btnsFor(f,true,rm)+"</div>"});
+h+="<button class='btn' data-a='open' style='margin-top:10px'>👥 Freundesliste öffnen"+(b?" ("+b+" neu)":"")+"</button>";
+c.innerHTML=h}
+function draw(){badge();drawCard();if(!panelOpen())return;if(prof)$("frme").textContent=fmt(prof.code);
+var h="";
+if(reqs.length){h+="<div class='frt'>ANFRAGEN</div>";reqs.forEach(function(r){h+="<div class='fr'><div class='fi'><b>"+esc(r.av+" "+r.name)+"</b><small>möchte dein Freund sein</small></div><button class='mini' data-a='no' data-i='"+r.fid+"'>✕</button><button class='mini' data-a='ok' data-i='"+r.id+"'>✔ Annehmen</button></div>"})}
+var l=friends.slice().sort(function(a,b){return (pres[b.id]?1:0)-(pres[a.id]?1:0)||nameOfF(a).localeCompare(nameOfF(b))});
+h+="<div class='frt'>FREUNDE ("+friends.length+")</div>";
+if(!l.length)h+="<div class='sub' style='margin:10px 0'>Noch keine Freunde. Tausche Codes aus oder teile deinen Link.</div>";
+l.forEach(function(f){var p=pres[f.id],on=!!p,ok=f.st==="ok",n=unread[f.id]||0,rm=on&&/^[a-z0-9]{4}$/.test(p.room||"")?p.room:"";
+var s=!ok?"Anfrage gesendet …":on?(rm?"Online · im Raum "+rm.toUpperCase():"Online"):"Offline";
+h+="<div class='fr'><span class='dot' style='color:"+(on&&ok?"#2a9d4a":"#9aa0c8")+"'></span><div class='fi'><b>"+esc(avOfF(f)+" "+nameOfF(f))+"</b><small>"+esc(s)+"</small></div>";
+if(ok){h+="<button class='mini' data-a='dm' data-i='"+f.id+"' aria-label='Chat'>💬"+(n?"<span style='display:block'>"+n+"</span>":"")+"</button>";
+if(on&&rm&&rm!==curRoom())h+="<button class='mini' data-a='join' data-i='"+f.id+"'>▶ Beitreten</button>";
+else if(on&&!(rm&&rm===curRoom()))h+="<button class='mini' data-a='inv' data-i='"+f.id+"'>➕ Einladen</button>";
+else if(on)h+="<small>im Raum</small>"}
+h+="<button class='mini' data-a='del' data-i='"+f.fid+"' aria-label='Entfernen'>🗑</button></div>"});
+$("frlb").innerHTML=h;if(view!=="list")drawDmHead()}
+function drawDmHead(){var f=fOf(view);if(!f)return;$("frdh").innerHTML="<span class='dot' style='color:"+(pres[f.id]?"#2a9d4a":"#9aa0c8")+"'></span>"+esc(avOfF(f)+" "+nameOfF(f))}
+function drawDm(){var th=msgs[view]||[],b=$("frdm");b.innerHTML=th.length?th.map(function(m){return"<div class='msg"+(m.me?" me":"")+"'>"+esc(m.t)+"</div>"}).join(""):"<div class='sub' style='margin:20px 0;text-align:center'>Noch keine Nachrichten. Sag Hallo! 👋</div>";b.scrollTop=1e9}
+async function setView(v){view=v;$("frlv").style.display=v==="list"?"flex":"none";$("frdv").style.display=v==="list"?"none":"flex";
+if(v==="list"){draw();return}
+drawDmHead();$("frdm").innerHTML="<div class='sub' style='margin:20px 0;text-align:center'>Lade …</div>";$("frdi").focus();
+var q=await db.from("messages").select("*").eq("kind","dm").or("and(from_id.eq."+me+",to_id.eq."+v+"),and(from_id.eq."+v+",to_id.eq."+me+")").order("created_at",{ascending:false}).limit(100);
+if(view!==v)return;msgs[v]=(q.data||[]).reverse().map(function(m){return{me:m.from_id===me?1:0,t:clean(m.body,200)}});drawDm();
+if(unread[v]){delete unread[v];badge();db.from("messages").update({read:true}).eq("to_id",me).eq("from_id",v).eq("read",false).then(function(){})}}
+function openP(){$("frp").classList.add("on");ntState();draw();if(view!=="list")setView(view)}
+function closeP(){$("frp").classList.remove("on")}
+async function sendDm(){var f=fOf(view),i=$("frdi"),t=i.value.trim();if(!f||!t||!db||Date.now()-lastSend<400)return;lastSend=Date.now();t=t.slice(0,200);i.value="";
+var r=await db.from("messages").insert({from_id:me,to_id:f.id,kind:"dm",body:t});
+if(r.error){toast("Nicht gesendet");i.value=t;return}(msgs[f.id]=msgs[f.id]||[]).push({me:1,t:t});drawDm()}
+/* ----- Events ----- */
+$("frb").onclick=openP;$("fracc").onclick=openAc;$("frx").onclick=closeP;$("frx2").onclick=closeP;$("frbk").onclick=function(){setView("list")};
+$("frp").onclick=function(e){if(e.target===$("frp"))closeP()};
+$("fradb").onclick=function(){addFriend($("fradd").value)};$("fradd").onkeydown=function(e){if(e.key==="Enter")$("fradb").click()};
+$("frds").onclick=sendDm;$("frdi").onkeydown=function(e){if(e.key==="Enter")sendDm()};
+$("frcp").onclick=function(){if(!prof)return;var t=fmt(prof.code);if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){toast("Code kopiert: "+t)},function(){toast("Code: "+t)});else toast("Code: "+t)};
+$("frsh").onclick=function(){if(!prof)return;var u=location.origin+location.pathname+"?f="+prof.code,tx="Sei mein Freund in der Spiele-Lounge! Code: "+fmt(prof.code);
+if(navigator.share)navigator.share({title:"Spiele-Lounge",text:tx,url:u}).catch(function(){});else if(navigator.clipboard)navigator.clipboard.writeText(tx+" "+u).then(function(){toast("Link kopiert")},function(){toast(u)});else toast(u)};
+function act(e){var b=e.target.closest("[data-a]");if(!b)return;var id=b.getAttribute("data-i"),a=b.getAttribute("data-a");
+if(a==="open")openP();else if(a==="acc")openAc();else if(a==="ok")acceptReq(id);else if(a==="no")dropF(+id);
+else if(a==="dm")setView(id);else if(a==="inv")invite(id);else if(a==="join"){var p=pres[id];if(p&&p.room)joinRoom2(p.room)}
+else if(a==="del"){var f=friends.filter(function(x){return x.fid===+id})[0];if(f&&confirm(nameOfF(f)+" aus der Freundesliste entfernen?"))dropF(f.fid)}}
+$("frlb").onclick=act;$("frc").onclick=act;if($("frl2"))$("frl2").onclick=openP;
+setInterval(function(){if(ready)track()},2000);
+document.addEventListener("visibilitychange",function(){if(!document.hidden&&ready){lastSig="";track();loadAll()}});
+try{var fq=new URLSearchParams(location.search).get("f"),fc=fq&&parseCode(fq);if(fc){openP();$("fradd").value=fmt(fc);toast("Freund gefunden – auf „Hinzufügen“ tippen")}}catch(e){}
+badge();status("🟠 verbindet …");init()
 })();
 </script>
 <script>
