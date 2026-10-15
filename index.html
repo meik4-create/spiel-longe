@@ -944,7 +944,7 @@ $("board").onclick=function(e){var el=e.target.closest("[data-m]");if(!el||!gid)
 if(net){if(G[gid].any){if(myIdx()>=0)sendAny(m);return}if(myIdx()!==S.t)return;net.emit("move",{n:moves.length,m:m})}else{if(botOn&&S.t!==0)return;apply(m,S.t)}};
 try{var rq=new URLSearchParams(location.search).get("r");if(rq&&/^[a-z0-9]{4}$/.test(rq)){$("code").value=rq;$("note").textContent="Einladung zu Raum "+rq.toUpperCase()+": Name prüfen und auf „Beitreten“ tippen."}}catch(e){}
 $("snd").onclick=function(){snd=!snd;this.textContent=snd?"🔊":"🔇"};
-var VERSION="6";$("ver").textContent="Version "+VERSION;
+var VERSION="8";$("ver").textContent="Version "+VERSION;
 (function(){var e=$("e67"),g=$("egg");function open(){e.className="on";confetti();tune([392,523,659,784,1047],90,.2)}function close(){e.className=""}
 g.onclick=open;g.onkeydown=function(k){if(k.key==="Enter"||k.key===" "){k.preventDefault();open()}};e.onclick=close;document.addEventListener("keydown",function(k){if(k.key==="Escape")close()})})();
 try{if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)navigator.serviceWorker.register("sw.js").catch(function(){})}catch(e){}
@@ -987,7 +987,7 @@ $("inst").onclick=function(){if(dp){var d=dp;dp=null;d.prompt();d.userChoice.the
 (function(){
 var SB_URL="https://ffibcujekwgrlmdzizbq.supabase.co",SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZmaWJjdWpla3dncmxtZHppemJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwNjA5MDksImV4cCI6MjEwNzYzNjkwOX0.flNCknO4PCDqDA6oJa4GRkNxnJ0H2vKgAbvMjLoE45w";
 var AL="abcdefghjkmnpqrstuvwxyz23456789",CODE_RE=/^[a-z0-9]{8}$/;
-var isGuest=true,accMail="",pushOn=false,db=null,me=null,prof=null,friends=[],reqs=[],invs=[],pres={},seenOn={},unread={},msgs={},chan=null,online=false,view="list",lastSend=0,lastSig="",ready=false;
+var initErr="",isGuest=true,accMail="",pushOn=false,db=null,me=null,prof=null,friends=[],reqs=[],invs=[],pres={},seenOn={},unread={},msgs={},chan=null,online=false,view="list",lastSend=0,lastSig="",ready=false;
 function rid(n){var s="";for(var i=0;i<n;i++)s+=AL[Math.floor(Math.random()*AL.length)];return s}
 function lg(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
 function clean(s,n){return String(s==null?"":s).replace(/[\u0000-\u001f<>]/g,"").slice(0,n)}
@@ -1014,7 +1014,7 @@ var p=(await db.from("profiles").select("*").eq("id",me).maybeSingle()).data;
 for(var t=0;!p&&t<5;t++){var ins=await db.from("profiles").insert({id:me,code:rid(8),name:myNm(),av:myAv()}).select().single();if(!ins.error)p=ins.data}
 if(!p)throw new Error("Profil konnte nicht angelegt werden");
 prof=p;await loadAll();realtime();ready=true;draw();syncStats();if("Notification" in window&&Notification.permission==="granted")subPush().then(ntState)
-}catch(e){status("🟠 Fehler");$("frnh").textContent="Server: "+(e&&e.message||e)+" – ist „Anonymous sign-ins“ aktiviert und das SQL ausgeführt?"}}
+}catch(e){status("🟠 Fehler");initErr=String(e&&e.message||e);draw();$("frnh").textContent="Server: "+(e&&e.message||e)+" – ist „Anonymous sign-ins“ aktiviert und das SQL ausgeführt?"}}
 async function loadAll(){
 var fs=(await db.from("friendships").select("*")).data||[],ids=[];
 fs.forEach(function(f){ids.push(f.a===me?f.b:f.a)});
@@ -1108,6 +1108,7 @@ $("acx").onclick=function(){$("acp").classList.remove("on")};
 $("acp").onclick=function(e){if(e.target===$("acp"))$("acp").classList.remove("on")};
 $("acb").onclick=async function(e){var b=e.target.closest("[data-b]");if(!b||!db)return;var a=b.getAttribute("data-b");
 if(a==="out"){if(!confirm("Abmelden? Danach spielst du wieder als neuer Gast."))return;try{localStorage.removeItem("sl-stats")}catch(x){}await db.auth.signOut();location.reload();return}
+if(a==='make'&&!me){acMsg('Es gibt noch kein Gast-Profil auf dem Server'+(initErr?': '+initErr:'')+'. Schalte in Supabase unter Authentication → Sign In / Providers „Anonymous Sign-Ins“ ein und lade die Seite neu.');return}
 var id=ident($("acu").value),pw=$("acw").value;
 if(!id){acMsg("Benutzername: mindestens 3 Zeichen (a–z, 0–9).");return}if(pw.length<6){acMsg("Das Passwort braucht mindestens 6 Zeichen.");return}
 if(a==="in"){if(!confirm("Anmelden? Dein aktueller Gast-Fortschritt wird nicht übernommen."))return;try{localStorage.removeItem("sl-stats")}catch(x){}var r=await db.auth.signInWithPassword({email:id,password:pw});if(r.error){acMsg("Anmeldung fehlgeschlagen: "+r.error.message);return}location.reload();return}
@@ -1119,12 +1120,12 @@ toast("✅ Konto erstellt");drawAc();drawCard()};
 function btnsFor(f,on,rm){var h="";if(on&&rm&&rm!==curRoom())h+="<button class='mini' data-a='join' data-i='"+f.id+"'>▶ Beitreten</button>";else if(on&&!(rm&&rm===curRoom()))h+="<button class='mini' data-a='inv' data-i='"+f.id+"'>➕ Einladen</button>";return h}
 function drawCard(){var c=$("frc");if(!c)return;var ok=friends.filter(function(f){return f.st==="ok"}),on=ok.filter(function(f){return pres[f.id]}),b=totalBadge();
 var h="<div style='display:flex;justify-content:space-between;align-items:center;gap:8px'><b style='font-size:1.15rem'>👥 Freunde</b><button class='mini' data-a='acc' style='margin:0'>👤 "+esc(isGuest?"Gast":accLabel())+" ›</button></div>";
-h+="<div class='sub' style='margin:2px 0 4px;text-align:left'>"+(!ready?"Verbinde …":ok.length?on.length+" von "+ok.length+" online":"Füge Freunde hinzu und spielt zusammen.")+"</div>";
+h+="<div class='sub' style='margin:2px 0 4px;text-align:left'>"+(!ready?(initErr?"⚠ "+esc(initErr):"Verbinde …"):ok.length?on.length+" von "+ok.length+" online":"Füge Freunde hinzu und spielt zusammen.")+"</div>";
 on.slice(0,3).forEach(function(f){var rm=/^[a-z0-9]{4}$/.test(pres[f.id].room||"")?pres[f.id].room:"";
 h+="<div class='fr'><span class='dot' style='color:#2a9d4a'></span><div class='fi'><b>"+esc(avOfF(f)+" "+nameOfF(f))+"</b><small>"+(rm?"im Raum "+rm.toUpperCase():"Online")+"</small></div><button class='mini' data-a='dm' data-i='"+f.id+"'>💬"+(unread[f.id]?"<span style='display:block'>"+unread[f.id]+"</span>":"")+"</button>"+btnsFor(f,true,rm)+"</div>"});
 h+="<button class='btn' data-a='open' style='margin-top:10px'>👥 Freundesliste öffnen"+(b?" ("+b+" neu)":"")+"</button>";
 c.innerHTML=h}
-function draw(){badge();drawCard();if(!panelOpen())return;if(prof)$("frme").textContent=fmt(prof.code);
+function draw(){badge();drawCard();if(!panelOpen())return;if(initErr){status("🟠 Fehler");$("frnh").style.color="#d33";$("frnh").textContent="⚠ Serverfehler: "+initErr}if(prof)$("frme").textContent=fmt(prof.code);
 var h="";
 if(reqs.length){h+="<div class='frt'>ANFRAGEN</div>";reqs.forEach(function(r){h+="<div class='fr'><div class='fi'><b>"+esc(r.av+" "+r.name)+"</b><small>möchte dein Freund sein</small></div><button class='mini' data-a='no' data-i='"+r.fid+"'>✕</button><button class='mini' data-a='ok' data-i='"+r.id+"'>✔ Annehmen</button></div>"})}
 var l=friends.slice().sort(function(a,b){return (pres[b.id]?1:0)-(pres[a.id]?1:0)||nameOfF(a).localeCompare(nameOfF(b))});
