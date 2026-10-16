@@ -306,7 +306,7 @@ body.adm-open main{padding-bottom:calc(40vh + 110px)}
 <div class="frv" id="frlv"><div class="frh"><b>👥 Freunde <span id="frst" class="sub" style="font-size:.8rem;margin:0"></span></b><button class="mini" id="frx" aria-label="Schließen">✕</button></div>
 <div class="frb2"><div class="frme"><div class="lbl" style="margin:0 0 6px">Dein Freundescode</div><span class="chip" id="frme"></span><button class="mini" id="frcp">📋</button><button class="mini" id="frsh">📤 Link teilen</button><button class="mini" data-a="acc" id="fracc">👤 Konto</button>
 <div class="fradd"><input id="fradd" maxlength="9" placeholder="Code des Freundes" autocomplete="off" autocapitalize="characters"><button class="btn" id="fradb">Hinzufügen</button></div>
-<button class="mini" id="frnt" style="margin:0"></button><div class="sub" id="frnh" style="font-size:.78rem;margin:6px 0 0"></div></div>
+<button class="mini" id="frnt" style="margin:0"></button><div class="sub" id="frnh" style="font-size:.78rem;margin:6px 0 0"></div><button class="mini" id="frdg" style="margin:6px 0 0">🔧 Verbindung prüfen</button><div class="sub" id="frer" style="font-size:.78rem;margin:6px 0 0;color:#d33"></div><div class="sub" id="frdr" style="display:none;font-size:.78rem;margin:6px 0 0;text-align:left"></div></div>
 <div id="frlb"></div></div></div>
 <div class="frv" id="frdv" style="display:none"><div class="frh"><button class="mini" id="frbk" aria-label="Zurück">←</button><b id="frdh" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></b><button class="mini" id="frx2" aria-label="Schließen">✕</button></div>
 <div class="frdm" id="frdm"></div><div class="fri"><input id="frdi" maxlength="200" placeholder="Nachricht …" autocomplete="off"><button class="btn" id="frds">Senden</button></div></div>
@@ -1004,46 +1004,95 @@ function badge(){var n=totalBadge(),e=$("frn");e.textContent=n;e.style.display=n
 function panelOpen(){return $("frp").classList.contains("on")}
 function status(t){$("frst").textContent=t}
 /* ----- Start: anonym anmelden, Profil holen/anlegen ----- */
+var initBusy=false,initTry=0,wrn="",dbOn=false,rtErr="",dbErr="",chan2=null,ldSeq=0;
+function bad(){return initErr||wrn}
+function errTxt(e){var m=String(e&&e.message||e||""),c=m+" "+String(e&&e.code||"");
+if(/anonymous/i.test(m)&&/disabled|not enabled/i.test(m))return m+" → In Supabase unter Authentication → Sign In / Providers „Allow anonymous sign-ins“ einschalten.";
+if(/does not exist|schema cache|PGRST20\d|42P01|42883/.test(c))return m+" → supabase_setup.sql im SQL-Editor ausführen.";
+if(/row-level security|permission denied|42501/.test(c))return m+" → Rechte fehlen, supabase_setup.sql noch einmal ausführen.";
+if(/failed to fetch|networkerror|load failed/i.test(m))return"Keine Verbindung zum Server (Internet prüfen).";
+return m}
+function stLine(){status(online?(dbOn?"🟢":"🟡 ohne Live-Updates"):"🟠 verbindet …")}
+function retryLater(){if(initTry>=8)return;initTry++;setTimeout(init,Math.min(30000,3000*initTry))}
 async function init(){
-if(typeof supabase==="undefined"){status("🟠 offline");return}
-try{db=supabase.createClient(SB_URL,SB_KEY);
+if(initBusy||ready)return;
+if(typeof supabase==="undefined"){status("🟠 offline");initErr="Die Supabase-Bibliothek konnte nicht geladen werden (Internet oder Werbeblocker prüfen).";draw();retryLater();return}
+initBusy=true;initErr="";
+try{if(!db)db=supabase.createClient(SB_URL,SB_KEY);
 var s=(await db.auth.getSession()).data.session;
 if(!s){var r=await db.auth.signInAnonymously();if(r.error)throw r.error;s=r.data.session}
 me=s.user.id;isGuest=!!s.user.is_anonymous;accMail=s.user.email||"";
-var p=(await db.from("profiles").select("*").eq("id",me).maybeSingle()).data;
-for(var t=0;!p&&t<5;t++){var ins=await db.from("profiles").insert({id:me,code:rid(8),name:myNm(),av:myAv()}).select().single();if(!ins.error)p=ins.data}
-if(!p)throw new Error("Profil konnte nicht angelegt werden");
-prof=p;await loadAll();realtime();ready=true;draw();syncStats();if("Notification" in window&&Notification.permission==="granted")subPush().then(ntState)
-}catch(e){status("🟠 Fehler");initErr=String(e&&e.message||e);draw();$("frnh").textContent="Server: "+(e&&e.message||e)+" – ist „Anonymous sign-ins“ aktiviert und das SQL ausgeführt?"}}
+var q=await db.from("profiles").select("*").eq("id",me).maybeSingle();if(q.error)throw q.error;
+var p=q.data,pe=null;
+for(var t=0;!p&&t<5;t++){var ins=await db.from("profiles").insert({id:me,code:rid(8),name:myNm(),av:myAv()}).select().single();
+if(!ins.error){p=ins.data;break}pe=ins.error;
+if(ins.error.code==="23505"){var q2=await db.from("profiles").select("*").eq("id",me).maybeSingle();if(q2.data){p=q2.data;break}continue}
+break}
+if(!p)throw pe||new Error("Profil konnte nicht angelegt werden");
+prof=p;initTry=0;ready=true;
+await loadAll();realtime();draw();syncStats();
+if("Notification" in window&&Notification.permission==="granted")subPush().then(ntState)
+}catch(e){ready=false;status("🟠 Fehler");initErr=errTxt(e);draw();retryLater()}
+finally{initBusy=false}}
 async function loadAll(){
-var fs=(await db.from("friendships").select("*")).data||[],ids=[];
+if(!db||!me)return;var my=++ldSeq;
+var fr=await db.from("friendships").select("*").or("a.eq."+me+",b.eq."+me);
+if(my!==ldSeq)return;
+if(fr.error){wrn="friendships: "+errTxt(fr.error);draw();return}
+var fs=fr.data||[],ids=[],w="";
 fs.forEach(function(f){ids.push(f.a===me?f.b:f.a)});
-var ps={};if(ids.length)((await db.from("profiles").select("id,name,av").in("id",ids)).data||[]).forEach(function(p){ps[p.id]=p});
+var ps={};if(ids.length){var pr=await db.from("profiles").select("id,name,av").in("id",ids);if(pr.error)w="profiles: "+errTxt(pr.error);(pr.data||[]).forEach(function(p){ps[p.id]=p})}
+var mr=await db.from("messages").select("id,from_id,kind,room,created_at").eq("to_id",me).eq("read",false);
+if(my!==ldSeq)return;
+if(mr.error&&!w)w="messages: "+errTxt(mr.error);
+var um=mr.data||[];
 friends=[];reqs=[];
 fs.forEach(function(f){var id=f.a===me?f.b:f.a,p=ps[id]||{name:"Freund",av:""};
 if(f.status==="ok")friends.push({fid:f.id,id:id,name:p.name,av:p.av,st:"ok"});
 else if(f.a===me)friends.push({fid:f.id,id:id,name:p.name,av:p.av,st:"out"});
 else reqs.push({fid:f.id,id:id,name:p.name,av:p.av})});
-var um=(await db.from("messages").select("id,from_id,kind,room,created_at").eq("to_id",me).eq("read",false)).data||[];
 unread={};var old=invs.map(function(v){return v.mid}),since=Date.now()-30*60000;
 um.forEach(function(m){if(m.kind==="dm")unread[m.from_id]=(unread[m.from_id]||0)+1;
 else if(m.kind==="inv"&&new Date(m.created_at).getTime()>since&&old.indexOf(m.id)<0&&fOf(m.from_id))invs.push({mid:m.id,id:m.from_id,room:m.room})});
-draw();showInv(true)}
-/* ----- Echtzeit: Online-Status, neue Nachrichten, Freundschaften ----- */
+wrn=w;draw();showInv(true)}
+/* ----- Echtzeit: Online-Status (Kanal 1) und neue Nachrichten / Freundschaften (Kanal 2) ----- */
 function realtime(){
+if(chan){try{db.removeChannel(chan)}catch(e){}}
+if(chan2){try{db.removeChannel(chan2)}catch(e){}}
+online=false;dbOn=false;
 chan=db.channel("lobby",{config:{presence:{key:me}}});
 chan.on("presence",{event:"sync"},function(){var st=chan.presenceState(),np={};
 Object.keys(st).forEach(function(k){var l=st[k];if(l&&l.length)np[k]=l[l.length-1]});
 Object.keys(np).forEach(function(k){var f=fOf(k);if(f&&f.st==="ok"&&!pres[k]&&seenOn[k])toast("🟢 "+nameOfF(f)+" ist online");seenOn[k]=1});
 pres=np;draw()})
+.subscribe(function(s,err){online=s==="SUBSCRIBED";if(err)rtErr=String(err.message||err);stLine();if(online){lastSig="";track()}});
+chan2=db.channel("db-"+me)
 .on("postgres_changes",{event:"INSERT",schema:"public",table:"messages",filter:"to_id=eq."+me},function(p){onMsg(p.new)})
 .on("postgres_changes",{event:"*",schema:"public",table:"friendships"},function(p){var n=p.new||{};
-if(p.eventType==="INSERT"&&n.b===me){var f=null;toast("👋 Neue Freundschaftsanfrage");notify("Freundschaftsanfrage","Jemand möchte dein Freund sein","req")}
+if(p.eventType==="INSERT"&&n.b===me){toast("👋 Neue Freundschaftsanfrage");notify("Freundschaftsanfrage","Jemand möchte dein Freund sein","req")}
 else if(p.eventType==="UPDATE"&&n.status==="ok"&&n.a===me)toast("✅ Freundschaftsanfrage angenommen");
 loadAll()})
-.subscribe(function(s){online=s==="SUBSCRIBED";status(online?"🟢":"🟠 verbindet …");if(online){lastSig="";track();loadAll()}})}
+.subscribe(function(s,err){dbOn=s==="SUBSCRIBED";if(err)dbErr=String(err.message||err);stLine();if(dbOn)loadAll()})}
 function track(){if(!chan||!online)return;var o={name:myNm(),av:myAv(),room:curRoom()},sig=JSON.stringify(o);if(sig===lastSig)return;lastSig=sig;chan.track(o);
 if(prof&&(prof.name!==o.name||prof.av!==o.av)){prof.name=o.name;prof.av=o.av;db.from("profiles").update({name:o.name,av:o.av}).eq("id",me).then(function(){})}}
+/* ----- Verbindung prüfen (zeigt, was am Server fehlt) ----- */
+async function diag(){var o=$("frdr"),L=[],miss=0;
+function add(ok,t,m){if(!ok)miss++;L.push((ok?"✅ ":"❌ ")+t+(m?" – "+m:""));o.innerHTML=L.map(esc).join("<br>")}
+o.style.display="";o.textContent="Prüfe …";
+try{
+if(typeof supabase==="undefined"){add(false,"Bibliothek","Supabase-Skript nicht geladen (Internet / Werbeblocker?)");return}
+if(!db)db=supabase.createClient(SB_URL,SB_KEY);
+var s=(await db.auth.getSession()).data.session;
+if(!s){var r=await db.auth.signInAnonymously();if(r.error){add(false,"Anmeldung",errTxt(r.error));return}s=r.data.session}
+add(true,"Anmeldung",(s.user.is_anonymous?"Gast ":"Konto ")+s.user.id.slice(0,8));
+var tb=["profiles","friendships","messages","stats"];
+for(var i=0;i<tb.length;i++){var q=await db.from(tb[i]).select("*",{count:"exact",head:true});add(!q.error,"Tabelle "+tb[i],q.error?errTxt(q.error):"")}
+var rp=await db.rpc("request_friend",{p_code:"--------"});
+add(!rp.error&&rp.data==="notfound","Funktion request_friend",rp.error?errTxt(rp.error):rp.data==="notfound"?"":"unerwartete Antwort: "+rp.data);
+add(online,"Online-Status (Realtime)",online?"":(rtErr||"nicht verbunden"));
+add(dbOn,"Live-Updates (Nachrichten, Anfragen)",dbOn?"":(dbErr||"nicht verbunden – das SQL-Skript (Abschnitt „Echtzeit“) ausführen"));
+if(miss)L.push("➡️ Führe supabase_setup.sql im Supabase SQL-Editor aus und lade die Seite neu.");else L.push("Alles in Ordnung 🎉");
+o.innerHTML=L.map(esc).join("<br>")}catch(e){add(false,"Fehler",errTxt(e))}}
 /* ----- Nachrichten ----- */
 function onMsg(m){var f=fOf(m.from_id);if(!f||f.st!=="ok")return;
 if(m.kind==="inv"){if(!/^[a-z0-9]{4}$/.test(m.room||""))return;invs.push({mid:m.id,id:m.from_id,room:m.room});showInv();notify("Einladung von "+nameOfF(f),"Komm in Raum "+m.room.toUpperCase(),"inv"+m.from_id);return}
@@ -1085,11 +1134,12 @@ toast(r.error?"Einladung fehlgeschlagen":"📨 Einladung an "+nameOfF(f)+" gesen
 /* ----- Freunde verwalten ----- */
 async function addFriend(raw){if(!db||!me){toast("Noch nicht mit dem Server verbunden");return}
 var c=parseCode(raw);if(!c){toast("Der Code ist nicht gültig (8 Zeichen)");return}
-var r=await db.rpc("request_friend",{p_code:c});if(r.error){toast("Fehler: "+r.error.message);return}
+var r=await db.rpc("request_friend",{p_code:c});if(r.error){toast(/request_friend|function|schema cache/i.test(r.error.message)?"Server-Setup fehlt – supabase_setup.sql ausführen":"Fehler: "+r.error.message);return}
 var m={sent:"Anfrage gesendet",ok:"✅ Ihr seid jetzt Freunde",notfound:"Diesen Code gibt es nicht",self:"Das ist dein eigener Code 😉",exists:"Schon in deiner Liste"};
 toast(m[r.data]||"Fertig");if(r.data==="sent"||r.data==="ok")$("fradd").value="";loadAll()}
-async function acceptReq(id){var r=reqs.filter(function(x){return x.id===id})[0];if(!r)return;await db.from("friendships").update({status:"ok"}).eq("id",r.fid);loadAll()}
-async function dropF(fid){await db.from("friendships").delete().eq("id",fid);loadAll()}
+async function acceptReq(id){var r=reqs.filter(function(x){return x.id===id})[0];if(!r||!db)return;var u=await db.from("friendships").update({status:"ok"}).eq("id",r.fid).select();
+if(u.error||!u.data||!u.data.length)toast("Annehmen hat nicht geklappt"+(u.error?": "+errTxt(u.error):""));else toast("✅ Ihr seid jetzt Freunde");loadAll()}
+async function dropF(fid){if(!db)return;var d=await db.from("friendships").delete().eq("id",fid);if(d.error)toast("Entfernen hat nicht geklappt: "+errTxt(d.error));loadAll()}
 /* ----- Statistik auf dem Server ----- */
 async function syncStats(){try{var r=await db.from("stats").select("*").eq("user_id",me).maybeSingle();
 if(r.data){localStorage.setItem("sl-stats",JSON.stringify({w:r.data.won,p:r.data.played,s:r.data.streak}))}
@@ -1114,18 +1164,19 @@ if(!id){acMsg("Benutzername: mindestens 3 Zeichen (a–z, 0–9).");return}if(pw
 if(a==="in"){if(!confirm("Anmelden? Dein aktueller Gast-Fortschritt wird nicht übernommen."))return;try{localStorage.removeItem("sl-stats")}catch(x){}var r=await db.auth.signInWithPassword({email:id,password:pw});if(r.error){acMsg("Anmeldung fehlgeschlagen: "+r.error.message);return}location.reload();return}
 var u=await db.auth.updateUser({email:id,password:pw});if(u.error){acMsg(u.error.message);return}
 var s2=(await db.auth.getSession()).data.session;if(s2){isGuest=!!s2.user.is_anonymous;accMail=s2.user.email||id}
-if(id.indexOf("@lounge-user.app")<0&&isGuest){acMsg("Bestätigungsmail gesendet – klicke den Link darin, dann ist dein Konto fertig.");return}
+if(isGuest){acMsg(id.indexOf("@lounge-user.app")<0?"Bestätigungsmail gesendet – klicke den Link darin, dann ist dein Konto fertig.":"Der Server verlangt eine E-Mail-Bestätigung. Schalte in Supabase unter Authentication → Sign In / Providers → Email „Confirm email“ aus und versuche es noch einmal.");return}
 toast("✅ Konto erstellt");drawAc();drawCard()};
 /* ----- Zeichnen ----- */
 function btnsFor(f,on,rm){var h="";if(on&&rm&&rm!==curRoom())h+="<button class='mini' data-a='join' data-i='"+f.id+"'>▶ Beitreten</button>";else if(on&&!(rm&&rm===curRoom()))h+="<button class='mini' data-a='inv' data-i='"+f.id+"'>➕ Einladen</button>";return h}
 function drawCard(){var c=$("frc");if(!c)return;var ok=friends.filter(function(f){return f.st==="ok"}),on=ok.filter(function(f){return pres[f.id]}),b=totalBadge();
 var h="<div style='display:flex;justify-content:space-between;align-items:center;gap:8px'><b style='font-size:1.15rem'>👥 Freunde</b><button class='mini' data-a='acc' style='margin:0'>👤 "+esc(isGuest?"Gast":accLabel())+" ›</button></div>";
-h+="<div class='sub' style='margin:2px 0 4px;text-align:left'>"+(!ready?(initErr?"⚠ "+esc(initErr):"Verbinde …"):ok.length?on.length+" von "+ok.length+" online":"Füge Freunde hinzu und spielt zusammen.")+"</div>";
+h+="<div class='sub' style='margin:2px 0 4px;text-align:left'>"+(bad()?"⚠ "+esc(bad()):!ready?"Verbinde …":ok.length?on.length+" von "+ok.length+" online":"Füge Freunde hinzu und spielt zusammen.")+"</div>";
+if(bad())h+="<button class='mini' data-a='retry' style='margin:0 0 6px'>🔄 Erneut verbinden</button>";
 on.slice(0,3).forEach(function(f){var rm=/^[a-z0-9]{4}$/.test(pres[f.id].room||"")?pres[f.id].room:"";
 h+="<div class='fr'><span class='dot' style='color:#2a9d4a'></span><div class='fi'><b>"+esc(avOfF(f)+" "+nameOfF(f))+"</b><small>"+(rm?"im Raum "+rm.toUpperCase():"Online")+"</small></div><button class='mini' data-a='dm' data-i='"+f.id+"'>💬"+(unread[f.id]?"<span style='display:block'>"+unread[f.id]+"</span>":"")+"</button>"+btnsFor(f,true,rm)+"</div>"});
 h+="<button class='btn' data-a='open' style='margin-top:10px'>👥 Freundesliste öffnen"+(b?" ("+b+" neu)":"")+"</button>";
 c.innerHTML=h}
-function draw(){badge();drawCard();if(!panelOpen())return;if(initErr){status("🟠 Fehler");$("frnh").style.color="#d33";$("frnh").textContent="⚠ Serverfehler: "+initErr}if(prof)$("frme").textContent=fmt(prof.code);
+function draw(){badge();drawCard();if(!panelOpen())return;$("frer").textContent=bad()?"⚠ Serverfehler: "+bad():"";if(prof)$("frme").textContent=fmt(prof.code);
 var h="";
 if(reqs.length){h+="<div class='frt'>ANFRAGEN</div>";reqs.forEach(function(r){h+="<div class='fr'><div class='fi'><b>"+esc(r.av+" "+r.name)+"</b><small>möchte dein Freund sein</small></div><button class='mini' data-a='no' data-i='"+r.fid+"'>✕</button><button class='mini' data-a='ok' data-i='"+r.id+"'>✔ Annehmen</button></div>"})}
 var l=friends.slice().sort(function(a,b){return (pres[b.id]?1:0)-(pres[a.id]?1:0)||nameOfF(a).localeCompare(nameOfF(b))});
@@ -1150,6 +1201,7 @@ if(view!==v)return;msgs[v]=(q.data||[]).reverse().map(function(m){return{me:m.fr
 if(unread[v]){delete unread[v];badge();db.from("messages").update({read:true}).eq("to_id",me).eq("from_id",v).eq("read",false).then(function(){})}}
 function openP(){$("frp").classList.add("on");ntState();draw();if(view!=="list")setView(view)}
 function closeP(){$("frp").classList.remove("on")}
+function openDm(id){$("frp").classList.add("on");ntState();setView(id)}
 async function sendDm(){var f=fOf(view),i=$("frdi"),t=i.value.trim();if(!f||!t||!db||Date.now()-lastSend<400)return;lastSend=Date.now();t=t.slice(0,200);i.value="";
 var r=await db.from("messages").insert({from_id:me,to_id:f.id,kind:"dm",body:t});
 if(r.error){toast("Nicht gesendet");i.value=t;return}(msgs[f.id]=msgs[f.id]||[]).push({me:1,t:t});drawDm()}
@@ -1162,12 +1214,14 @@ $("frcp").onclick=function(){if(!prof)return;var t=fmt(prof.code);if(navigator.c
 $("frsh").onclick=function(){if(!prof)return;var u=location.origin+location.pathname+"?f="+prof.code,tx="Sei mein Freund in der Spiele-Lounge! Code: "+fmt(prof.code);
 if(navigator.share)navigator.share({title:"Spiele-Lounge",text:tx,url:u}).catch(function(){});else if(navigator.clipboard)navigator.clipboard.writeText(tx+" "+u).then(function(){toast("Link kopiert")},function(){toast(u)});else toast(u)};
 function act(e){var b=e.target.closest("[data-a]");if(!b)return;var id=b.getAttribute("data-i"),a=b.getAttribute("data-a");
-if(a==="open")openP();else if(a==="acc")openAc();else if(a==="ok")acceptReq(id);else if(a==="no")dropF(+id);
-else if(a==="dm")setView(id);else if(a==="inv")invite(id);else if(a==="join"){var p=pres[id];if(p&&p.room)joinRoom2(p.room)}
-else if(a==="del"){var f=friends.filter(function(x){return x.fid===+id})[0];if(f&&confirm(nameOfF(f)+" aus der Freundesliste entfernen?"))dropF(f.fid)}}
-$("frlb").onclick=act;$("frc").onclick=act;if($("frl2"))$("frl2").onclick=openP;
+if(a==="retry"){initTry=0;init()}else if(a==="open")openP();else if(a==="acc")openAc();else if(a==="ok")acceptReq(id);else if(a==="no")dropF(id);
+else if(a==="dm")openDm(id);else if(a==="inv")invite(id);else if(a==="join"){var p=pres[id];if(p&&p.room)joinRoom2(p.room)}
+else if(a==="del"){var f=friends.filter(function(x){return String(x.fid)===id})[0];if(f&&confirm(nameOfF(f)+" aus der Freundesliste entfernen?"))dropF(f.fid)}}
+$("frlb").onclick=act;$("frc").onclick=act;if($("frl2"))$("frl2").onclick=openP;if($("frdg"))$("frdg").onclick=diag;
 setInterval(function(){if(ready)track()},2000);
-document.addEventListener("visibilitychange",function(){if(!document.hidden&&ready){lastSig="";track();loadAll()}});
+document.addEventListener("visibilitychange",function(){if(document.hidden)return;if(ready){lastSig="";track();loadAll()}else{initTry=0;init()}});
+window.addEventListener("online",function(){if(ready)loadAll();else{initTry=0;init()}});
+setInterval(function(){if(ready&&!dbOn&&!document.hidden)loadAll()},15000);
 try{var fq=new URLSearchParams(location.search).get("f"),fc=fq&&parseCode(fq);if(fc){openP();$("fradd").value=fmt(fc);toast("Freund gefunden – auf „Hinzufügen“ tippen")}}catch(e){}
 badge();status("🟠 verbindet …");init()
 })();
