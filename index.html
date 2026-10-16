@@ -307,10 +307,28 @@ body.adm-open main{padding-bottom:calc(40vh + 110px)}
 .af-f2{--fc:#f5b800;box-shadow:0 0 7px #f5b800aa}
 .af-f3{--fc:#e5383b;box-shadow:0 0 7px #e5383baa}
 .af-f4{--fc:#2fb24f;box-shadow:0 0 7px #2fb24faa}
-.af-f5,.af-f6,.af-f7{border-color:transparent;background-size:100% 100%,300% 100%;background-origin:border-box;background-clip:padding-box,border-box;animation:rb 2.4s linear infinite}
+.af-f5,.af-f6,.af-f7,.af-f10,.af-f11,.af-f12{border-color:transparent;background-size:100% 100%,300% 100%;background-origin:border-box;background-clip:padding-box,border-box;animation:rb 2.4s linear infinite}
 .af-f5{background-image:linear-gradient(var(--card),var(--card)),linear-gradient(90deg,#e8290b,#ff8c00,#ffd000,#ff8c00,#e8290b);box-shadow:0 0 8px #ff6a00aa}
 .af-f6{background-image:linear-gradient(var(--card),var(--card)),linear-gradient(90deg,#ff6b6b,#ffd93d,#6bcb77,#4d96ff,#c77dff,#ff6b6b)}
 .af-f7{background-image:linear-gradient(var(--card),var(--card)),linear-gradient(90deg,#67e8f9,#fff,#a5b4fc,#fff,#67e8f9);box-shadow:0 0 9px #67e8f9aa}
+.nx-aurora{background-image:linear-gradient(90deg,#00e5a8,#3b82f6,#a855f7,#3b82f6,#00e5a8);animation-duration:4s;filter:drop-shadow(0 0 3px #00e5a888)}
+.nx-ocean{background-image:linear-gradient(90deg,#005c97,#00c6ff,#9be7ff,#00c6ff,#005c97);animation-duration:2.6s;filter:drop-shadow(0 0 3px #00c6ff77)}
+.nx-sakura{background-image:linear-gradient(90deg,#ff7fb0,#ffc2da,#ff4f93,#ffc2da,#ff7fb0);animation-duration:3.4s}
+.nx-lava{background-image:linear-gradient(90deg,#7a0000,#ff2d00,#ffb300,#ff2d00,#7a0000);animation-duration:1.2s;filter:drop-shadow(0 0 4px #ff2d0099)}
+.nx-void{background:none;-webkit-background-clip:border-box;background-clip:border-box;color:#b794ff;animation:nvoid 2s ease-in-out infinite alternate}
+@keyframes nvoid{from{text-shadow:0 0 2px #000,0 0 6px #6d28d9}to{text-shadow:0 0 4px #000,0 0 14px #a855f7,0 0 24px #4c1d95}}
+.nx-crystal{background-image:linear-gradient(90deg,#4cc9f0,#e8fbff,#a78bfa,#e8fbff,#4cc9f0);animation-duration:1.8s;filter:drop-shadow(0 0 4px #4cc9f0cc)}
+.ti-t9{background:linear-gradient(90deg,#8be9ff,#c4b5fd,#8be9ff);background-size:300% 100%;animation:rb 3s linear infinite;color:#10243a}
+.ti-t10{background:linear-gradient(90deg,#7a0000,#ff2d00,#ffb300,#ff2d00,#7a0000);background-size:300% 100%;animation:rb 2s linear infinite;color:#fff}
+.ti-t11{background:linear-gradient(90deg,#0f0c29,#4c2a9a,#0f0c29);background-size:300% 100%;animation:rb 4s linear infinite;color:#e9d5ff;box-shadow:0 0 8px #7c3aedaa}
+.ti-t12{background:linear-gradient(90deg,#b8860b,#ffd700,#fff8dc,#ffd700,#b8860b);background-size:300% 100%;animation:rb 2s linear infinite;color:#3a2800;box-shadow:0 0 9px #ffd700bb}
+.ti-t13{background:linear-gradient(90deg,#ff6b6b,#ffd93d,#6bcb77,#4d96ff,#c77dff,#ff6b6b);background-size:300% 100%;animation:rb 1.6s linear infinite;color:#1a1b3a;box-shadow:0 0 10px #c77dffcc}
+.ti-t14{background:linear-gradient(90deg,#00a844,#ffd700,#00e676,#ffd700,#00a844);background-size:300% 100%;animation:rb 1.8s linear infinite;color:#10300f;box-shadow:0 0 12px #ffd700cc}
+.af-f8{--fc:#a855f7;box-shadow:0 0 8px #a855f7aa}
+.af-f9{--fc:#14101f;box-shadow:0 0 0 2px #7c3aed,0 0 10px #7c3aedaa}
+.af-f10{background-image:linear-gradient(var(--card),var(--card)),linear-gradient(90deg,#5b2be0,#2f80ed,#ff4ecd,#2f80ed,#5b2be0);box-shadow:0 0 9px #7b2ff7aa}
+.af-f11{background-image:linear-gradient(var(--card),var(--card)),linear-gradient(90deg,#00ffd5,#ff00e5,#fff700,#ff00e5,#00ffd5);box-shadow:0 0 10px #ff00e5aa}
+.af-f12{background-image:linear-gradient(var(--card),var(--card)),linear-gradient(90deg,#a87400,#ffd700,#fff6b0,#ffd700,#a87400);box-shadow:0 0 13px #ffd700cc}
 </style>
 <link rel="icon" id="fav" href="data:,">
 <link rel="apple-touch-icon" id="ati" href="data:,">
@@ -337,6 +355,7 @@ body.adm-open main{padding-bottom:calc(40vh + 110px)}
 <p class="sub" id="note" style="margin:6px 0 0"></p>
 </div>
 <div class="card" id="frc" style="text-align:left"></div>
+<div class="card" id="idc"></div><div class="card" id="shc" style="text-align:left"></div>
 <div class="stats" id="stats"></div>
 <button class="btn alt" id="inst" style="display:none">📲 Zum Homescreen hinzufügen</button>
 <div class="card" id="instHelp" style="display:none;text-align:left"></div>
@@ -346,7 +365,6 @@ body.adm-open main{padding-bottom:calc(40vh + 110px)}
 <div id="loc" style="display:none;margin-top:8px">Spieleranzahl: <select id="lp" style="width:auto"><option>2</option><option>3</option><option>4</option></select></div><div id="dfw" style="display:none;margin-top:8px">Schwierigkeit: <select id="df" style="width:auto"><option value="0">Leicht</option><option value="1" selected>Mittel</option><option value="2">Schwer</option></select></div></div>
 <button class="btn" id="frl2">👥 Freunde einladen</button><button class="btn" id="rndG">🎲 Überrasch uns</button>
 <div class="card" id="tnc"><b>🏆 Turnier</b><div class="sub" style="margin:4px 0 10px">Zufällige Spiele. Wer die meisten Runden gewinnt, holt den Pokal.</div><div style="display:flex;gap:8px;align-items:center"><select id="tnr" style="width:auto"><option value="3">3 Runden</option><option value="5" selected>5 Runden</option><option value="7">7 Runden</option><option value="9">9 Runden</option><option value="11">11 Runden</option></select><button class="btn" id="tnb" style="margin:0">Turnier starten</button></div></div>
-<div class="card" id="idc"></div><div class="card" id="shc" style="text-align:left"></div>
 <div id="games"></div>
 </section>
 <section id="game">
@@ -933,7 +951,7 @@ for(i=0;i<64;i++){f=en.filter(function(x){return x[0]===i})[0];a+='<div class="c
 return a+'</div><p class="score">Treffer: '+my.filter(function(x){return x[1]}).length+' / 14</p>'}}
 };
 var TC={code:["#9775fa","#7048e8"],mine:["#868e96","#495057"],quiz:["#ff922b","#c2410c"],snake:["#3bc9db","#0c8599"],brk:["#da77f2","#862e9c"],five:["#f2c46d","#c27a1e"],bj:["#3fb37f","#12643c"],ttt:["#ff6b6b","#ee5a8f"],c4:["#4facfe","#3b5bdb"],nim:["#f6a85b","#e17055"],pig:["#a8e063","#2a9d4a"],mem:["#a18cd1","#7a5cff"],ludo:["#ff9a9e","#e5383b"],mono:["#43e97b","#1a936f"],rv:["#4b6cb7","#182848"],dame:["#c79081","#8b5a2b"],kn:["#f7971e","#d4580a"],uno:["#ff5f6d","#ffa04d"],wolf:["#4a4a6a","#1b1b2f"],hang:["#9d50bb","#4e2a84"],paint:["#f953c6","#b91d73"],ship:["#2193b0","#0b486b"]};
-var AV0=["🦊","🐼","🐸","🦁","🐙","🦄","🐯","🐵"],AV=AV0.concat(["🐧","🦉","🐺","🦈","🤖","👽","🐲","🔥","🚀","👑","🐢","🦖","🐝","🦋","🦩","🧙","🧛","🦸","🧜","💎","👻","🎃","🌈","⚡","🛸","🐉"]),RX=["😂","👏","😮","😡","🔥","❤️"],avOf={},colOf={};
+var AV0=["🦊","🐼","🐸","🦁","🐙","🦄","🐯","🐵"],AV=AV0.concat(["🐧","🦉","🐺","🦈","🤖","👽","🐲","🔥","🚀","👑","🐢","🦖","🐝","🦋","🦩","🧙","🧛","🦸","🧜","💎","👻","🎃","🌈","⚡","🛸","🐉","🦚","🐋","🦅","🐅","🧞","🥷","🪐","🌋","🏆","💰","🎭","🦂","🧿","🔮","🗿"]),RX=["😂","👏","😮","😡","🔥","❤️"],avOf={},colOf={};
 var RULES={code:"Das Spiel denkt sich einen geheimen Code aus 4 Farben aus, Farben dürfen doppelt vorkommen. Ihr legt abwechselnd Rateversuche. ⚫ heißt: richtige Farbe am richtigen Platz. ⚪ heißt: richtige Farbe am falschen Platz. Wer den Code knackt, gewinnt. Es gibt 12 Versuche für alle zusammen.",
 mine:"Auf dem Feld liegen 10 versteckte Minen. Tippt abwechselnd ein Feld an. Die Zahl zeigt, wie viele Minen in den 8 Nachbarfeldern liegen. Wer auf eine Mine tippt, scheidet aus. Wer zuletzt übrig bleibt, gewinnt. Sind alle sicheren Felder offen, gewinnt, wer die meisten aufgedeckt hat. Der erste Zug ist immer sicher.",
 quiz:"Jeder bekommt 5 Fragen mit je 4 Antworten. Wer am meisten richtig beantwortet, gewinnt. Bei Gleichstand gewinnen alle Besten.",
@@ -1009,7 +1027,7 @@ function botMove(){if(!botOn||!gid||S.w!==null||S.t!==1)return;var g=gid,n=moves
 function floatEmoji(e,who){var d=document.createElement("div");d.className="fe";d.style.left=(10+Math.random()*75)+"vw";d.innerHTML=e+"<small>"+esc(who||"")+"</small>";document.body.appendChild(d);setTimeout(function(){d.remove()},2200)}
 function onReact(m){var e=m.data&&m.data.e;if(RX.indexOf(e)<0)return;floatEmoji(e,nameOf[m.peer])}
 function cl(o){return JSON.parse(JSON.stringify(o))}
-var CZX={rainbow:1,fire:1,ice:1,gold:1,neon:1,galaxy:1,toxic:1,candy:1},CZT={t1:"🌱 Neuling",t2:"🎮 Zocker",t3:"🍀 Glückspilz",t4:"🧠 Schlauberger",t5:"🔥 Profi",t6:"⚔️ Champion",t7:"👑 König",t8:"🌟 Legende"},CZF={f1:1,f2:1,f3:1,f4:1,f5:1,f6:1,f7:1};
+var CZX={rainbow:1,fire:1,ice:1,gold:1,neon:1,galaxy:1,toxic:1,candy:1,aurora:1,ocean:1,sakura:1,lava:1,void:1,crystal:1},CZT={t1:"🌱 Neuling",t2:"🎮 Zocker",t3:"🍀 Glückspilz",t4:"🧠 Schlauberger",t5:"🔥 Profi",t6:"⚔️ Champion",t7:"👑 König",t8:"🌟 Legende",t9:"💎 Elite",t10:"🐉 Drachenherr",t11:"🌌 Unsterblich",t12:"👑 Imperator",t13:"🔱 Gottheit",t14:"💸 Münzmagnat"},CZF={f1:1,f2:1,f3:1,f4:1,f5:1,f6:1,f7:1,f8:1,f9:1,f10:1,f11:1,f12:1};
 /* Kosmetik-Code: "Namenseffekt~Titel~Rahmen" – nur Whitelist-Werte werden angezeigt */
 function czSpec(c){var a=String(c||"").split("~"),x=a[0]||"";if(!CZX[x]&&!/^#[0-9a-f]{6}$/i.test(x))x="";return{fx:x,ti:CZT[a[1]]?a[1]:"",fr:CZF[a[2]]?a[2]:""}}
 function cn(n,c){n=esc(n);var x=czSpec(c).fx;if(x==="rainbow")return'<span class="rb">'+n+'</span>';if(CZX[x])return'<span class="nx nx-'+x+'">'+n+'</span>';if(x)return'<span style="color:'+x+';font-weight:800">'+n+'</span>';return n}
@@ -1325,9 +1343,11 @@ function myAv(){return clean($("av").value||lg("sl-av","")||"",8)}
 function curRoom(){try{return net&&roomCode?String(roomCode).toLowerCase():""}catch(e){return""}}
 function fOf(id){for(var i=0;i<friends.length;i++)if(friends[i].id===id)return friends[i];return null}
 function nameOfF(f){var p=pres[f.id];return clean((p&&p.name)||f.name||"Freund",16)}
-function colOfF(f){var p=pres[f.id];return String((p&&p.c)||"").slice(0,24)}
+var fcache={};try{fcache=JSON.parse(localStorage.getItem("sl-fcache"))||{}}catch(e){}
+function fcSave(){try{localStorage.setItem("sl-fcache",JSON.stringify(fcache))}catch(e){}}
+function colOfF(f){var p=pres[f.id];return String((p&&p.c!=null?p.c:(fcache[f.id]&&fcache[f.id].c)||f.c)||"").slice(0,24)}
 function myCol(){return window.slCol?String(slCol()).slice(0,24):""}
-function avOfF(f){var p=pres[f.id];return clean((p&&p.av)||f.av||"",8)}
+function avOfF(f){var p=pres[f.id];return clean((p&&p.av)||(fcache[f.id]&&fcache[f.id].av)||f.av||"",8)}
 function totalBadge(){var n=reqs.length+invs.length;Object.keys(unread).forEach(function(k){n+=unread[k]||0});return n}
 function badge(){var n=totalBadge(),e=$("frn");e.textContent=n;e.style.display=n?"block":"none";document.title=(n?"("+n+") ":"")+"Spiele-Lounge"}
 function panelOpen(){return $("frp").classList.contains("on")}
@@ -1374,15 +1394,15 @@ if(my!==ldSeq)return;
 if(fr.error){wrn="friendships: "+errTxt(fr.error);draw();return}
 var fs=fr.data||[],ids=[],w="";
 fs.forEach(function(f){ids.push(f.a===me?f.b:f.a)});
-var ps={};if(ids.length){var pr=await db.from("profiles").select("id,name,av").in("id",ids);if(pr.error)w="profiles: "+errTxt(pr.error);(pr.data||[]).forEach(function(p){ps[p.id]=p})}
+var ps={};if(ids.length){var pr=await db.from("profiles").select("id,name,av,c").in("id",ids);if(pr.error)pr=await db.from("profiles").select("id,name,av").in("id",ids);if(pr.error)w="profiles: "+errTxt(pr.error);(pr.data||[]).forEach(function(p){ps[p.id]=p})}
 var mr=await db.from("messages").select("id,from_id,kind,room,created_at").eq("to_id",me).eq("read",false);
 if(my!==ldSeq)return;
 if(mr.error&&!w)w="messages: "+errTxt(mr.error);
 var um=mr.data||[];
 friends=[];reqs=[];
 fs.forEach(function(f){var id=f.a===me?f.b:f.a,p=ps[id]||{name:"Freund",av:""};
-if(f.status==="ok")friends.push({fid:f.id,id:id,name:p.name,av:p.av,st:"ok"});
-else if(f.a===me)friends.push({fid:f.id,id:id,name:p.name,av:p.av,st:"out"});
+if(f.status==="ok")friends.push({fid:f.id,id:id,name:p.name,av:p.av,c:p.c||"",st:"ok"});
+else if(f.a===me)friends.push({fid:f.id,id:id,name:p.name,av:p.av,c:p.c||"",st:"out"});
 else reqs.push({fid:f.id,id:id,name:p.name,av:p.av})});
 unread={};var old=invs.map(function(v){return v.mid}),since=Date.now()-30*60000;
 um.forEach(function(m){if(m.kind==="dm")unread[m.from_id]=(unread[m.from_id]||0)+1;
@@ -1397,7 +1417,7 @@ chan=db.channel("lobby",{config:{presence:{key:me}}});
 chan.on("presence",{event:"sync"},function(){var st=chan.presenceState(),np={};
 Object.keys(st).forEach(function(k){var l=st[k];if(l&&l.length)np[k]=l[l.length-1]});
 Object.keys(np).forEach(function(k){var f=fOf(k);if(f&&f.st==="ok"&&!pres[k]&&seenOn[k])toast("🟢 "+nameOfF(f)+" ist online");seenOn[k]=1});
-pres=np;draw()})
+var fch=0;Object.keys(np).forEach(function(k){if(!fOf(k))return;var c=String(np[k].c||"").slice(0,24),a=clean(np[k].av||"",8),o=fcache[k];if(!o||o.c!==c||o.av!==a){fcache[k]={c:c,av:a};fch=1}});if(fch)fcSave();pres=np;draw()})
 .subscribe(function(s,err){online=s==="SUBSCRIBED";if(err)rtErr=String(err.message||err);stLine();if(online){lastSig="";track()}});
 chan2=db.channel("db-"+me)
 .on("postgres_changes",{event:"INSERT",schema:"public",table:"messages",filter:"to_id=eq."+me},function(p){onMsg(p.new)})
@@ -1407,7 +1427,8 @@ else if(p.eventType==="UPDATE"&&n.status==="ok"&&n.a===me)toast("✅ Freundschaf
 loadAll()})
 .subscribe(function(s,err){dbOn=s==="SUBSCRIBED";if(err)dbErr=String(err.message||err);stLine();if(dbOn)loadAll()})}
 function track(){if(!chan||!online)return;var o={name:myNm(),av:myAv(),room:curRoom(),c:myCol()},sig=JSON.stringify(o);if(sig===lastSig)return;lastSig=sig;chan.track(o);
-if(prof&&(prof.name!==o.name||prof.av!==o.av)){prof.name=o.name;prof.av=o.av;db.from("profiles").update({name:o.name,av:o.av}).eq("id",me).then(function(){})}}
+if(prof&&(prof.name!==o.name||prof.av!==o.av)){prof.name=o.name;prof.av=o.av;db.from("profiles").update({name:o.name,av:o.av}).eq("id",me).then(function(){})}
+if(prof&&prof.c!==o.c){prof.c=o.c;db.from("profiles").update({c:o.c}).eq("id",me).then(function(){},function(){})}}
 /* ----- Verbindung prüfen (zeigt, was am Server fehlt) ----- */
 async function diag(){var o=$("frdr"),L=[],miss=0;
 function add(ok,t,m){if(!ok)miss++;L.push((ok?"✅ ":"❌ ")+t+(m?" – "+m:""));o.innerHTML=L.map(esc).join("<br>")}
@@ -1563,17 +1584,17 @@ badge();status("🟠 verbindet …");init()
 <script>
 /* ===== Münz-Farm (Idle) + Personalisierung v2 ===== */
 (function(){
-var UPS=[{k:"p",n:"Stärkere Hacke",e:"⛏️",d:"+1 Münze pro Tipp",b:15,g:1.5},{k:"a",n:"Bergarbeiter",e:"👷",d:"+1 Münze pro Sekunde",b:40,g:1.35},{k:"m",n:"Goldmine",e:"🏭",d:"+6 Münzen pro Sekunde",b:350,g:1.4},{k:"d",n:"Diamantbohrer",e:"💎",d:"+30 Münzen pro Sekunde",b:2800,g:1.42},{k:"f",n:"Münzfabrik",e:"🏰",d:"+150 Münzen pro Sekunde",b:18000,g:1.45}],
-RT={a:1,m:6,d:30,f:150},
-AVX=AV.slice(AV0.length),AVP=[120,150,200,250,300,400,500,650,800,1500,180,220,260,320,380,450,550,700,900,1100,1400,1800,2200,2800,3500,5000],
-COLS=[["Rot","#e5383b",200],["Orange","#f07f13",200],["Gold","#e0a800",300],["Grün","#2fb24f",300],["Türkis","#12b5cb",400],["Blau","#3b82f6",400],["Lila","#a855f7",500],["Pink","#ff2d95",500],["Feuer","fire",1200],["Eis","ice",1200],["Gift","toxic",1500],["Zuckerwatte","candy",1500],["Gold-Glanz","gold",1800],["Neon","neon",2000],["Galaxie","galaxy",2500],["Regenbogen","rainbow",3000]],
-TIK=["t1","t2","t3","t4","t5","t6","t7","t8"],TIP={t1:300,t2:500,t3:700,t4:900,t5:1500,t6:2500,t7:4000,t8:6000},
-FRS=[["f1","Silber",400],["f2","Gold",800],["f3","Rubin",1000],["f4","Smaragd",1000],["f5","Feuer",2000],["f6","Regenbogen",3000],["f7","Diamant",5000]],
+var UPS=[{k:"p",n:"Stärkere Hacke",e:"⛏️",d:"+1 Münze pro Tipp",b:15,g:1.5},{k:"a",n:"Bergarbeiter",e:"👷",d:"+1 Münze pro Sekunde",b:40,g:1.35},{k:"m",n:"Goldmine",e:"🏭",d:"+6 Münzen pro Sekunde",b:350,g:1.4},{k:"d",n:"Diamantbohrer",e:"💎",d:"+30 Münzen pro Sekunde",b:2800,g:1.42},{k:"f",n:"Münzfabrik",e:"🏰",d:"+150 Münzen pro Sekunde",b:18000,g:1.45},{k:"r",n:"Asteroiden-Mine",e:"☄️",d:"+800 Münzen pro Sekunde",b:120000,g:1.45},{k:"z",n:"Zeitmaschine",e:"⏳",d:"+5.000 Münzen pro Sekunde",b:900000,g:1.5},{k:"y",n:"Münz-Galaxie",e:"🌌",d:"+40.000 Münzen pro Sekunde",b:8000000,g:1.5}],
+RT={a:1,m:6,d:30,f:150,r:800,z:5000,y:40000},
+AVX=AV.slice(AV0.length),AVP=[120,150,200,250,300,400,500,650,800,1500,180,220,260,320,380,450,550,700,900,1100,1400,1800,2200,2800,3500,5000,6000,8000,10000,12000,15000,20000,25000,30000,40000,50000,75000,100000,150000,250000,500000],
+COLS=[["Mint","#2ee6a6",250],["Koralle","#ff6f61",250],["Indigo","#4f46e5",350],["Limette","#a3e635",350],["Rot","#e5383b",200],["Orange","#f07f13",200],["Gold","#e0a800",300],["Grün","#2fb24f",300],["Türkis","#12b5cb",400],["Blau","#3b82f6",400],["Lila","#a855f7",500],["Pink","#ff2d95",500],["Feuer","fire",1200],["Eis","ice",1200],["Gift","toxic",1500],["Zuckerwatte","candy",1500],["Gold-Glanz","gold",1800],["Neon","neon",2000],["Galaxie","galaxy",2500],["Regenbogen","rainbow",3000],["Aurora","aurora",5000],["Ozean","ocean",6000],["Sakura","sakura",7500],["Lava","lava",10000],["Void","void",15000],["Kristall","crystal",25000]],
+TIK=["t1","t2","t3","t4","t5","t6","t7","t8","t9","t10","t11","t12","t13","t14"],TIP={t1:300,t2:500,t3:700,t4:900,t5:1500,t6:2500,t7:4000,t8:6000,t9:8000,t10:12000,t11:20000,t12:35000,t13:60000,t14:100000},
+FRS=[["f1","Silber",400],["f2","Gold",800],["f3","Rubin",1000],["f4","Smaragd",1000],["f5","Feuer",2000],["f6","Regenbogen",3000],["f7","Diamant",5000],["f8","Amethyst",6000],["f9","Obsidian",9000],["f10","Galaxie",15000],["f11","Plasma",25000],["f12","Götter-Gold",50000]],
 TABS=[["a","🐾 Avatare"],["n","🌈 Namen"],["t","🏷️ Titel"],["r","🖼️ Rahmen"]],tab="a",I;
 function arr(a){return Array.isArray(a)?a:[]}
 function okCol(k){return COLS.some(function(c){return c[1]===k})}
 function okFr(k){return FRS.some(function(f){return f[0]===k})}
-function fm(n){n=Math.floor(n);return n>=1e6?(n/1e6).toFixed(1)+"M":n>=1e4?(n/1e3).toFixed(1)+"k":String(n)}
+function fm(n){n=Math.floor(n);return n>=1e12?(n/1e12).toFixed(1)+"T":n>=1e9?(n/1e9).toFixed(1)+"B":n>=1e6?(n/1e6).toFixed(1)+"M":n>=1e4?(n/1e3).toFixed(1)+"k":String(n)}
 function load(){var s=null,l,o,l2={};try{s=JSON.parse(localStorage.getItem("sl-idle"))}catch(e){}s=s&&typeof s==="object"?s:{};l=s.l||{};
 UPS.forEach(function(u){l2[u.k]=Math.min(300,Math.max(0,+l[u.k]||0))});
 o={c:Math.max(0,+s.c||0),t:Math.max(0,+s.t||0),l:l2,av:arr(s.av).filter(function(a){return AVX.indexOf(a)>=0}),co:arr(s.co).filter(okCol),ti:arr(s.ti).filter(function(k){return TIP[k]}),fr:arr(s.fr).filter(okFr),col:"",tt:"",rr:"",ts:+s.ts||Date.now()};
