@@ -344,7 +344,7 @@ body.adm-open main{padding-bottom:calc(40vh + 110px)}
 <button class="mini" id="leave" aria-label="Raum verlassen">← Raum verlassen</button>
 <div class="tools"><button class="mini" id="thm" aria-label="Hell oder dunkel">🌙</button><button class="mini" id="frb" aria-label="Freunde">👥<span id="frn"></span></button><button class="mini" id="snd" aria-label="Ton an oder aus">🔊</button></div>
 <h1 class="logo" aria-label="Spiele-Lounge"><span class="w"><i id="egg" role="button" tabindex="0" aria-label="Überraschung" style="--c:var(--p0);--i:0;--r:-4deg;cursor:pointer">S</i><i style="--c:var(--p3);--i:1;--r:3deg">P</i><i style="--c:var(--p1);--i:2;--r:-2deg;--tc:#1a1b3a">I</i><i style="--c:var(--p2);--i:3;--r:4deg">E</i><i style="--c:var(--p4);--i:4;--r:-3deg">L</i><i style="--c:var(--p5);--i:5;--r:2deg">E</i></span><span class="w"><i style="--c:var(--p1);--i:6;--r:-2deg;--tc:#1a1b3a">L</i><i style="--c:var(--p2);--i:7;--r:4deg">O</i><i id="adm-u" style="--c:var(--p4);--i:8;--r:-3deg">U</i><i style="--c:var(--p5);--i:9;--r:2deg">N</i><i style="--c:var(--p0);--i:10;--r:-4deg">G</i><i style="--c:var(--p3);--i:11;--r:3deg">E</i></span></h1>
-<p class="sub">25 Spiele für den Spieleabend. Jeder am eigenen Handy.</p>
+<p class="sub">30 Spiele für den Spieleabend. Jeder am eigenen Handy.</p>
 <section id="menu">
 <div class="card">
 <div style="display:flex;gap:8px"><select id="av" style="width:78px;font-size:1.4rem;padding:8px"></select><input id="nm" maxlength="16" placeholder="Dein Name" autocomplete="nickname"></div>
@@ -364,11 +364,13 @@ body.adm-open main{padding-bottom:calc(40vh + 110px)}
 <div class="card"><div class="code" id="codeLine"></div><div id="who"></div>
 <div id="loc" style="display:none;margin-top:8px">Spieleranzahl: <select id="lp" style="width:auto"><option>2</option><option>3</option><option>4</option></select></div><div id="dfw" style="display:none;margin-top:8px">Schwierigkeit: <select id="df" style="width:auto"><option value="0">Leicht</option><option value="1" selected>Mittel</option><option value="2">Schwer</option></select></div></div>
 <button class="btn" id="frl2">👥 Freunde einladen</button><button class="btn" id="rndG">🎲 Überrasch uns</button>
-<div class="card" id="tnc"><b>🏆 Turnier</b><div class="sub" style="margin:4px 0 10px">Zufällige Spiele. Wer die meisten Runden gewinnt, holt den Pokal.</div><div style="display:flex;gap:8px;align-items:center"><select id="tnr" style="width:auto"><option value="3">3 Runden</option><option value="5" selected>5 Runden</option><option value="7">7 Runden</option><option value="9">9 Runden</option><option value="11">11 Runden</option></select><button class="btn" id="tnb" style="margin:0">Turnier starten</button></div></div>
+<div class="card" id="tnc"><b>🏆 Turnier</b><div class="sub" style="margin:4px 0 10px">Wer die meisten Runden gewinnt, holt den Pokal. Bei zufälligen Spielen können alle gemeinsam ein Spiel überspringen, solange noch niemand gezogen hat.</div><select id="tnm" style="margin:0 0 8px"><option value="0" selected>🎲 Zufällige Spiele</option><option value="1">🎯 Reihum wählen</option></select><div style="display:flex;gap:8px;align-items:center"><select id="tnr" style="width:auto"><option value="3">3 Runden</option><option value="5" selected>5 Runden</option><option value="7">7 Runden</option><option value="9">9 Runden</option><option value="11">11 Runden</option></select><button class="btn" id="tnb" style="margin:0">Turnier starten</button></div></div>
+<div class="card" id="tnw" style="display:none"></div>
 <div id="games"></div>
 </section>
 <section id="game">
 <div class="card"><div id="tb"></div><div class="gh" id="gh"></div><div id="status"></div><div id="rl" class="rl" style="display:none"></div><div id="board"></div><div id="rx" style="display:none"></div><div id="gx" class="join" style="display:none"><input id="gt" maxlength="30" placeholder="Dein Tipp …" style="text-transform:none;letter-spacing:0;text-align:left"><button class="btn" id="gb">Raten</button></div>
+<button class="btn alt" id="skip" style="display:none"></button>
 <div class="row"><button class="btn alt" id="again">Nochmal</button><button class="btn alt" id="back">Spielauswahl</button><button class="btn alt" id="rules">❓ Regeln</button></div></div>
 </section>
 <div class="card" id="sb" style="display:none"></div>
@@ -549,6 +551,52 @@ for(k in SNS){a=snx(+k);b=snx(SNS[k]);dx=b[0]-a[0];dy=b[1]-a[1];l=Math.sqrt(dx*d
 o+='<path d="M'+a[0]+' '+a[1]+'Q'+cx+' '+cy+' '+b[0]+' '+b[1]+'" stroke="#2f9e44" stroke-width="5" fill="none" stroke-linecap="round" opacity=".92"/><circle cx="'+a[0]+'" cy="'+a[1]+'" r="5.8" fill="#2f9e44" stroke="#14532d" stroke-width="1.2"/><circle cx="'+(a[0]-2)+'" cy="'+(a[1]-1.5)+'" r="1.3" fill="#fff"/><circle cx="'+(a[0]+2)+'" cy="'+(a[1]-1.5)+'" r="1.3" fill="#fff"/>'}
 s.pos.forEach(function(n,i){if(n<1)return;p=snx(n);o+='<circle cx="'+(p[0]+(i%3-1)*8+3)+'" cy="'+(p[1]+3+Math.floor(i/3)*9)+'" r="5.6" fill="var(--p'+i+')" stroke="#fff" stroke-width="1.6"/>'});
 return o+'</svg>'}
+
+/* ---------- Neue Spiele: Hilfsfunktionen ---------- */
+function kalMv(p,t,m){var q=p.slice(),i=t*7+m,n=q[i],pos=i,st=t*7+6,sk=t===0?13:6,ex=false,a=0,b=0,k;
+if(!(m>=0&&m<6)||!(n>0))return null;
+q[i]=0;while(n>0){pos=(pos+1)%14;if(pos===sk)continue;q[pos]++;n--}
+if(pos===st)ex=true;else if(pos>=t*7&&pos<st&&q[pos]===1&&q[12-pos]>0){q[st]+=q[12-pos]+1;q[12-pos]=0;q[pos]=0}
+for(k=0;k<6;k++){a+=q[k];b+=q[7+k]}
+var over=!a||!b;if(over){q[6]+=a;q[13]+=b;for(k=0;k<6;k++){q[k]=0;q[7+k]=0}}
+return{p:q,ex:ex&&!over,lp:pos,over:over}}
+function kalAB(p,t,me,dep){var best=null,mine=t===me,m,r,v;
+for(m=0;m<6;m++){if(p[t*7+m]<1)continue;r=kalMv(p,t,m);
+if(r.over||dep<=1)v=r.p[me*7+6]-r.p[(1-me)*7+6];else v=kalAB(r.p,r.ex?t:1-t,me,dep-1);
+if(best===null||(mine?v>best:v<best))best=v}
+return best===null?p[me*7+6]-p[(1-me)*7+6]:best}
+var HXN=[];(function(){for(var i=0;i<49;i++){var r=(i/7)|0,c=i%7,o=[];if(c>0)o.push(i-1);if(c<6)o.push(i+1);if(r>0){o.push(i-7);if(c<6)o.push(i-6)}if(r<6){o.push(i+7);if(c>0)o.push(i+6)}HXN.push(o)}})();
+function hxD(b,p){var D=Array(49).fill(99),q=[],i,k,n,j,w,best=99;
+for(i=0;i<49;i++){if((p===0?i<7:i%7===0)&&b[i]!==1-p){D[i]=b[i]===p?0:1;q.push(i)}}
+while(q.length){i=q.shift();n=HXN[i];for(k=0;k<n.length;k++){j=n[k];if(b[j]===1-p)continue;w=D[i]+(b[j]===p?0:1);if(w<D[j]){D[j]=w;q.push(j)}}}
+for(i=0;i<49;i++)if((p===0?i>=42:i%7===6)&&D[i]<best)best=D[i];
+return best}
+function hxPath(b,p){var par={},q=[],i,j,k,n,e,path;
+for(i=0;i<49;i++)if(b[i]===p&&(p===0?i<7:i%7===0)){par[i]=-1;q.push(i)}
+while(q.length){i=q.shift();if(p===0?i>=42:i%7===6){path=[];for(e=i;e!==-1;e=par[e])path.push(e);return path}
+n=HXN[i];for(k=0;k<n.length;k++){j=n[k];if(b[j]===p&&par[j]===undefined){par[j]=i;q.push(j)}}}
+return null}
+var CHM={};
+function chW(l){var k=l.join(),r,c,rr,l2,w=false;if(CHM[k]!==undefined)return CHM[k];
+for(r=0;r<5&&!w;r++)for(c=0;c<l[r]&&!w;c++){if(!r&&!c)continue;l2=l.slice();for(rr=r;rr<5;rr++)l2[rr]=Math.min(l2[rr],c);if(!chW(l2))w=true}
+CHM[k]=w;return w}
+
+
+/* ---------- Impostor und Wer bin ich: Daten ---------- */
+var IW=[["Essen",["Pizza","Spaghetti","Burger","Sushi","Pommes","Döner","Eis","Kuchen","Salat","Brezel"]],
+["Tiere",["Hund","Katze","Pferd","Elefant","Pinguin","Giraffe","Hase","Delfin","Löwe","Eule"]],
+["Orte",["Strand","Schule","Zoo","Flughafen","Kino","Bibliothek","Schwimmbad","Bahnhof","Supermarkt","Zirkus"]],
+["Berufe",["Bäcker","Pilot","Arzt","Feuerwehr","Lehrer","Koch","Friseur","Polizist","Maler","Gärtner"]],
+["Sport",["Fußball","Tennis","Schwimmen","Skifahren","Reiten","Boxen","Golf","Turnen","Basketball","Radfahren"]],
+["Dinge",["Regenschirm","Fernseher","Schlüssel","Brille","Rucksack","Kerze","Spiegel","Uhr","Besen","Lampe"]]],
+WW=[["Tiere",["Hund","Katze","Elefant","Pinguin","Giraffe","Löwe","Delfin","Hase","Eule","Krokodil","Affe","Bär","Hai","Schmetterling"]],
+["Märchenfiguren",["Rotkäppchen","Aschenputtel","Schneewittchen","Pinocchio","Peter Pan","Zwerg Nase","Rapunzel","Hänsel","Gretel","Froschkönig","Hexe","Zauberer","Drache","Piratenkapitän"]],
+["Berufe",["Bäcker","Pilot","Arzt","Feuerwehrmann","Lehrer","Koch","Friseur","Polizist","Astronaut","Gärtner","Zahnarzt","Clown","Detektiv","Müllmann"]],
+["Dinge",["Regenschirm","Fernseher","Schlüssel","Brille","Rucksack","Kerze","Spiegel","Uhr","Besen","Staubsauger","Fahrrad","Zahnbürste","Kühlschrank","Telefon"]]];
+function iwEnd(s,iw,why){var ws=[],i;if(iw)ws=[s.imp];else for(i=0;i<s.P;i++)if(i!==s.imp)ws.push(i);
+s.ws=ws;s.w=ws[0];s.ph="end";
+s.msg=(iw?"🕵️ "+tag(s.imp)+" (Impostor) gewinnt – ":"🎉 Die Crew gewinnt – ")+why;return s}
+
 var G={
 code:{n:"Code knacken",e:"🔐",min:2,max:6,
 bot:function(s,d){var k=s.cur.length,cand=[],a,c,ok,g;
@@ -948,9 +996,137 @@ var my=s.sh[me],en=s.sh[1-me],can=me===s.t&&!s.pend&&s.w===null,a='<div class="l
 for(i=0;i<64;i++){f=my.filter(function(x){return x[0]===i})[0];a+='<div class="c"'+(f?"":(can?' data-m=\'{"s":'+i+'}\'':""))+'>'+(f?(f[1]?"💥":"•"):"")+'</div>'}
 a+='</div><div class="lbl">Deine Flotte</div><div class="g g8">';
 for(i=0;i<64;i++){f=en.filter(function(x){return x[0]===i})[0];a+='<div class="c'+(fleet[i]?" sp":"")+'">'+(f?(f[1]?"💥":"•"):"")+'</div>'}
-return a+'</div><p class="score">Treffer: '+my.filter(function(x){return x[1]}).length+' / 14</p>'}}
+return a+'</div><p class="score">Treffer: '+my.filter(function(x){return x[1]}).length+' / 14</p>'}},
+kal:{n:"Kalaha",e:"🫘",min:2,max:2,
+bot:function(s,d){var t=s.t,l=[],m,r,v,bs=-1e9,best,k;for(m=0;m<6;m++)if(s.p[t*7+m]>0)l.push(m);
+if(d===0&&Math.random()<.5)return l[Math.floor(Math.random()*l.length)];
+for(k=0;k<l.length;k++){m=l[k];r=kalMv(s.p,t,m);v=r.p[t*7+6]-r.p[(1-t)*7+6];
+if(!r.over){if(d===2)v=kalAB(r.p,r.ex?t:1-t,t,5);else if(r.ex)v+=4}
+v+=Math.random()*.5;if(v>bs){bs=v;best=m}}
+return best},
+init:function(){return{P:2,p:[4,4,4,4,4,4,0,4,4,4,4,4,4,0],t:0,w:null}},
+step:function(s,m){if(s.w!==null||!Number.isInteger(m)||m<0||m>5)return null;var r=kalMv(s.p,s.t,m);if(!r)return null;
+s.p=r.p;s.lm=r.lp;s.ex=r.ex;
+if(r.over)s.w=s.p[6]>s.p[13]?0:s.p[13]>s.p[6]?1:-1;else if(!r.ex)nx(s);return s},
+view:function(s,me){var b=net&&me===1?1:0,o=1-b,can=me===s.t&&s.w===null,j,idx,n,ow,ck,x;
+x='<p class="score">Tippe eine Mulde auf deiner Seite. Die Steine wandern gegen den Uhrzeigersinn. Landet der letzte im eigenen Lager, bist du nochmal dran.</p><div style="display:grid;grid-template-columns:1.15fr repeat(6,1fr) 1.15fr;gap:6px;padding:8px;border-radius:18px;background:#8a5a2b;box-shadow:var(--sh)">';
+function st(i,col){return'<div style="grid-column:'+col+';grid-row:1 / span 2;background:#5a3418;color:#fff;border-radius:40px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:1.7rem;font-weight:800;'+(s.lm===i?"outline:3px solid #fff9;":"")+'">'+dot(i<7?0:1)+s.p[i]+'</div>'}
+function pit(idx,col,row){n=s.p[idx];ow=idx<7?0:1;ck=can&&ow===s.t&&n>0;
+return'<div class="c'+(s.lm===idx?" lm":"")+'"'+(ck?' data-m="'+(idx-ow*7)+'"':"")+' style="grid-column:'+col+';grid-row:'+row+';background:#5a3418;color:#fff;font-size:1.25rem;font-weight:800;border-radius:50%;box-shadow:inset 0 -4px 0 var(--p'+ow+');'+(ck?"cursor:pointer;outline:3px solid #fff8;":"cursor:default;")+(n?"":"opacity:.5;")+'">'+n+'</div>'}
+x+=st(o*7+6,1);
+for(j=0;j<6;j++)x+=pit(o*7+(5-j),j+2,1);
+for(j=0;j<6;j++)x+=pit(b*7+j,j+2,2);
+x+=st(b*7+6,8);
+x+='</div>';
+if(s.ex&&s.w===null)x+='<p class="score">'+tag(s.t)+' ist nochmal dran! 🔁</p>';
+return x+'<p class="score">'+tag(0)+" "+s.p[6]+" &nbsp; "+tag(1)+" "+s.p[13]+'</p>'}},
+hex:{n:"Hex",e:"🔷",min:2,max:2,
+bot:function(s,d){var me=s.t,op=1-me,e=[],i,k,b2,v,sc=[];
+for(i=0;i<49;i++)if(s.b[i]===null)e.push(i);
+if(e.length===49)return 24;
+if(d===0&&Math.random()<.4)return e[Math.floor(Math.random()*e.length)];
+for(k=0;k<e.length;k++){i=e[k];b2=s.b.slice();b2[i]=me;if(hxD(b2,me)===0)return i;
+v=hxD(b2,op)-hxD(b2,me)-Math.abs(((i/7)|0)-3)*.05-Math.abs(i%7-3)*.05+Math.random()*(d===0?2.5:d===1?1.2:.3);sc.push([v,i])}
+sc.sort(function(a,c){return c[0]-a[0]});
+if(d<2)return sc[0][1];
+var best=sc[0][1],bv=-1e9;
+sc.slice(0,6).forEach(function(c){var b3=s.b.slice(),w=1e9,j,b4,x,q;b3[c[1]]=me;
+for(j=0;j<e.length;j++){x=e[j];if(x===c[1])continue;b4=b3.slice();b4[x]=op;
+if(hxD(b4,op)===0){w=-1e8;break}
+q=hxD(b4,op)-hxD(b4,me);if(q<w)w=q}
+if(w>bv){bv=w;best=c[1]}});
+return best},
+init:function(){return{P:2,b:Array(49).fill(null),t:0,w:null}},
+step:function(s,m){if(s.w!==null||!Number.isInteger(m)||m<0||m>=49||s.b[m]!==null)return null;
+s.b[m]=s.t;s.lm=m;var pa=hxPath(s.b,s.t);if(pa){s.w=s.t;s.wl=pa}else nx(s);return s},
+view:function(s,me){var can=me===s.t&&s.w===null,R=20,h=17.32,i,r,c,p,q,ce,t,
+o='<p class="score">'+tag(0)+' verbindet oben und unten, '+tag(1)+' links und rechts. Wer zuerst eine lückenlose Kette hat, gewinnt.</p><div style="background:var(--card);border:3px solid var(--ink);border-radius:20px;box-shadow:var(--sh);padding:6px"><svg viewBox="0 0 400 252" style="display:block;margin:auto">';
+function C(r,c){return[36+2*h*c+h*r,34+1.5*R*r]}
+function P(a){return a.map(function(z){return z[0].toFixed(1)+","+z[1].toFixed(1)}).join(" ")}
+function L(a,col){return'<polyline points="'+P(a)+'" fill="none" stroke="var(--p'+col+')" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>'}
+for(i=0;i<49;i++){r=(i/7)|0;c=i%7;ce=C(r,c);
+p=[[ce[0],ce[1]-R],[ce[0]+h,ce[1]-R/2],[ce[0]+h,ce[1]+R/2],[ce[0],ce[1]+R],[ce[0]-h,ce[1]+R/2],[ce[0]-h,ce[1]-R/2]];
+t=s.b[i];q=s.wl&&s.wl.indexOf(i)>=0;
+o+='<polygon points="'+P(p)+'" fill="'+(t===null?"var(--hole)":"var(--p"+t+")")+'" stroke="'+(q||s.lm===i?"#fff":"var(--ink)")+'" stroke-width="'+(q?4:s.lm===i?3:1.5)+'"'+(can&&t===null?' data-m="'+i+'" style="cursor:pointer"':"")+'/>';
+if(s.lm===i)o+='<circle cx="'+ce[0].toFixed(1)+'" cy="'+ce[1].toFixed(1)+'" r="4" fill="#fff" pointer-events="none"/>'}
+var tp=[],bt=[],lf=[],rt=[];
+for(c=0;c<7;c++){ce=C(0,c);tp.push([ce[0]-h,ce[1]-R/2],[ce[0],ce[1]-R]);ce=C(6,c);bt.push([ce[0]-h,ce[1]+R/2],[ce[0],ce[1]+R])}
+ce=C(0,6);tp.push([ce[0]+h,ce[1]-R/2]);ce=C(6,6);bt.push([ce[0]+h,ce[1]+R/2]);
+for(r=0;r<7;r++){ce=C(r,0);lf.push([ce[0]-h,ce[1]-R/2],[ce[0]-h,ce[1]+R/2]);ce=C(r,6);rt.push([ce[0]+h,ce[1]-R/2],[ce[0]+h,ce[1]+R/2])}
+return o+L(tp,0)+L(bt,0)+L(lf,1)+L(rt,1)+'</svg></div>'}},
+choc:{n:"Schoko-Bruch",e:"🍫",min:2,max:2,
+bot:function(s,d){var l=s.l,mv=[],win=[],r,c,l2,rr;
+for(r=0;r<5;r++)for(c=0;c<l[r];c++){if(!r&&!c)continue;mv.push(r*7+c);l2=l.slice();for(rr=r;rr<5;rr++)l2[rr]=Math.min(l2[rr],c);if(!chW(l2))win.push(r*7+c)}
+if(!mv.length)return 0;
+if(win.length&&Math.random()<[.15,.6,1][d])return win[Math.floor(Math.random()*win.length)];
+return mv[Math.floor(Math.random()*mv.length)]},
+init:function(){return{P:2,l:[7,7,7,7,7],t:0,w:null}},
+step:function(s,m){if(s.w!==null||!Number.isInteger(m)||m<0||m>34)return null;var r=Math.floor(m/7),c=m%7,rr;if(c>=s.l[r])return null;
+if(m===0){s.w=1-s.t;s.dead=true;s.msg="☠️ "+tag(s.t)+" musste das vergiftete Stück essen – "+tag(s.w)+" gewinnt! 🎉";return s}
+for(rr=r;rr<5;rr++)s.l[rr]=Math.min(s.l[rr],c);
+if(s.l[0]===1&&!s.l[1]){s.w=s.t;s.msg="☠️ "+tag(1-s.t)+" muss das vergiftete Stück essen – "+tag(s.t)+" gewinnt! 🎉";return s}
+nx(s);return s},
+view:function(s,me){var can=me===s.t&&s.w===null,r,c,i,
+o='<p class="score">Tippe ein Stück: es wird mit allen Stücken rechts davon und darunter abgebrochen. Wer das ☠️ essen muss, verliert.</p><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;padding:8px;border-radius:14px;background:#4a2a12;box-shadow:var(--sh)">';
+for(r=0;r<5;r++)for(c=0;c<7;c++){i=r*7+c;
+if(c>=s.l[r]){o+='<div class="c" style="background:#00000030;box-shadow:none;cursor:default"></div>';continue}
+o+='<div class="c'+(i===0&&s.dead?" win":"")+'"'+(can?' data-m="'+i+'"':"")+' style="background:'+(i?"#8b5a2b":"#2a9d4a")+';color:#fff;border-radius:8px;font-size:1.4rem;'+(i?"box-shadow:inset 3px 3px 0 #b98450,inset -3px -3px 0 #5a3418;":"")+'">'+(i?"":"☠️")+'</div>'}
+return o+'</div>'}},
+imp:{n:"Impostor",e:"🕵️",min:3,max:10,online:true,any:true,
+st:function(s,me){return s.ph==="talk"?"💬 Redet reihum über das Geheimwort":s.ph==="vote"?"🗳️ Wer ist der Impostor?":"🕵️ Der Impostor rät das Wort"},
+init:function(P,seed){var x=seed||1,a=[],i,w,op,ord=[];for(i=0;i<P;i++)a.push(i);x=shf(a,x);
+var c=IW[x%IW.length];x=(x*1103515245+12345)%2147483648;w=c[1].slice();x=shf(w,x);op=w.slice(0,6);x=shf(op,x);
+for(i=0;i<P;i++)ord.push(i);x=shf(ord,x);
+return{P:P,imp:a[0],cat:c[0],wd:w[0],op:op,ph:"talk",rd:Array(P).fill(false),vt:Array(P).fill(-1),ord:ord,w:null}},
+step:function(s,m){if(s.w!==null||!m)return null;var u=m.u,P=s.P,i;if(!Number.isInteger(u)||u<0||u>=P)return null;
+if(s.ph==="talk"){if(!m.r||s.rd[u])return null;s.rd[u]=true;if(s.rd.filter(Boolean).length>=Math.floor(P/2)+1)s.ph="vote";return s}
+if(s.ph==="vote"){if(!Number.isInteger(m.v)||s.vt[u]>=0||m.v<0||m.v>=P||m.v===u)return null;s.vt[u]=m.v;
+for(i=0;i<P;i++)if(s.vt[i]<0)return s;
+var c={},b=-1,n=0,tie=false;s.vt.forEach(function(v){c[v]=(c[v]||0)+1});
+Object.keys(c).forEach(function(k){if(c[k]>n){n=c[k];b=+k;tie=false}else if(c[k]===n)tie=true});
+if(!tie&&b===s.imp){s.ph="guess";return s}
+return iwEnd(s,true,tie?"Gleichstand bei der Abstimmung. Das Wort war "+s.wd+".":"falscher Verdacht! Das Wort war "+s.wd+".")}
+if(s.ph==="guess"){if(u!==s.imp||!Number.isInteger(m.g)||m.g<0||m.g>=s.op.length)return null;s.gu=m.g;
+return s.op[m.g]===s.wd?iwEnd(s,true,"enttarnt, aber das Wort „"+s.wd+"“ richtig erraten!"):iwEnd(s,false,"der Impostor riet „"+s.op[m.g]+"“, richtig war „"+s.wd+"“.")}
+return null},
+view:function(s,me){var o='',isI=me>=0&&me===s.imp,i,n,b;
+if(me>=0)o+='<div class="rl" style="display:block">'+(isI?'🕵️ Du bist der <b>Impostor</b>!<br>Kategorie: <b>'+s.cat+'</b><br>Das Geheimwort kennst du nicht. Tu so, als ob.':'Kategorie: <b>'+s.cat+'</b><br>Geheimwort: <b style="font-size:1.4rem">'+s.wd+'</b><br>Einer von euch kennt es nicht!')+'</div>';
+else o+='<p class="score">Du schaust zu.</p>';
+if(s.ph==="talk"){n=s.rd.filter(Boolean).length;b=Math.floor(s.P/2)+1;
+o+='<p class="score">Sagt reihum je ein Wort, das zum Geheimwort passt (zwei Runden, per Anruf oder im Chat 💬):</p><p><b>'+s.ord.map(function(j){return tag(j)}).join(" → ")+'</b></p>';
+if(me>=0&&!s.rd[me])o+='<button class="btn" data-m=\'{"r":1}\'>🗳️ Bereit zum Abstimmen</button>';
+o+='<p class="score">Bereit: '+n+' / '+b+' nötig</p>'}
+else if(s.ph==="vote"){
+if(me>=0&&s.vt[me]<0){o+='<p>Wer ist der Impostor?</p><div class="uh">';for(i=0;i<s.P;i++)if(i!==me)o+='<button class="mini" data-m=\'{"v":'+i+'}\'>'+tag(i)+'</button>';o+='</div>'}
+else o+='<p class="score">Warte auf die anderen Stimmen …</p>';
+o+='<p class="score">Abgegeben: '+s.vt.filter(function(v){return v>=0}).length+' / '+s.P+'</p>'}
+else if(s.ph==="guess"){
+if(isI){o+='<p>Du wurdest enttarnt! Rate das Geheimwort:</p><div class="uh">'+s.op.map(function(w,j){return'<button class="mini" data-m=\'{"g":'+j+'}\'>'+w+'</button>'}).join("")+'</div>'}
+else o+='<p class="score">Der Impostor wurde enttarnt und rät jetzt das Wort …</p>'}
+if(s.w!==null)o+='<p class="score">🕵️ Impostor: '+tag(s.imp)+' · Wort: <b>'+s.wd+'</b></p><p class="score">Stimmen: '+s.vt.map(function(v,j){return v>=0?tag(j)+" → "+tag(v):""}).join(" · ")+'</p>';
+return o}},
+wbi:{n:"Wer bin ich?",e:"🤔",min:2,max:8,online:true,any:true,
+st:function(s,me){return me>=0&&s.out[me]?"❌ Du bist raus – schau zu":"💭 Fragt reihum Ja/Nein-Fragen"},
+init:function(P,seed){var x=seed||1,c=WW[x%WW.length],w;x=(x*1103515245+12345)%2147483648;w=c[1].slice();x=shf(w,x);
+return{P:P,cat:c[0],ls:c[1],id:w.slice(0,P),out:Array(P).fill(false),lg:[],w:null}},
+step:function(s,m){if(s.w!==null||!m)return null;var u=m.u,P=s.P,i,left=[];
+if(!Number.isInteger(u)||u<0||u>=P||s.out[u]||!Number.isInteger(m.g)||m.g<0||m.g>=s.ls.length)return null;
+var g=s.ls[m.g];if(s.id.some(function(x,j){return j!==u&&x===g}))return null;
+if(g===s.id[u]){s.w=u;s.msg="🎉 "+tag(u)+" hat es erraten: „"+g+"“!";return s}
+s.out[u]=true;s.lg.push("❌ @"+u+" riet „"+g+"“ – falsch, raus!");
+for(i=0;i<P;i++)if(!s.out[i])left.push(i);
+if(left.length===1){s.w=left[0];s.msg="🏆 "+tag(left[0])+" ist als Einziger übrig!"}
+return s},
+view:function(s,me){var o='<p class="score">Kategorie: <b>'+s.cat+'</b>. Du siehst die Figuren der anderen, nur deine nicht! Stellt euch reihum Ja/Nein-Fragen (per Anruf oder im Chat 💬).</p><div style="text-align:left;margin:8px 0">',i;
+for(i=0;i<s.P;i++)o+='<div class="sbr"><span>'+tag(i)+(s.out[i]?' ❌':'')+'</span><b>'+(i===me&&s.w===null?"❓":s.id[i])+'</b></div>';
+o+='</div>';
+if(me>=0&&!s.out[me]&&s.w===null){
+if(dsel==="wbi"){o+='<p>Wer bist du?</p><div class="uh">'+s.ls.map(function(w,j){return s.id.some(function(x,k){return k!==me&&x===w})?"":'<button class="mini" data-m=\'{"g":'+j+'}\'>'+w+'</button>'}).join("")+'</div><button class="mini" data-m=\'{"sel":null}\'>Abbrechen</button>'}
+else o+='<button class="btn" data-m=\'{"sel":"wbi"}\'>🙋 Ich weiß es!</button>'}
+o+=s.lg.slice(-4).map(function(l){return'<p class="score">'+l.replace(/@(\d+)/g,function(_,n){return tag(+n)})+'</p>'}).join("");
+return o}}
 };
-var TC={code:["#9775fa","#7048e8"],mine:["#868e96","#495057"],quiz:["#ff922b","#c2410c"],snake:["#3bc9db","#0c8599"],brk:["#da77f2","#862e9c"],five:["#f2c46d","#c27a1e"],bj:["#3fb37f","#12643c"],ttt:["#ff6b6b","#ee5a8f"],c4:["#4facfe","#3b5bdb"],nim:["#f6a85b","#e17055"],pig:["#a8e063","#2a9d4a"],mem:["#a18cd1","#7a5cff"],ludo:["#ff9a9e","#e5383b"],mono:["#43e97b","#1a936f"],rv:["#4b6cb7","#182848"],dame:["#c79081","#8b5a2b"],kn:["#f7971e","#d4580a"],uno:["#ff5f6d","#ffa04d"],wolf:["#4a4a6a","#1b1b2f"],hang:["#9d50bb","#4e2a84"],paint:["#f953c6","#b91d73"],ship:["#2193b0","#0b486b"]};
+var TC={code:["#9775fa","#7048e8"],mine:["#868e96","#495057"],quiz:["#ff922b","#c2410c"],snake:["#3bc9db","#0c8599"],brk:["#da77f2","#862e9c"],five:["#f2c46d","#c27a1e"],bj:["#3fb37f","#12643c"],ttt:["#ff6b6b","#ee5a8f"],c4:["#4facfe","#3b5bdb"],nim:["#f6a85b","#e17055"],pig:["#a8e063","#2a9d4a"],mem:["#a18cd1","#7a5cff"],ludo:["#ff9a9e","#e5383b"],mono:["#43e97b","#1a936f"],rv:["#4b6cb7","#182848"],dame:["#c79081","#8b5a2b"],kn:["#f7971e","#d4580a"],uno:["#ff5f6d","#ffa04d"],wolf:["#4a4a6a","#1b1b2f"],hang:["#9d50bb","#4e2a84"],paint:["#f953c6","#b91d73"],ship:["#2193b0","#0b486b"],kal:["#c79081","#8a5a2b"],hex:["#4facfe","#2a6f97"],choc:["#a9733c","#6b3e26"],imp:["#9b59d0","#6a2c91"],wbi:["#f6c445","#c98a14"]};
 var AV0=["🦊","🐼","🐸","🦁","🐙","🦄","🐯","🐵"],AV=AV0.concat(["🐧","🦉","🐺","🦈","🤖","👽","🐲","🔥","🚀","👑","🐢","🦖","🐝","🦋","🦩","🧙","🧛","🦸","🧜","💎","👻","🎃","🌈","⚡","🛸","🐉","🦚","🐋","🦅","🐅","🧞","🥷","🪐","🌋","🏆","💰","🎭","🦂","🧿","🔮","🗿"]),RX=["😂","👏","😮","😡","🔥","❤️"],avOf={},colOf={};
 var RULES={code:"Das Spiel denkt sich einen geheimen Code aus 4 Farben aus, Farben dürfen doppelt vorkommen. Ihr legt abwechselnd Rateversuche. ⚫ heißt: richtige Farbe am richtigen Platz. ⚪ heißt: richtige Farbe am falschen Platz. Wer den Code knackt, gewinnt. Es gibt 12 Versuche für alle zusammen.",
 mine:"Auf dem Feld liegen 10 versteckte Minen. Tippt abwechselnd ein Feld an. Die Zahl zeigt, wie viele Minen in den 8 Nachbarfeldern liegen. Wer auf eine Mine tippt, scheidet aus. Wer zuletzt übrig bleibt, gewinnt. Sind alle sicheren Felder offen, gewinnt, wer die meisten aufgedeckt hat. Der erste Zug ist immer sicher.",
@@ -971,7 +1147,12 @@ nim:"Es gibt drei Reihen Hölzchen. Wer dran ist, nimmt aus einer Reihe beliebig
 pig:"Wer dran ist, würfelt beliebig oft und sammelt die Augen. Mit „Behalten“ werden sie gutgeschrieben. Bei einer 1 verfällt alles aus dieser Runde. Wer zuerst 50 hat, gewinnt.",
 mem:"Zwei Karten aufdecken. Passen sie, bekommst du einen Punkt und darfst nochmal. Sonst ist der Nächste dran. Die meisten Paare gewinnen.",
 ludo:"Mit einer 6 kommt eine Figur aufs Startfeld, und du würfelst nochmal. Wer auf eine fremde Figur zieht, schickt sie zurück ins Haus. Wer zuerst alle vier Figuren ins Ziel bringt, gewinnt. Ohne Figur auf dem Brett hast du 3 Versuche.",
-ship:"Jeder versteckt 5 Schiffe (14 Felder). Abwechselnd auf ein Feld beim Gegner schießen. 💥 ist ein Treffer, • daneben. Wer zuerst alle gegnerischen Schiffsfelder trifft, gewinnt."};
+ship:"Jeder versteckt 5 Schiffe (14 Felder). Abwechselnd auf ein Feld beim Gegner schießen. 💥 ist ein Treffer, • daneben. Wer zuerst alle gegnerischen Schiffsfelder trifft, gewinnt.",
+kal:"Jeder hat 6 Mulden mit je 4 Steinen und ein Lager. Wer dran ist, nimmt alle Steine aus einer eigenen Mulde und verteilt sie gegen den Uhrzeigersinn, je einen pro Mulde, auch ins eigene Lager (aber nicht ins gegnerische). Landet der letzte Stein im eigenen Lager, bist du nochmal dran. Landet er in einer leeren eigenen Mulde und gegenüber liegen Steine, bekommst du diese samt deinem Stein ins Lager. Ist eine Seite leer, wandern die restlichen Steine ins Lager des anderen. Wer am Ende mehr Steine im Lager hat, gewinnt.",
+hex:"Abwechselnd setzt ihr einen Stein auf ein freies Sechseck. Rot verbindet die obere mit der unteren Kante, Gelb die linke mit der rechten. Gesetzte Steine bleiben liegen. Wer zuerst eine lückenlose Kette zwischen seinen beiden Kanten hat, gewinnt. Ein Unentschieden gibt es nie. Tipp: Die Mitte ist stark, und wer den Gegner blockt, baut oft gleichzeitig die eigene Kette.",
+choc:"Eine Tafel Schokolade, das Stück oben links ☠️ ist vergiftet. Abwechselnd tippt ihr ein Stück an: Es wird mit allen Stücken rechts davon und darunter abgebrochen und gegessen. Wer das vergiftete Stück essen muss, verliert.",
+imp:"Alle bekommen dasselbe Geheimwort, nur der Impostor 🕵️ nicht: Er sieht bloß die Kategorie. Sagt reihum je ein Wort, das zum Geheimwort passt (per Anruf oder im Chat), zwei Runden lang. Der Impostor muss bluffen, die anderen dürfen das Wort nicht zu deutlich verraten. Sobald mehr als die Hälfte bereit ist, stimmt ihr ab, wer der Impostor ist. Wird er enttarnt, darf er noch das Geheimwort raten: Trifft er, gewinnt er doch. Sonst gewinnen alle anderen. Bei falschem Verdacht oder Gleichstand gewinnt der Impostor.",
+wbi:"Jeder bekommt eine geheime Figur aus der angezeigten Kategorie. Du siehst die Figuren der anderen, nur deine eigene nicht! Stellt euch reihum Ja/Nein-Fragen (per Anruf oder im Chat 💬) und findet heraus, wer ihr seid. Wenn du es weißt, tippe „Ich weiß es!“ und wähle deine Figur. Richtig: du gewinnst. Falsch: du bist raus. Bleibt nur einer übrig, gewinnt er."};
 var T=null,TN_SKIP=["mono"],roomCode="",botOn=false,buzz=-1,AC=null,botFleet=[],mseen={},lastH="",tilt=true,dsel=null,snd=true,strokes=[],pcol="#111111",pw=4,pbuf=[],pend=null;
 var mode="menu",net=null,offs=[],gid=null,order=[],seed=1,moves=[],S=null,fleet=[],ans=-1,scores={},nameOf={};
 function pick(a){return a[Math.floor(Math.random()*a.length)]}
@@ -1025,6 +1206,9 @@ if(!win){sticker("🤝","Unentschieden",pick(["Das war knapp.","Alle gleich gut.
 if(botOn){if(mine){sticker("🏅","Du gewinnst!",pick(["Der Computer ist beeindruckt.","Das war souverän.","Und der Computer so: 🤯"]));confetti();tune([523,659,784,1047],110,.24)}else{sticker("🤖","Der Computer gewinnt",pick(["Nächstes Mal klappt es.","Revanche?","Knapp daneben ist auch vorbei."]));tune([392,330,262],170,.28)}}
 else{sticker(mine?"🏅":"🎉",names+" gewinnt!",mine?pick(["Stark gespielt!","Das sitzt.","Applaus!"]):pick(["Glückwunsch!","Revanche gefällig?","Gut gespielt."]));confetti();tune(mine||mode==="local"?[523,659,784,1047]:[392,494,587],110,.24)}
 if(cnt()){addStat(mine);recG(gid,mine?"w":"l");if(mine)setTimeout(function(){toast("🏅 +1 Medaille ("+stat().w+" insgesamt)")},1100)}}
+function ask(t,yes){var o=document.createElement("div");o.style.cssText="position:fixed;top:0;left:0;right:0;bottom:0;background:#0009;z-index:99;display:flex;align-items:center;justify-content:center;padding:20px";
+o.innerHTML='<div class="card" style="max-width:340px;width:100%;margin:0"><p style="margin:0 0 6px;font-weight:700"></p><div class="row"><button class="btn alt">Abbrechen</button><button class="btn">OK</button></div></div>';
+o.querySelector("p").textContent=t;var b=o.querySelectorAll("button");b[0].onclick=function(){o.remove()};b[1].onclick=function(){o.remove();yes()};document.body.appendChild(o)}
 function toast(t){var d=document.createElement("div");d.className="toast";d.textContent=t;document.body.appendChild(d);setTimeout(function(){d.remove()},1900)}
 function copyCode(){function ok(){toast("Code kopiert: "+roomCode)}function fb(){var t=document.createElement("textarea");t.value=roomCode;document.body.appendChild(t);t.select();try{document.execCommand("copy");ok()}catch(e){toast("Code: "+roomCode)}t.remove()}
 if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(roomCode).then(ok,fb);else fb()}
@@ -1048,7 +1232,7 @@ function lab(k){return botOn&&k==="1"?"Computer 🤖":botOn&&k==="0"?me0():mode=
 function players(){return net?net.peers().filter(function(p){return p.presence&&typeof p.presence.t==="number"}).sort(function(a,b){return a.presence.t-b.presence.t||(a.peer<b.peer?-1:1)}):[]}
 function me(){var l=players();for(var i=0;i<l.length;i++)if(l[i].sameTab)return l[i].peer;return null}
 function myIdx(){return net?order.indexOf(me()):(S?(botOn?0:S.t):-1)}
-function begin(g,ord,sd){gid=g;order=ord;seed=sd;moves=[];ans=-1;buzz=-1;botFleet=mkFleet();mseen={};lastH="";strokes=[];pend=null;$("rl").style.display="none";S=G[g].init(ord.length,sd);if(g==="ship")fleet=mkFleet();keepAwake();render();botMove()}
+function begin(g,ord,sd){skv={};gid=g;order=ord;seed=sd;moves=[];ans=-1;buzz=-1;botFleet=mkFleet();mseen={};lastH="";strokes=[];pend=null;$("rl").style.display="none";S=G[g].init(ord.length,sd);if(g==="ship")fleet=mkFleet();keepAwake();render();botMove()}
 function replay(g,ord,sd,mv){var s=G[g].init(ord.length,sd);for(var i=0;i<mv.length;i++){s=G[g].step(cl(s),mv[i]);if(!s)return null}return s}
 function drawSb(){var k={},l=players();Object.keys(scores).forEach(function(x){k[x]=1});if(net)l.forEach(function(p){k[p.peer]=1});else order.forEach(function(x){k[x]=1});
 var ks=Object.keys(k).sort(function(a,b){return(scores[b]||0)-(scores[a]||0)});
@@ -1062,8 +1246,8 @@ $("leave").style.display=mode==="menu"?"none":"block";
 if(mode==="menu")return;
 players().forEach(function(p){nameOf[p.peer]=p.presence.name;avOf[p.peer]=AV.indexOf(p.presence.av)>=0?p.presence.av:"";colOf[p.peer]=p.presence.c||""});$("rx").style.display=net?"block":"none";
 drawSb();
-if(!gid){var l=players();var hp=hostPeer(),ih=hp===me();$("who").innerHTML=net?"<div>"+l.map(function(p){return'<span class="chip2">'+(p.peer===hp?"👑 ":"")+czPf(AV.indexOf(p.presence.av)>=0?p.presence.av:"",p.presence.name||"?",p.presence.c)+'</span>'}).join("")+"</div>"+(l.length<2?"<br>Schick deinen Freunden den Code!":"")+'<div class="sub" style="margin:8px 0 0">'+(ih?"Du bist der Host 👑 und wählst die Spiele.":"Nur der Host 👑 wählt Spiele. Deine Auswahl schickst du ihm als Anfrage.")+'</div>':"";$("rndG").textContent=!net||ih?"🎲 Überrasch uns":"🎲 Zufallsspiel vorschlagen";$("tnb").textContent=!net||ih?"Turnier starten":"Turnier vorschlagen";return}
-$("gh").textContent=G[gid].e+" "+G[gid].n;tnBar();$("again").style.display=T&&(S.w===null||T.done||!T.cr)?"none":"";var rq=net&&!amHost()?" 🙋":"";$("again").textContent=(T?"Nächste Runde ▶":"Nochmal")+rq;$("back").textContent=(T&&!T.done?"Turnier beenden":"Spielauswahl")+rq;var hh=G[gid].view(S,myIdx());if(hh!==lastH){$("board").innerHTML=hh;lastH=hh}if(gid==="paint"){paintInit();$("gx").style.display=(S.w===null&&myIdx()>=0&&myIdx()!==S.dr)?"flex":"none"}else $("gx").style.display="none";
+if(!gid){var l=players();var hp=hostPeer(),ih=hp===me();$("who").innerHTML=net?"<div>"+l.map(function(p){return'<span class="chip2">'+(p.peer===hp?"👑 ":"")+czPf(AV.indexOf(p.presence.av)>=0?p.presence.av:"",p.presence.name||"?",p.presence.c)+'</span>'}).join("")+"</div>"+(l.length<2?"<br>Schick deinen Freunden den Code!":"")+'<div class="sub" style="margin:8px 0 0">'+(ih?"Du bist der Host 👑 und wählst die Spiele.":"Nur der Host 👑 wählt Spiele. Deine Auswahl schickst du ihm als Anfrage.")+'</div>':"";$("rndG").textContent=!net||ih?"🎲 Überrasch uns":"🎲 Zufallsspiel vorschlagen";$("tnb").textContent=!net||ih?"Turnier starten":"Turnier vorschlagen";tnWait();return}
+$("gh").textContent=G[gid].e+" "+G[gid].n;tnBar();skipUi();$("again").style.display=T&&(S.w===null||T.done||!T.cr)?"none":"";var rq=net&&!amHost()?" 🙋":"";$("again").textContent=(T?"Nächste Runde ▶":"Nochmal")+rq;$("back").textContent=(T&&!T.done?"Turnier beenden":"Spielauswahl")+rq;var hh=G[gid].view(S,myIdx());if(hh!==lastH){$("board").innerHTML=hh;lastH=hh}if(gid==="paint"){paintInit();$("gx").style.display=(S.w===null&&myIdx()>=0&&myIdx()!==S.dr)?"flex":"none"}else $("gx").style.display="none";
 var s=S,st,m=myIdx();
 if(s.w!==null)st=s.msg||(s.w===-1?"Unentschieden":tag(s.w)+" gewinnt! 🎉");
 else if(net&&m<0)st="Du schaust zu – "+tag(s.t)+" ist dran";
@@ -1090,7 +1274,7 @@ setInterval(pflush,100);
 /* ===== Turniermodus ===== */
 function plainOf(k,i){if(botOn)return i===1?"Computer 🤖":($("nm").value.trim()||"Du");if(mode==="local")return"Spieler "+(i+1);return(avOf[k]?avOf[k]+" ":"")+(nameOf[k]||"Spieler "+(i+1))}
 function tnClean(t){if(!t||typeof t!=="object"||typeof t.tid!=="string"||t.tid.length>40)return null;var n=+t.n,i=+t.i,n0=+t.n0;if(!(n>=1&&n<=40&&i>=1&&i<=40&&n0>=1&&n0<=40))return null;
-var o={tid:t.tid,n:n,n0:n0,i:i,w:{},nm:{},cr:t.cr?1:0,last:String(t.last||"").slice(0,8)};
+var o={tid:t.tid,n:n,n0:n0,i:i,w:{},nm:{},cr:t.cr?1:0,last:String(t.last||"").slice(0,8),m:t.m?1:0,pp:String(t.pp||"").slice(0,24),wt:t.wt?1:0,sk:Math.min(99,Math.max(0,+t.sk||0))};
 Object.keys(t.w||{}).slice(0,12).forEach(function(k){var v=t.w[k];if(Number.isInteger(v)&&v>=0&&v<100){o.w[k]=v;o.nm[k]=String((t.nm||{})[k]||"").slice(0,24)}});
 if(t.done){o.done=1;o.win=String(t.win||"")}return o}
 function trList(){return[]}function tnSave(){}function trReset(){}function drawTrophies(){}
@@ -1110,15 +1294,48 @@ setTimeout(function(){sticker("🏆",mine2?"Du gewinnst das Turnier!":esc(T.nm[k
 else if(T.i>=T.n)T.n=T.i+1}
 function tnPick(prev){var n=net?players().length:botOn?2:+$("lp").value,ks=Object.keys(G).filter(function(k){var d=G[k];if(n<d.min||n>d.max||TN_SKIP.indexOf(k)>=0)return false;if(botOn&&!d.bot)return false;if(!net&&!botOn&&d.online)return false;return true});
 var f=ks.filter(function(k){return k!==prev});return f.length?pick(f):ks.length?pick(ks):null}
-function tnGo(t){var g=tnPick(t.last);if(!g){toast("Für diese Spielerzahl gibt es kein Turnier-Spiel.");return}
+function tnGo(t,fg){if(t.m&&!fg){var rr=tnChoose(t);if(rr===true)return;fg=rr}var g=fg||tnPick(t.last);if(!g){toast("Für diese Spielerzahl gibt es kein Turnier-Spiel.");return}
 var d=G[g],sd=rnd(),l=[],i;
 if(net){l=shufArr(players().slice(0,d.max).map(function(p){return p.peer}));if(l.length<d.min){toast("Zu wenige Spieler im Raum.");return}}
 else{var P=botOn?2:Math.max(d.min,Math.min(d.max,+$("lp").value));for(i=0;i<P;i++)l.push(String(i))}
 l.forEach(function(k,j){t.nm[k]=plainOf(k,j);if(t.w[k]===undefined)t.w[k]=0});
-t.last=g;t.cr=0;
+t.last=g;t.cr=0;t.wt=0;
 if(net)net.emit("start",{g:g,order:l,seed:sd,tn:t});else{T=t;begin(g,l,sd)}}
-function startTn(n){tnGo({tid:Date.now()+"x"+rnd(),n:n,n0:n,i:1,w:{},nm:{},cr:0,last:""})}
-$("tnb").onclick=function(){var n=+$("tnr").value;if(net&&!amHost()){sendReq({k:"tn",n:n});return}startTn(n)};
+function tnOk(k){var d=G[k],n=net?players().length:botOn?2:+$("lp").value;if(!d||n<d.min||n>d.max||TN_SKIP.indexOf(k)>=0)return false;if(botOn&&!d.bot)return false;if(!net&&!botOn&&d.online)return false;return true}
+function tnKeys(){var n,i,o=[];if(net)return players().map(function(p){return p.peer});n=botOn?2:+$("lp").value;for(i=0;i<n;i++)o.push(String(i));return o}
+function tnChoose(t){var ks=tnKeys(),all=Object.keys(G).filter(tnOk),j;
+if(!all.length){toast("Für diese Spielerzahl gibt es kein Turnier-Spiel.");return true}
+t.pp=ks[(t.i-1)%ks.length];
+if(botOn&&t.pp==="1")return pick(all);
+ks.forEach(function(k,j2){t.nm[k]=plainOf(k,j2);if(t.w[k]===undefined)t.w[k]=0});
+t.wt=1;t.cr=0;T=t;gid=null;if(net)net.emit("tnp",{tn:t});render();return true}
+function tnTile(k){if(!T||!T.wt||gid)return;
+if(k===null){var all=Object.keys(G).filter(tnOk);if(!all.length){toast("Für diese Spielerzahl gibt es kein Turnier-Spiel.");return}k=pick(all)}
+if(!tnOk(k)){toast("Dieses Spiel passt nicht zur Spielerzahl.");return}
+if(net){if(T.pp!==me()){toast("Nur "+plainOf(T.pp,0)+" darf jetzt wählen.");return}
+if(amHost()){var t=cl(T);t.wt=0;tnGo(t,k)}else{net.emit("req",{k:"tg",g:k});toast("🎯 Auswahl wird gesendet …")}}
+else{var t2=cl(T);t2.wt=0;tnGo(t2,k)}}
+function tnWait(){var b=$("tnw"),on=!!(T&&T.wt&&!gid&&!T.done);b.style.display=on?"block":"none";$("tnc").style.display=on?"none":"";if(!on)return;
+var mine=net?T.pp===me():true,ks=Object.keys(T.w).sort(function(a,c){return T.w[c]-T.w[a]});
+b.innerHTML='<div class="tbh">🏆 Turnier · '+(T.i>T.n0?"Stichentscheid":"Runde "+T.i+" von "+T.n)+'</div><div class="tbs">'+ks.map(function(k){return'<span>'+esc(T.nm[k]||"?")+' · '+T.w[k]+'</span>'}).join("")+'</div><p style="font-weight:700;margin:10px 0 4px">'+(net?(mine?"🎯 Du bist dran: Wähle das Spiel für diese Runde!":"🎯 "+esc(plainOf(T.pp,0))+" wählt das nächste Spiel …"):"🎯 "+esc(plainOf(T.pp,+T.pp||0))+" wählt das nächste Spiel!")+'</p><button class="mini" id="tnx">Turnier abbrechen</button>';
+$("tnx").onclick=function(){ask("Turnier wirklich abbrechen?",function(){if(net&&!amHost()){sendReq({k:"stop"});return}T=null;if(net)net.emit("stop",{});else render()})}}
+
+var skv={};
+function skCan(){return !!(T&&!T.m&&!T.done&&gid&&S&&S.w===null&&moves.length===0)}
+function skipUi(){var b=$("skip");if(!b)return;var on=skCan()&&(!net||order.indexOf(me())>=0);b.style.display=on?"":"none";if(!on)return;
+if(net){var n=order.filter(function(k){return skv[k]}).length;b.textContent="⏭ Spiel überspringen ("+n+"/"+order.length+")"+(skv[me()]?" ✓":"")}
+else b.textContent="⏭ Spiel überspringen"}
+function skipDo(){if(!skCan())return;var t=cl(T);t.sk=(t.sk||0)+1;t.cr=0;skv={};toast("⏭ Spiel übersprungen");tnGo(t)}
+function skCheck(){if(!net||!amHost()||!skCan())return;var req=order.filter(function(k){return players().some(function(p){return p.peer===k})});
+if(req.length&&req.every(function(k){return skv[k]}))skipDo()}
+function onSkv(m){var d=m.data;if(!d||!T||d.tid!==T.tid||d.i!==T.i||(d.sk||0)!==(T.sk||0)||!skCan()||order.indexOf(m.peer)<0)return;skv[m.peer]=1;render();skCheck()}
+$("skip").onclick=function(){if(!skCan())return;
+if(net){var k=me();if(order.indexOf(k)<0)return;if(skv[k]){toast("Du hast schon zugestimmt. Es müssen alle zustimmen.");return}
+skv[k]=1;net.emit("skv",{tid:T.tid,i:T.i,sk:T.sk||0});toast("⏭ Deine Zustimmung ist raus");render();skCheck();return}
+(function nxt(j){if(j>=(botOn?1:order.length)){skipDo();return}ask(botOn?"Dieses Spiel überspringen?":plainOf(order[j],j)+": Dieses Spiel überspringen?",function(){nxt(j+1)})})(0)};
+
+function startTn(n,m){tnGo({tid:Date.now()+"x"+rnd(),n:n,n0:n,i:1,w:{},nm:{},cr:0,last:"",m:m?1:0,pp:"",wt:0})}
+$("tnb").onclick=function(){var n=+$("tnr").value,m=+$("tnm").value;if(net&&!amHost()){sendReq({k:"tn",n:n,m:m});return}startTn(n,m)};
 /* ===== Host-Rolle: nur der Host startet Spiele, alle anderen schicken Anfragen ===== */
 var hq=[],lastReq=0;
 function hostPeer(){var l=players(),h=l.filter(function(p){return p.presence.h}),a=h.length?h:l;return a.length?a[0].peer:null}
@@ -1130,26 +1347,27 @@ function onReq(m){var d=m.data;if(m.isMe||!d||!amHost()||typeof d.k!=="string")r
 if(!players().some(function(p){return p.peer===m.peer}))return;
 var r={peer:m.peer,k:d.k};
 if(d.k==="g"){if(typeof d.g!=="string"||!G[d.g])return;r.g=d.g}
-else if(d.k==="tn"){var n=+d.n;if([3,5,7,9,11].indexOf(n)<0)return;r.n=n}
+else if(d.k==="tn"){var n=+d.n;if([3,5,7,9,11].indexOf(n)<0)return;r.n=n;r.m=d.m?1:0}
+else if(d.k==="tg"){if(typeof d.g!=="string"||!G[d.g]||!(T&&T.wt&&!gid&&T.pp===m.peer&&tnOk(d.g)))return;var t3=cl(T);t3.wt=0;tnGo(t3,d.g);return}
 else if(d.k!=="next"&&d.k!=="stop")return;
 hq=hq.filter(function(x){return x.peer!==m.peer});hq.push(r);showReq();beep(660,.06)}
 function reqTxt(r){var w="<b>"+czPf(avOf[r.peer],nameOf[r.peer]||"Jemand",colOf[r.peer])+"</b> ";
-return w+(r.k==="g"?"möchte <b>"+G[r.g].e+" "+esc(G[r.g].n)+"</b> spielen":r.k==="tn"?"möchte ein Turnier mit "+r.n+" Runden starten":r.k==="next"?"möchte die nächste Turnierrunde starten":"möchte zurück zur Spielauswahl")}
+return w+(r.k==="g"?"möchte <b>"+G[r.g].e+" "+esc(G[r.g].n)+"</b> spielen":r.k==="tn"?"möchte ein Turnier mit "+r.n+" Runden starten"+(r.m?" (reihum wählen)":""):r.k==="next"?"möchte die nächste Turnierrunde starten":"möchte zurück zur Spielauswahl")}
 function showReq(){var b=$("hreq"),r=hq[0];if(!r||!net||!amHost()){hq=[];b.className="";return}
 b.innerHTML="<div>🙋 "+reqTxt(r)+"</div>"+(hq.length>1?"<div class='sub' style='margin:4px 0 0'>+ "+(hq.length-1)+" weitere Anfrage"+(hq.length>2?"n":"")+"</div>":"")+"<div class='row'><button class='btn alt' id='hrn'>Ablehnen</button><button class='btn' id='hry'>Annehmen</button></div>";b.className="on";
 $("hrn").onclick=function(){hq.shift();net.emit("reqres",{to:r.peer,ok:0});showReq()};
 $("hry").onclick=function(){hq.shift();net.emit("reqres",{to:r.peer,ok:1});showReq();doReq(r)}}
 function doReq(r){if(!net||!amHost())return;
 if(r.k==="g")startGame(r.g,rnd());
-else if(r.k==="tn")startTn(r.n);
+else if(r.k==="tn")startTn(r.n,r.m);
 else if(r.k==="next"){if(T&&!T.done&&S&&S.w!==null&&T.cr){var t=cl(T);t.i++;tnGo(t)}}
 else if(r.k==="stop"){T=null;net.emit("stop",{})}}
 function onReqRes(m){var d=m.data;if(!d||d.to!==me()||!isHostPeer(m.peer))return;toast(d.ok?"✅ Der Host hat angenommen":"❌ Der Host hat abgelehnt")}
 function peersHost(){if(!amHost()){hq=[];$("hreq").className=""}else showReq()}
-function onStart(msg){var d=msg.data;if(!isHostPeer(msg.peer))return;if(!d||!G[d.g]||!Array.isArray(d.order))return;var g=G[d.g];if(d.order.length<g.min||d.order.length>g.max||!d.order.every(function(x){return typeof x==="string"}))return;var tn=tnClean(d.tn);if(tn&&T&&T.tid===tn.tid&&tn.i<=T.i&&gid)return;T=tn;begin(d.g,d.order,+d.seed||1)}
+function onStart(msg){var d=msg.data;if(!isHostPeer(msg.peer))return;if(!d||!G[d.g]||!Array.isArray(d.order))return;var g=G[d.g];if(d.order.length<g.min||d.order.length>g.max||!d.order.every(function(x){return typeof x==="string"}))return;var tn=tnClean(d.tn);if(tn&&T&&T.tid===tn.tid&&gid&&(tn.i<T.i||(tn.i===T.i&&tn.sk<=(T.sk||0))))return;T=tn;begin(d.g,d.order,+d.seed||1)}
 function sum(o){return Object.keys(o).reduce(function(a,k){return a+o[k]},0)}
 function onState(msg){var d=msg.data;if(!d)return;
-var tn=tnClean(d.tn);if(tn&&(!T||T.tid!==tn.tid||tn.i>T.i||(tn.i===T.i&&((tn.done&&!T.done)||tn.cr>T.cr))))T=tn;if(T&&T.done)tnSave();
+var tn=tnClean(d.tn);if(tn&&(!T||T.tid!==tn.tid||tn.i>T.i||(tn.i===T.i&&(tn.sk>(T.sk||0)||(tn.done&&!T.done)||tn.cr>T.cr))))T=tn;if(T&&T.done)tnSave();
 if(d.sc&&typeof d.sc==="object"){var n={};Object.keys(d.sc).forEach(function(k){var v=d.sc[k];if(Number.isInteger(v)&&v>=0&&v<1000)n[k]=v});if(sum(n)>sum(scores))scores=n}
 if(G[d.g]&&Array.isArray(d.order)&&Array.isArray(d.moves)&&d.moves.length<=300&&!(gid===d.g&&d.moves.length<=moves.length)){var s=replay(d.g,d.order,+d.seed||1,d.moves);if(s){gid=d.g;order=d.order;seed=+d.seed||1;moves=d.moves;S=s;if(gid==="ship")fleet=mkFleet()}}
 render()}
@@ -1222,8 +1440,8 @@ if(net.onClose)net.onClose(function(){lost()});
 if(net.onState)net.onState(function(x){setCS(x);toast(x==="online"?"Wieder verbunden ✅":"Verbindung unterbrochen …");if(x==="online")net.emit("sync",{})});
 net.presence({t:Date.now(),name:name,av:$("av").value,h:asHost?1:0,c:window.slCol?slCol():""});
 offs=[net.on("move",onMove),net.on("start",onStart),net.on("state",onState),
-net.on("sync",function(m){if(!m.isMe&&(gid||sum(scores)>0))net.emit("state",{g:gid,order:order,seed:seed,moves:moves,sc:scores,tn:T})}),
-net.on("stop",function(m){if(isHostPeer(m.peer)){gid=null;T=null;render()}}),net.on("react",onReact),net.on("chat",onChat),net.on("draw",onDraw),net.on("req",onReq),net.on("reqres",onReqRes),net.onPeers(render),net.onPeers(peerToast),net.onPeers(peersHost)];
+net.on("sync",function(m){if(!m.isMe&&(gid||sum(scores)>0||(T&&T.wt)))net.emit("state",{g:gid,order:order,seed:seed,moves:moves,sc:scores,tn:T})}),
+net.on("stop",function(m){if(isHostPeer(m.peer)){gid=null;T=null;render()}}),net.on("skv",onSkv),net.on("tnp",function(m){if(!isHostPeer(m.peer))return;var tn=tnClean(m.data&&m.data.tn);if(!tn)return;T=tn;gid=null;render()}),net.on("react",onReact),net.on("chat",onChat),net.on("draw",onDraw),net.on("req",onReq),net.on("reqres",onReqRes),net.onPeers(render),net.onPeers(peerToast),net.onPeers(peersHost)];
 roomCode=code.toUpperCase();$("codeLine").innerHTML="Raum-Code: <span class='chip'>"+roomCode+"</span><br><button class='mini' id='cp'>📋 Code kopieren</button><button class='mini' id='sh'>📤 Teilen</button><button class='mini' id='qr'>📷 QR-Code</button><span id='cs' class='sub' style='display:block;margin:4px 0 0'></span><div id='qrBox'></div>";$("cp").onclick=copyCode;$("sh").onclick=shareRoom;$("qr").onclick=showQR;setCS("online");$("dfw").style.display="none";$("loc").style.display="none";
 render();net.emit("sync",{})}
 function startGame(g,sd){var d=G[g];
@@ -1268,11 +1486,16 @@ uno:SV('<g stroke="#fff" stroke-width="2.5"><rect x="22" y="14" width="26" heigh
 wolf:SV('<circle cx="50" cy="26" r="19" fill="#fff6b0"/><path d="M26 60L31 26L43 38H57L69 26L74 60Z" fill="#14141f" stroke="#fff" stroke-width="2" stroke-linejoin="round"/><circle cx="42" cy="47" r="3" fill="#ffd54a"/><circle cx="58" cy="47" r="3" fill="#ffd54a"/>'),
 hang:SV('<g stroke="#fff" stroke-width="3.5" stroke-linecap="round" fill="none"><path d="M16 58h34M30 58V8h32v10"/><circle cx="62" cy="24" r="6"/><path d="M62 30v14M62 34l-9 6M62 34l9 6M62 44l-7 12M62 44l7 12"/></g>'),
 paint:SV('<rect x="10" y="8" width="64" height="48" rx="6" fill="#fff" stroke="#1a1b3a" stroke-width="2.5"/><path d="M18 42q10-24 20-4t26-20" stroke="#e5383b" stroke-width="4.5" fill="none" stroke-linecap="round"/><path d="M72 12l16 16-26 26-9 3 3-9z" fill="#f6b800" stroke="#1a1b3a" stroke-width="2.5" stroke-linejoin="round"/>'),
-ship:SV('<path d="M0 52q12-8 25 0t25 0t25 0t25 0V64H0z" fill="#ffffff66"/><path d="M20 38h58l-9 14H29z" fill="#fff" stroke="#1a1b3a" stroke-width="2.5" stroke-linejoin="round"/><path d="M50 36V10l18 22z" fill="#fff" stroke="#1a1b3a" stroke-width="2.5" stroke-linejoin="round"/>')
+ship:SV('<path d="M0 52q12-8 25 0t25 0t25 0t25 0V64H0z" fill="#ffffff66"/><path d="M20 38h58l-9 14H29z" fill="#fff" stroke="#1a1b3a" stroke-width="2.5" stroke-linejoin="round"/><path d="M50 36V10l18 22z" fill="#fff" stroke="#1a1b3a" stroke-width="2.5" stroke-linejoin="round"/>'),
+kal:SV('<rect x="6" y="8" width="88" height="48" rx="16" fill="#a9733c" stroke="#1a1b3a" stroke-width="2.5"/><rect x="11" y="13" width="12" height="38" rx="6" fill="#5a3418"/><rect x="77" y="13" width="12" height="38" rx="6" fill="#5a3418"/><circle cx="33" cy="22" r="6" fill="#5a3418"/><circle cx="33" cy="42" r="6" fill="#5a3418"/><circle cx="44" cy="22" r="6" fill="#5a3418"/><circle cx="44" cy="42" r="6" fill="#5a3418"/><circle cx="55" cy="22" r="6" fill="#5a3418"/><circle cx="55" cy="42" r="6" fill="#5a3418"/><circle cx="66" cy="22" r="6" fill="#5a3418"/><circle cx="66" cy="42" r="6" fill="#5a3418"/><circle cx="33" cy="22" r="2.6" fill="#fff" stroke="#1a1b3a" stroke-width="1"/><circle cx="44" cy="22" r="2.6" fill="#e5383b" stroke="#1a1b3a" stroke-width="1"/><circle cx="55" cy="42" r="2.6" fill="#f6b800" stroke="#1a1b3a" stroke-width="1"/><circle cx="66" cy="42" r="2.6" fill="#fff" stroke="#1a1b3a" stroke-width="1"/><circle cx="83" cy="28" r="2.6" fill="#fff" stroke="#1a1b3a" stroke-width="1"/><circle cx="83" cy="38" r="2.6" fill="#e5383b" stroke="#1a1b3a" stroke-width="1"/><circle cx="17" cy="32" r="2.6" fill="#f6b800" stroke="#1a1b3a" stroke-width="1"/>'),
+hex:SV('<polygon points="22.0,5.0 29.8,9.5 29.8,18.5 22.0,23.0 14.2,18.5 14.2,9.5" fill="#ffffff66" stroke="#1a1b3a" stroke-width="2"/><polygon points="37.6,5.0 45.4,9.5 45.4,18.5 37.6,23.0 29.8,18.5 29.8,9.5" fill="#e5383b" stroke="#1a1b3a" stroke-width="2"/><polygon points="53.2,5.0 61.0,9.5 61.0,18.5 53.2,23.0 45.4,18.5 45.4,9.5" fill="#ffffff66" stroke="#1a1b3a" stroke-width="2"/><polygon points="68.8,5.0 76.6,9.5 76.6,18.5 68.8,23.0 61.0,18.5 61.0,9.5" fill="#f6b800" stroke="#1a1b3a" stroke-width="2"/><polygon points="29.8,18.5 37.6,23.0 37.6,32.0 29.8,36.5 22.0,32.0 22.0,23.0" fill="#ffffff66" stroke="#1a1b3a" stroke-width="2"/><polygon points="45.4,18.5 53.2,23.0 53.2,32.0 45.4,36.5 37.6,32.0 37.6,23.0" fill="#e5383b" stroke="#1a1b3a" stroke-width="2"/><polygon points="61.0,18.5 68.8,23.0 68.8,32.0 61.0,36.5 53.2,32.0 53.2,23.0" fill="#ffffff66" stroke="#1a1b3a" stroke-width="2"/><polygon points="76.6,18.5 84.4,23.0 84.4,32.0 76.6,36.5 68.8,32.0 68.8,23.0" fill="#f6b800" stroke="#1a1b3a" stroke-width="2"/><polygon points="37.6,32.0 45.4,36.5 45.4,45.5 37.6,50.0 29.8,45.5 29.8,36.5" fill="#e5383b" stroke="#1a1b3a" stroke-width="2"/><polygon points="53.2,32.0 61.0,36.5 61.0,45.5 53.2,50.0 45.4,45.5 45.4,36.5" fill="#ffffff66" stroke="#1a1b3a" stroke-width="2"/><polygon points="68.8,32.0 76.6,36.5 76.6,45.5 68.8,50.0 61.0,45.5 61.0,36.5" fill="#f6b800" stroke="#1a1b3a" stroke-width="2"/><polygon points="84.4,32.0 92.1,36.5 92.1,45.5 84.4,50.0 76.6,45.5 76.6,36.5" fill="#ffffff66" stroke="#1a1b3a" stroke-width="2"/>'),
+choc:SV('<rect x="8" y="3" width="84" height="58" rx="6" fill="#4a2a12" opacity=".35"/><rect x="11.0" y="5.0" width="14" height="12.5" rx="2.5" fill="#2a9d4a" stroke="#1a1b3a" stroke-width="2"/><rect x="26.5" y="5.0" width="14" height="12.5" rx="2.5" fill="#8b5a2b" stroke="#1a1b3a" stroke-width="2"/><rect x="42.0" y="5.0" width="14" height="12.5" rx="2.5" fill="#8b5a2b" stroke="#1a1b3a" stroke-width="2"/><rect x="57.5" y="5.0" width="14" height="12.5" rx="2.5" fill="#8b5a2b" stroke="#1a1b3a" stroke-width="2"/><rect x="73.0" y="5.0" width="14" height="12.5" rx="2.5" fill="#8b5a2b" stroke="#1a1b3a" stroke-width="2"/><rect x="11.0" y="19.0" width="14" height="12.5" rx="2.5" fill="#8b5a2b" stroke="#1a1b3a" stroke-width="2"/><rect x="26.5" y="19.0" width="14" height="12.5" rx="2.5" fill="#8b5a2b" stroke="#1a1b3a" stroke-width="2"/><rect x="42.0" y="19.0" width="14" height="12.5" rx="2.5" fill="#8b5a2b" stroke="#1a1b3a" stroke-width="2"/><rect x="57.5" y="19.0" width="14" height="12.5" rx="2.5" fill="#8b5a2b" stroke="#1a1b3a" stroke-width="2"/><rect x="73.0" y="19.0" width="14" height="12.5" rx="2.5" fill="#8b5a2b" stroke="#1a1b3a" stroke-width="2"/><rect x="11.0" y="33.0" width="14" height="12.5" rx="2.5" fill="#8b5a2b" stroke="#1a1b3a" stroke-width="2"/><rect x="26.5" y="33.0" width="14" height="12.5" rx="2.5" fill="#8b5a2b" stroke="#1a1b3a" stroke-width="2"/><rect x="42.0" y="33.0" width="14" height="12.5" rx="2.5" fill="#8b5a2b" stroke="#1a1b3a" stroke-width="2"/><rect x="11.0" y="47.0" width="14" height="12.5" rx="2.5" fill="#8b5a2b" stroke="#1a1b3a" stroke-width="2"/><rect x="26.5" y="47.0" width="14" height="12.5" rx="2.5" fill="#8b5a2b" stroke="#1a1b3a" stroke-width="2"/><text x="18" y="15" font-size="10" text-anchor="middle">☠</text>'),
+imp:SV('<circle cx="50" cy="42" r="16" fill="#ffe0b5" stroke="#1a1b3a" stroke-width="2.5"/><rect x="35" y="37" width="13" height="8" rx="3" fill="#1a1b3a"/><rect x="52" y="37" width="13" height="8" rx="3" fill="#1a1b3a"/><path d="M44 52q6 4 12 0" stroke="#1a1b3a" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M33 27Q35 6 50 6Q65 6 67 27Z" fill="#1a1b3a" stroke="#fff" stroke-width="1.5"/><ellipse cx="50" cy="27" rx="30" ry="6" fill="#1a1b3a" stroke="#fff" stroke-width="1.5"/>'),
+wbi:SV('<circle cx="50" cy="42" r="17" fill="#ffe0b5" stroke="#1a1b3a" stroke-width="2.5"/><circle cx="43" cy="42" r="2.2" fill="#1a1b3a"/><circle cx="57" cy="42" r="2.2" fill="#1a1b3a"/><path d="M43 50q7 5 14 0" stroke="#1a1b3a" stroke-width="2.5" fill="none" stroke-linecap="round"/><rect x="26" y="12" width="48" height="16" rx="5" fill="#fff" stroke="#1a1b3a" stroke-width="2.5"/><text x="50" y="25" font-size="14" font-weight="800" text-anchor="middle" fill="#1a1b3a">?</text>')
 };
-var GRP=[["Zu zweit",["ttt","five","c4","rv","dame","brk","ship","rps","dbx"]],["Würfeln und Brettspiele",["pig","kn","ludo","snake","mono","nim"]],["Karten und Denken",["mem","bj","uno","hang","hl"]],["Knobeln und Wissen",["code","mine","quiz"]],["Für die ganze Runde",["paint","wolf"]]],TS={code:"#7048e8",mine:"#495057",quiz:"#c2410c",snake:"#0c8599",brk:"#862e9c",five:"#c27a1e",bj:"#1b7a4a",ttt:"#e8457c",c4:"#3b5bdb",nim:"#d9622b",pig:"#23924a",mem:"#7352f0",ludo:"#d92f3a",mono:"#14806a",rv:"#26335f",dame:"#8b5a2b",kn:"#c9500c",uno:"#e0334b",wolf:"#3a3a5c",hang:"#8541b0",paint:"#c4208a",ship:"#1a7a9a",rps:"#e0792b",hl:"#2a7f9e",dbx:"#b0307a"};
-GRP.forEach(function(g){var h=document.createElement("div");h.className="gg";h.textContent=g[0];$("games").appendChild(h);var w=document.createElement("div");w.className="tiles";g[1].forEach(function(k){var d=G[k],b=document.createElement("button");b.className="tile";b.style.setProperty("--c",TS[k]||"#3b5bdb");b.innerHTML='<div class="th">'+(TH[k]||"<b>"+d.e+"</b>")+"</div>"+d.n+"<small>"+(d.min===d.max?d.min:d.min+"–"+d.max)+" Spieler</small>";b.onclick=function(){startGame(k,rnd())};w.appendChild(b)});$("games").appendChild(w)});
-$("rndG").onclick=function(){var n=net?players().length:botOn?2:+$("lp").value,ks=Object.keys(G).filter(function(k){var d=G[k];if(n<d.min||n>d.max)return false;if(botOn&&!d.bot)return false;if(!net&&!botOn&&d.online)return false;return true});if(!ks.length){toast("Für "+n+" Spieler passt gerade kein Spiel.");return}startGame(pick(ks),rnd())};
+var GRP=[["Zu zweit",["ttt","five","c4","rv","dame","brk","ship","rps","dbx","hex","choc"]],["Würfeln und Brettspiele",["pig","kn","ludo","snake","mono","nim","kal"]],["Karten und Denken",["mem","bj","uno","hang","hl"]],["Knobeln und Wissen",["code","mine","quiz"]],["Für die ganze Runde",["paint","wolf","imp","wbi"]]],TS={code:"#7048e8",mine:"#495057",quiz:"#c2410c",snake:"#0c8599",brk:"#862e9c",five:"#c27a1e",bj:"#1b7a4a",ttt:"#e8457c",c4:"#3b5bdb",nim:"#d9622b",pig:"#23924a",mem:"#7352f0",ludo:"#d92f3a",mono:"#14806a",rv:"#26335f",dame:"#8b5a2b",kn:"#c9500c",uno:"#e0334b",wolf:"#3a3a5c",hang:"#8541b0",paint:"#c4208a",ship:"#1a7a9a",rps:"#e0792b",hl:"#2a7f9e",dbx:"#b0307a",kal:"#8a5a2b",hex:"#2a6f97",choc:"#6b3e26",imp:"#6a2c91",wbi:"#c98a14"};
+GRP.forEach(function(g){var h=document.createElement("div");h.className="gg";h.textContent=g[0];$("games").appendChild(h);var w=document.createElement("div");w.className="tiles";g[1].forEach(function(k){var d=G[k],b=document.createElement("button");b.className="tile";b.style.setProperty("--c",TS[k]||"#3b5bdb");b.innerHTML='<div class="th">'+(TH[k]||"<b>"+d.e+"</b>")+"</div>"+d.n+"<small>"+(d.min===d.max?d.min:d.min+"–"+d.max)+" Spieler</small>";b.onclick=function(){if(T&&T.wt&&!gid){tnTile(k);return}startGame(k,rnd())};w.appendChild(b)});$("games").appendChild(w)});
+$("rndG").onclick=function(){if(T&&T.wt&&!gid){tnTile(null);return}var n=net?players().length:botOn?2:+$("lp").value,ks=Object.keys(G).filter(function(k){var d=G[k];if(n<d.min||n>d.max)return false;if(botOn&&!d.bot)return false;if(!net&&!botOn&&d.online)return false;return true});if(!ks.length){toast("Für "+n+" Spieler passt gerade kein Spiel.");return}startGame(pick(ks),rnd())};
 function keepAwake(){try{if(navigator.wakeLock&&!wl)navigator.wakeLock.request("screen").then(function(l){wl=l;l.addEventListener("release",function(){wl=null})},function(){})}catch(e){}}
 var wl=null;document.addEventListener("visibilitychange",function(){if(!document.hidden&&gid)keepAwake()});
 function curTheme(){var a=document.documentElement.getAttribute("data-theme");return a||(window.matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light")}
@@ -1290,9 +1513,9 @@ $("host").onclick=function(){var a="abcdefghjkmnpqrstuvwxyz23456789",c="";for(va
 $("joinBtn").onclick=function(){var v=$("code").value.trim().toLowerCase();if(/^[a-z0-9]{4}$/.test(v))connect(v);else $("note").textContent="Bitte den 4-stelligen Code eingeben."};
 $("bot").onclick=function(){T=null;botOn=true;mode="local";net=null;gid=null;scores={};order=[];$("codeLine").textContent="Gegen den Computer";$("loc").style.display="none";$("dfw").style.display="block";render()};
 $("local").onclick=function(){T=null;botOn=false;mode="local";net=null;gid=null;scores={};order=[];$("codeLine").textContent="Lokales Spiel";$("loc").style.display="block";$("dfw").style.display="none";render()};
-$("leave").onclick=function(){if(gid&&S&&S.w===null&&!confirm("Laufendes Spiel wirklich verlassen?"))return;leave()};
+$("leave").onclick=function(){if(gid&&S&&S.w===null){ask("Laufendes Spiel wirklich verlassen?",leave);return}leave()};
 $("again").onclick=function(){if(T){if(T.done||S.w===null||!T.cr)return;if(net&&!amHost()){sendReq({k:"next"});return}var t=cl(T);t.i++;tnGo(t);return}if(net&&!amHost()){sendReq({k:"g",g:gid});return}startGame(gid,rnd())};
-$("back").onclick=function(){if(net&&!amHost()){sendReq({k:"stop"});return}if(T&&!T.done&&!confirm("Turnier wirklich abbrechen?"))return;T=null;if(net)net.emit("stop",{});else{gid=null;render()}};
+$("back").onclick=function(){if(net&&!amHost()){sendReq({k:"stop"});return}var go=function(){T=null;if(net)net.emit("stop",{});else{gid=null;render()}};if(T&&!T.done){ask("Turnier wirklich abbrechen?",go);return}go()};
 $("board").onclick=function(e){var el=e.target.closest("[data-m]");if(!el||!gid)return;var m=JSON.parse(el.getAttribute("data-m"));if(m&&m.tilt){tilt=!tilt;lastH="";render();return}if(m&&m.col){pcol=m.col;pw=m.w||4;lastH="";render();return}if(m&&m.clr){strokes=[];pbuf=[];if(net)net.emit("draw",{r:S.rd,clr:1});paintInit();return}if(m&&m.sel!==undefined){dsel=m.sel;lastH="";render();return}if(m&&m.to!==undefined){m={f:(S.ch!==null&&S.ch!==undefined&&gid==="dame"?S.ch:dsel),t:m.to};dsel=null}if(S.w!==null)return;if(m&&m.roll)m=gid==="kn"?{r:[1,2,3,4,5].map(function(){return 1+Math.floor(Math.random()*6)})}:gid==="mono"?{r:[1+Math.floor(Math.random()*6),1+Math.floor(Math.random()*6),Math.floor(Math.random()*10)]}:{r:1+Math.floor(Math.random()*6)};
 if(net){if(G[gid].any){if(myIdx()>=0)sendAny(m);return}if(myIdx()!==S.t)return;net.emit("move",{n:moves.length,m:m})}else{if(botOn&&S.t!==0)return;apply(m,S.t)}};
 try{var rq=new URLSearchParams(location.search).get("r");if(rq&&/^[a-z0-9]{4}$/.test(rq)){$("code").value=rq;$("note").textContent="Einladung zu Raum "+rq.toUpperCase()+": Name prüfen und auf „Beitreten“ tippen."}}catch(e){}
@@ -1319,7 +1542,7 @@ try{
 var i192=icon(192),i512=icon(512),i180=icon(180);
 $("ati").href=i180;$("fav").href=i192;
 var base=location.href.split("#")[0].split("?")[0];
-var man={name:"Spiele-Lounge",short_name:"Spiele",description:"25 Spiele für den Spieleabend",start_url:base,scope:base.replace(/[^\/]*$/,""),display:"standalone",orientation:"portrait",background_color:"#dfe7ff",theme_color:"#dfe7ff",lang:"de",icons:[{src:i192,sizes:"192x192",type:"image/png",purpose:"any"},{src:i512,sizes:"512x512",type:"image/png",purpose:"any"},{src:i512,sizes:"512x512",type:"image/png",purpose:"maskable"}]};
+var man={name:"Spiele-Lounge",short_name:"Spiele",description:"30 Spiele für den Spieleabend",start_url:base,scope:base.replace(/[^\/]*$/,""),display:"standalone",orientation:"portrait",background_color:"#dfe7ff",theme_color:"#dfe7ff",lang:"de",icons:[{src:i192,sizes:"192x192",type:"image/png",purpose:"any"},{src:i512,sizes:"512x512",type:"image/png",purpose:"any"},{src:i512,sizes:"512x512",type:"image/png",purpose:"maskable"}]};
 $("mf").href=URL.createObjectURL(new Blob([JSON.stringify(man)],{type:"application/manifest+json"}));
 }catch(e){}
 window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();dp=e});
@@ -1851,6 +2074,146 @@ $("admP").addEventListener("change",function(e){
 var t=e.target,d=t.getAttribute&&t.getAttribute("data-d");
 if(d!==null&&d!==undefined){adm.dv[+d]=t.value?+t.value:null;refresh()}});
 })();
+</script>
+<script>
+window.addEventListener("error",function(e){try{var d=document.getElementById("errbox");if(!d){d=document.createElement("pre");d.id="errbox";d.style.cssText="position:fixed;left:6px;right:6px;bottom:6px;max-height:40vh;overflow:auto;margin:0;padding:8px;background:#fff;color:#c00;border:3px solid #c00;border-radius:10px;font:12px/1.3 monospace;z-index:999;white-space:pre-wrap";document.body.appendChild(d)}d.textContent+="Fehler: "+e.message+" (Zeile "+e.lineno+")\n"}catch(x){}});
+/* Spiele-Lounge: Computer-Mitspieler + Turnier-Spiellänge */
+(function(){
+/* ---------- Oberfläche ---------- */
+var st=document.createElement("style");
+st.textContent="#dfw{display:none!important}input[type=checkbox]{width:22px;height:22px;padding:0;margin:0;accent-color:var(--acc);flex:none}.opt{display:inline-flex;align-items:center;gap:6px;background:var(--field);border:2px solid var(--ink);border-radius:999px;padding:6px 12px;margin:3px;font-weight:700;cursor:pointer}";
+document.head.appendChild(st);
+var card=document.createElement("div");card.className="card";card.id="bcard";card.style.display="none";
+card.innerHTML='<b>🤖 Computer-Mitspieler</b><div class="sub" id="bnh" style="margin:4px 0 8px"></div><div style="display:flex;gap:8px;align-items:center;margin:6px 0"><span style="flex:1;text-align:left">Anzahl</span><select id="bn" style="width:auto"></select></div><div style="display:flex;gap:8px;align-items:center"><span style="flex:1;text-align:left">Schwierigkeit</span><span id="dfh"></span></div>';
+$("frl2").parentNode.insertBefore(card,$("frl2"));
+$("dfh").appendChild($("df"));
+var tl=document.createElement("div");tl.id="tnl";
+tl.innerHTML='<div class="lbl" style="text-align:left;margin:4px 0">Spiellänge (mindestens eine)</div><label class="opt"><input type="checkbox" id="tl0" checked> ⚡ Kurz</label><label class="opt"><input type="checkbox" id="tl1" checked> ⏱ Mittel</label><label class="opt"><input type="checkbox" id="tl2" checked> 🐢 Lang</label><div class="sub" style="font-size:.78rem;margin:4px 0 10px;text-align:left">Kurz: Tic Tac Toe, Vier gewinnt, Quiz …<br>Mittel: Hex, UNO, Fünf gewinnt …<br>Lang: Dame, Ludo, Werwolf, Kniffel …</div>';
+$("tnm").insertAdjacentElement("afterend",tl);
+["tl0","tl1","tl2"].forEach(function(id){$(id).onchange=function(){if(!$("tl0").checked&&!$("tl1").checked&&!$("tl2").checked){this.checked=true;toast("Mindestens eine Länge muss aktiv bleiben.")}}});
+
+/* ---------- Hilfen ---------- */
+var GL={ttt:0,rps:0,nim:0,choc:0,hang:0,bj:0,c4:0,mem:0,quiz:0,hl:0,pig:1,five:1,code:1,mine:1,kal:1,hex:1,brk:1,dbx:1,snake:1,uno:1,wbi:1,rv:2,dame:2,kn:2,ludo:2,mono:2,wolf:2,imp:2,paint:2,ship:2};
+var bt={key:"",at:0,p:{},rv:{}},BI=1,curLen=0,reqL={},kind="";
+function isBotKey(k){return typeof k==="string"&&/^bot\d+$/.test(k)}
+function botLabel(k){return"Computer "+k.slice(3)+" 🤖"}
+function isBotIdx(i){return botOn?i>=1:(net?isBotKey(order[i]):false)}
+function nbN(){return net&&!amHost()?0:Math.max(0,+$("bn").value||0)}
+function lenOk(k,len){return !!((len||7)&(1<<(GL[k]||0)))}
+function tnMask(){return($("tl0").checked?1:0)|($("tl1").checked?2:0)|($("tl2").checked?4:0)||7}
+function ML(){return curLen||(T&&T.len)||tnMask()}
+function rr(a,b){return a+Math.random()*(b-a)}
+function rv(k){if(bt.rv[k]===undefined)bt.rv[k]=Math.random();return bt.rv[k]}
+function fillBn(mn,kd){var s=$("bn"),cur=+s.value,i,o;s.innerHTML="";
+for(i=mn;i<=9;i++){o=document.createElement("option");o.value=i;o.textContent=i?String(i):"keine";s.appendChild(o)}
+s.value=String(Math.max(mn,Math.min(9,cur||mn)));
+$("bnh").textContent=kd==="b"?"So viele Computer spielen mit, wie das Spiel braucht (höchstens so viele wie erlaubt).":"Nur du als Host siehst das. Computer füllen freie Plätze auf, bis das Spiel voll ist. Dein Handy steuert sie, lass die App offen. Im Turnier spielen keine Computer mit."}
+setInterval(function(){var k=botOn?"b":net?"n":"l";
+if(k!==kind){kind=k;if(k!=="l")fillBn(k==="b"?1:0,k)}
+card.style.display=(botOn||(net&&amHost()))?"":"none"},400);
+
+/* ---------- Namen ---------- */
+var _nm=nm;nm=function(i){if(botOn&&i>=1)return"Computer"+(order.length>2?" "+i:"")+" 🤖";if(net&&isBotKey(order[i]))return botLabel(order[i]);return _nm(i)};
+var _lab=lab;lab=function(k){if(isBotKey(k))return botLabel(k);if(botOn&&k!=="0"&&k!=="1")return"Computer "+k+" 🤖";return _lab(k)};
+
+/* ---------- Spiele mit Computern starten ---------- */
+var _sg=startGame;
+startGame=function(g,sd){var d=G[g],i;
+if(net&&amHost()){var hs=shufArr(players().slice(0,d.max).map(function(p){return p.peer})),nb=Math.max(0,Math.min(nbN(),d.max-hs.length)),l=hs.slice();
+for(i=1;i<=nb;i++)l.push("bot"+i);l=shufArr(l);
+if(l.length<d.min){toast("Für "+d.n+" brauchst du mindestens "+d.min+" Mitspieler. Stell mehr Computer ein.");return}
+net.emit("start",{g:g,order:l,seed:sd});return}
+if(botOn){if(!d.bot&&!ABOT[g]){toast("Dieses Spiel hat keinen Computergegner.");return}
+var P=Math.max(d.min,Math.min(d.max,1+nbN())),o=[];for(i=0;i<P;i++)o.push(String(i));begin(g,o,sd);return}
+return _sg(g,sd)};
+var _begin=begin;begin=function(g,o,s){bt={key:"",at:0,p:{},rv:{}};return _begin(g,o,s)};
+$("rndG").onclick=function(){if(T&&T.wt&&!gid){tnTile(null);return}
+var n=net?players().length+nbN():+$("lp").value,ks=Object.keys(G).filter(function(k){var d=G[k];if(!botOn&&(n<d.min||n>d.max))return false;if(botOn&&!d.bot&&!ABOT[k])return false;if(!net&&!botOn&&d.online)return false;return true});
+if(!ks.length){toast("Dafür passt gerade kein Spiel.");return}startGame(pick(ks),rnd())};
+
+/* ---------- Züge der Computer ---------- */
+botMove=function(){};
+function send(i,m){if(net)net.emit("move",{n:moves.length,m:m,b:order[i]});else apply(m,i)}
+function botTick(){if(!gid||!S||S.w!==null)return;
+if(!(botOn?order.length>1:(net&&amHost()&&order.some(isBotKey))))return;
+var g=gid,now=Date.now(),i;
+if(G[g].any){var ab=ABOT[g];if(!ab)return;
+for(i=0;i<order.length;i++){if(!isBotIdx(i))continue;var d=ab(S,i,+$("df").value);if(!d){delete bt.p[i];continue}
+var p=bt.p[i];if(!p||p.k!==d.k)p=bt.p[i]={k:d.k,m:d.m,at:now+d.w*1000};
+if(now>=p.at){p.at=now+3000;send(i,p.m)}}return}
+if(!isBotIdx(S.t))return;
+var key=g+":"+moves.length+":"+S.t;if(bt.key!==key){bt.key=key;bt.at=now+(g==="ship"&&S.pend?300:750)}
+if(now<bt.at)return;bt.at=now+2500;
+var m;BI=S.t;try{m=pickBot(g)}finally{BI=1}
+if(m!==undefined&&m!==null)send(S.t,m)}
+setInterval(botTick,400);
+var _om=onMove;
+onMove=function(msg){var d=msg.data;if(!gid||!d||d.n!==moves.length)return;
+if(d.b!==undefined){if(!isHostPeer(msg.peer)||!isBotKey(d.b))return;apply(d.m,order.indexOf(d.b));return}
+return _om(msg)};
+/* Gegen-Spieler-Logik der Bots war auf Spieler 2 festgelegt: Brett spiegeln, wenn der Computer Spieler 1 ist */
+function mir(g,fn){var o=G[g].bot;G[g].bot=function(s,d){if(BI!==0)return o(s,d);var s2=cl(s);fn(s2);return o(s2,d)}}
+function flip(s){s.b=s.b.map(function(x){return x===null?null:1-x});s.t=1-s.t}
+mir("ttt",flip);mir("c4",flip);
+mir("rps",function(s){if(s.lr)s.lr=[s.lr[1],s.lr[0],s.lr[2]]});
+mir("ship",function(s){s.sh=[s.sh[1],s.sh[0]]});
+/* Spiele ohne Zugreihenfolge (alle gleichzeitig) */
+var ABOT={
+imp:function(s,i,d){var j,c=[];
+if(s.ph==="talk"){if(s.rd[i])return null;for(j=0;j<s.P;j++)if(!isBotIdx(j)&&!s.rd[j])return null;return{k:"talk",m:{r:1,u:i},w:rr(2,6)}}
+if(s.ph==="vote"){if(s.vt[i]>=0)return null;var v;
+if(i!==s.imp&&Math.random()<[0,.2,.4][d])v=s.imp;else{for(j=0;j<s.P;j++)if(j!==i)c.push(j);v=pick(c)}
+return{k:"vote",m:{v:v,u:i},w:rr(3,9)}}
+if(s.ph==="guess"&&i===s.imp){var ci=s.op.indexOf(s.wd),g;
+if(Math.random()<[.17,.35,.6][d])g=ci;else{for(j=0;j<s.op.length;j++)if(j!==ci)c.push(j);g=pick(c)}
+return{k:"guess",m:{g:g,u:i},w:rr(3,7)}}
+return null},
+wolf:function(s,i,d){if(!s.al[i])return null;var al=[],j,rl=s.role[i],c;
+for(j=0;j<s.P;j++)if(s.al[j]&&j!==i)al.push(j);if(!al.length)return null;
+if(s.ph==="night"){
+if(rl===1&&s.wv[i]<0){c=al.filter(function(x){return s.role[x]!==1});if(!c.length)return null;return{k:"n"+s.rd,m:{w:c[Math.floor(rv("n"+s.rd)*c.length)],u:i},w:rr(3,9)}}
+if(rl===2&&s.sv<0){var sn=s.seen.map(function(x){return x[1]});c=al.filter(function(x){return sn.indexOf(x)<0});if(!c.length)c=al;return{k:"s"+s.rd,m:{s:pick(c),u:i},w:rr(3,9)}}
+return null}
+if(s.vt[i]>=0)return null;
+var wv=al.filter(function(x){return s.role[x]===1}),t;
+if(rl===1){c=al.filter(function(x){return s.role[x]!==1});if(!c.length)return null;t=c[Math.floor(rv("d"+s.rd)*c.length)]}
+else{var fw=rl===2?s.seen.filter(function(x){return x[2]&&s.al[x[1]]}):[];
+if(fw.length)t=fw[0][1];else if(wv.length&&Math.random()<[0,.2,.4][d])t=pick(wv);else t=pick(al)}
+return{k:"d"+s.rd,m:{v:t,u:i},w:rr(3,10)}},
+wbi:function(s,i,d){if(s.out[i])return null;var ci=s.ls.indexOf(s.id[i]),g=ci,c=[],j;
+if(Math.random()>=[.25,.5,.75][d]){for(j=0;j<s.ls.length;j++)if(j!==ci&&!s.id.some(function(x,k){return k!==i&&x===s.ls[j]}))c.push(j);if(c.length)g=pick(c)}
+var b=[30,20,12][d];return{k:"w"+s.lg.length,m:{g:g,u:i},w:b+Math.random()*b}},
+paint:function(s,i,d){if(s.dr===i)return{k:"s"+s.rd,m:{skip:1,u:i},w:rr(3,6)};
+var wd=WL[s.wo[Math.min(s.rd,s.P*2-1)]],g=wd;
+if(Math.random()>=[.07,.14,.25][d]){do{g=pick(WL)}while(g===wd)}
+var b=[14,10,7][d];return{k:"g"+s.rd+":"+moves.length,m:{g:g,u:i},w:b+Math.random()*10}}
+};
+/* Computer in Spielen für alle, wenn man allein gegen den Computer spielt (kein Online-Raum) */
+$("board").addEventListener("click",function(e){
+if(net||!botOn||!gid||!G[gid].any)return;
+var el=e.target.closest("[data-m]");if(!el)return;e.stopPropagation();
+var m=JSON.parse(el.getAttribute("data-m"));
+if(m.sel!==undefined){dsel=m.sel;lastH="";render();return}
+if(m.col){pcol=m.col;pw=m.w||4;lastH="";render();return}
+if(m.clr){strokes=[];pbuf=[];paintInit();return}
+if(S.w!==null)return;m.u=0;apply(m,0)},true);
+var _sa=sendAny;sendAny=function(m){if(!net){if(botOn&&S&&S.w===null){m.u=0;apply(m,0)}return}return _sa(m)};
+
+/* ---------- Turnier: Spiellänge ---------- */
+var _tc=tnClean;tnClean=function(t){var o=_tc(t);if(o)o.len=Math.max(1,Math.min(7,+(t&&t.len)||7));return o};
+var _ok=tnOk;tnOk=function(k){return _ok(k)&&lenOk(k,ML())};
+tnPick=function(prev){var n=net?players().length:botOn?2:+$("lp").value,len=ML(),
+ks=Object.keys(G).filter(function(k){var d=G[k];if(n<d.min||n>d.max||TN_SKIP.indexOf(k)>=0||!lenOk(k,len))return false;if(botOn&&!d.bot)return false;if(!net&&!botOn&&d.online)return false;return true});
+var f=ks.filter(function(k){return k!==prev});return f.length?pick(f):ks.length?pick(ks):null};
+var _tg=tnGo;tnGo=function(t,fg){if(t&&!t.len)t.len=curLen||tnMask();var p=curLen;curLen=t.len;try{return _tg(t,fg)}finally{curLen=p}};
+var _st=startTn;startTn=function(n,m,len){var p=curLen;curLen=len||curLen;try{_st(n,m)}finally{curLen=p}};
+var _or=onReq;onReq=function(m){if(m&&m.data&&m.data.k==="tn")reqL[m.peer]=+m.data.l;return _or(m)};
+var _dr=doReq;doReq=function(r){if(r&&r.k==="tn"){var p=curLen;curLen=Math.max(1,Math.min(7,+reqL[r.peer]||7));try{return _dr(r)}finally{curLen=p}}return _dr(r)};
+$("tnb").onclick=function(){var n=+$("tnr").value,m=+$("tnm").value;
+if(net&&!amHost()){sendReq({k:"tn",n:n,m:m,l:tnMask()});return}
+startTn(n,m,tnMask())};
+})();
+
 </script>
 </body>
 </html>
